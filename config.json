@@ -1,0 +1,21 @@
+{
+  "teamName": "UCLA TFT",
+  "platform": "na1",
+  "timezone": "America/Los_Angeles",
+  "weekStartsOn": 3,
+  "trackFrom": "2026-10-21",
+  "weekOne": "2026-09-23",
+  "players": [
+    { "riotId": "UCLA Jhins3ng#NA2", "name": "Andrew" },
+    { "riotId": "UCLA mcalmic#evil", "name": "Michael" },
+    { "riotId": "UCLA sws#tft", "name": "Kyle", "endRanks": { "2026-10-14": "D2 75" } },
+    { "riotId": "UCLA dude kisser#8888", "name": "Edward", "endRanks": { "2026-10-14": "D4 8", "2026-10-21": "D3 26" } },
+    { "riotId": "UCLA TheSky#jlfan", "name": "Will", "endRanks": { "2026-10-14": "GM 367" } },
+    { "riotId": "UCLA meiybox#00000", "name": "Aliya" },
+    { "riotId": "UCLA MotherYoshi#BIG8", "name": "Alvin" },
+    { "riotId": "UCLAKermithefrog#Frog", "name": "Jae Vin" },
+    { "riotId": "UCLA What#8888", "name": "Neil", "endRanks": { "2026-10-14": "E3 75" } },
+    { "riotId": "UCLA hyomaker#hyo", "name": "Hyo" },
+    { "riotId": "UCLA weorge#1111", "name": "George", "endRanks": { "2026-10-14": "D4 0" } }
+  ]
+}

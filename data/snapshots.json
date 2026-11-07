@@ -1,0 +1,46 @@
+{
+  "K1lYAGP3dbsftPDYe68QFoy7xHK6Ih3x_tWoeSfs-4l2iwNTOa42sH9QYHku7V3In6oChNwVhFj1KQ": [
+    {"t":1793873589498,"tier":"MASTER","rank":"I","lp":191,"wins":63,"losses":33},
+    {"t":1794002820851,"tier":"MASTER","rank":"I","lp":146,"wins":66,"losses":37}
+  ],
+  "yNMXTPsjjAgjq_9LeMXHfMsfMAybLwAZS-61lChqhM9cNaYpkjsGPTyOJs1UVMeGuyQXYXRNy3yCnw": [
+    {"t":1793873589498,"tier":"GRANDMASTER","rank":"I","lp":688,"wins":152,"losses":100}
+  ],
+  "HfAbyhL7SHm5clayOBrDsCtzZyrygkKpW1BJ5uCTzDpdf50yukGUutvj2UrMjvQ6mQcsEAsJnvn3OQ": [
+    {"t":1793873589498,"tier":"MASTER","rank":"I","lp":55,"wins":147,"losses":127},
+    {"t":1794002820851,"tier":"MASTER","rank":"I","lp":38,"wins":150,"losses":129}
+  ],
+  "78wVO7InLeAlkK44t7GRVSr_Vih3WG4z8IUJzIZ-EaDHs6VEH5QCdl5sWC8UMyPgAgKszAiD-JkWZA": [
+    {"t":1793873589498,"tier":"DIAMOND","rank":"I","lp":65,"wins":90,"losses":75},
+    {"t":1794002820851,"tier":"DIAMOND","rank":"II","lp":75,"wins":94,"losses":81}
+  ],
+  "VCtYVjMfW7Il38ROfJRVkxKMRI2kutPr45fAy4eopUPUfiNmzQMGnLIEZ1YTJzRrMSxxWXIjawuqNg": [
+    {"t":1793873589498,"tier":"GRANDMASTER","rank":"I","lp":375,"wins":171,"losses":126},
+    {"t":1794002820851,"tier":"GRANDMASTER","rank":"I","lp":396,"wins":175,"losses":128},
+    {"t":1794005661002,"tier":"GRANDMASTER","rank":"I","lp":423,"wins":176,"losses":128},
+    {"t":1794007308720,"tier":"GRANDMASTER","rank":"I","lp":435,"wins":177,"losses":128}
+  ],
+  "BQYAZo1-1ZCgztBTp9wSYLL6suZjNSYhnzeuESiKZYp0qldysaD-5GSgZsBvuzgUHk9RwDCQa3CP-Q": [
+    {"t":1793873589498,"tier":"GOLD","rank":"II","lp":26,"wins":25,"losses":19}
+  ],
+  "wT5nh9hzQIHuWKVcT6XzpHioPeJ5Y9v0Vdr7vJ5wN9YZ6U4duwIlRtvVUIhxDSChV3NG0mWoct4czg": [
+    {"t":1793873589498,"tier":"DIAMOND","rank":"II","lp":44,"wins":56,"losses":27},
+    {"t":1794002820851,"tier":"DIAMOND","rank":"II","lp":10,"wins":61,"losses":35},
+    {"t":1794011482710,"tier":"DIAMOND","rank":"II","lp":0,"wins":61,"losses":36}
+  ],
+  "ZA_UvOuPIl5E5nGeEitoMxHuWgBdLLF1YQTlNUqXy8BzaV33zQyHPmsQLqGzb_PcofmIKvlg7JfFiA": [
+    {"t":1793873589498,"tier":"MASTER","rank":"I","lp":111,"wins":124,"losses":101}
+  ],
+  "ePs-Y8DndPU2416m6go87Wbzo_vT7Htj89w2E6J8FYV38d-ZjW4uaLEduDzX2a6s49QufqdhOGBtfw": [
+    {"t":1793873589498,"tier":"DIAMOND","rank":"II","lp":44,"wins":66,"losses":42},
+    {"t":1794002820851,"tier":"MASTER","rank":"I","lp":0,"wins":73,"losses":44}
+  ],
+  "6zT2icgAYs1g63nsVs1P6BHtMVpjAKsBjbhAQREE-eVADnN-uMpF9GrFxm_jrQR5bmq5t7ZFjMaEPw": [
+    {"t":1793873589498,"tier":"DIAMOND","rank":"III","lp":24,"wins":96,"losses":86},
+    {"t":1794002820851,"tier":"DIAMOND","rank":"III","lp":23,"wins":98,"losses":87}
+  ],
+  "ViVxXqksCNHyuyDRK3hRjXXOkTbdsUmLQDjsO0usYikT9DQVKZzy0eG0a3n3NlJ-ASHXY7oJMH9UrQ": [
+    {"t":1793873654047,"tier":"EMERALD","rank":"II","lp":52,"wins":43,"losses":32},
+    {"t":1794002820851,"tier":"EMERALD","rank":"I","lp":12,"wins":45,"losses":32}
+  ]
+}
