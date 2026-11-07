@@ -38,6 +38,16 @@ jobs:
       - name: Build site data
         run: node src/build.js
 
+      # A deploy for a code change (push) didn't check Riot, so keep the live site's "Last updated" time
+      # instead of the build's. If the live site can't be reached, the build's time is used.
+      - name: Keep the last check time
+        if: github.event_name == 'push'
+        run: |
+          url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data/status.json"
+          if curl -sfL "$url" -o /tmp/status.json && node -e "JSON.parse(require('fs').readFileSync('/tmp/status.json')).updatedAt > 0 || process.exit(1)"; then
+            mv /tmp/status.json site/data/status.json
+          fi
+
       - name: Commit data
         id: commit
         run: |
