@@ -694,6 +694,30 @@ function setupThemeToggle() {
   label();
 }
 
+/** "Last updated 5 minutes ago" in the header, from the time of the last build (data/status.json). */
+async function showUpdated() {
+  const el = document.getElementById('updated');
+  let at = null;
+  try {
+    const res = await fetch('data/status.json', { cache: 'no-cache' });
+    if (res.ok) at = (await res.json()).updatedAt;
+  } catch {}
+  if (!at) return;
+  const ago = () => {
+    const min = Math.floor((Date.now() - at) / 60e3);
+    if (min < 1) return 'just now';
+    if (min < 60) return `${min} minute${min === 1 ? '' : 's'} ago`;
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return `${hr} hour${hr === 1 ? '' : 's'} ago`;
+    const d = Math.floor(hr / 24);
+    return `${d} day${d === 1 ? '' : 's'} ago`;
+  };
+  const tick = () => { el.textContent = `Last updated ${ago()}`; };
+  el.title = fmtDateTime.format(at);
+  tick();
+  setInterval(tick, 30e3);
+}
+
 async function boot() {
   setupThemeToggle();
   try {
@@ -707,7 +731,7 @@ async function boot() {
   initFormats();
   document.title = `${site.teamName} · TFT Tracker`;
   document.getElementById('brand').textContent = site.teamName;
-  if (site.latestActivity) document.getElementById('updated').textContent = `Latest activity ${fmtDateTime.format(site.latestActivity)}`;
+  showUpdated();
   if (!site.players.length || !site.weeks?.length) {
     app.replaceChildren(h('div', { class: 'notice' }, 'No players found. Add Riot IDs to ', h('code', {}, 'config.json'), ' and run ', h('code', {}, 'npm run update'), '.'));
     return;

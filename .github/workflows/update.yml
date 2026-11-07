@@ -23,8 +23,6 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    outputs:
-      deploy: ${{ steps.commit.outputs.changed == 'true' || github.event_name != 'schedule' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -55,15 +53,15 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # Deployed after every check, even when nothing changed: the build stamps site/data/status.json
+      # (not committed) with the time, which the site shows as "Last updated X minutes ago".
       - name: Upload site
-        if: steps.commit.outputs.changed == 'true' || github.event_name != 'schedule'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
     needs: update
-    if: needs.update.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -86,10 +86,20 @@ several runs. Use `node src/poll.js --max-matches 5000` to do it all at once.
 1. Create a GitHub repo for this folder and push it.
 2. Repo **Settings → Secrets and variables → Actions → New repository secret**: name `RIOT_API_KEY`, value = your key.
 3. Repo **Settings → Pages → Source: GitHub Actions**.
-4. **Actions → "Update data & deploy site" → Run workflow** once. After that it runs every 15 minutes on its own.
+4. **Actions → "Update data & deploy site" → Run workflow** once. After that it's meant to run every 15 minutes on its own.
 
-The site will be at `https://<user-or-org>.github.io/<repo>/`. The workflow only commits and redeploys
-when something changed.
+The site will be at `https://<user-or-org>.github.io/<repo>/`. The workflow commits only when the data changed, but
+redeploys after every check so the site's "Last updated X minutes ago" stays current.
+
+**If the scheduled runs never start.** GitHub's built-in schedule is best-effort, and for some repos it never fires. The fix
+is a free outside timer that starts the workflow through GitHub's API every 15 minutes. This repo uses
+[cron-job.org](https://cron-job.org):
+- Make a fine-grained token (GitHub **Settings → Developer settings → Fine-grained tokens**) for this repo only, with
+  **Actions: Read and write**.
+- Create a cron job: `POST https://api.github.com/repos/<owner>/<repo>/actions/workflows/update.yml/dispatches` every
+  15 minutes, with headers `Authorization: Bearer <token>`, `Accept: application/vnd.github+json`,
+  `Content-Type: application/json` and body `{"ref":"main"}`. A test run should return 204.
+- When the token expires (GitHub emails you first), regenerate it and paste the new one into the cron job.
 
 Notes:
 - If the key expires or is wrong, the workflow fails and GitHub emails you. Update the secret and it recovers.

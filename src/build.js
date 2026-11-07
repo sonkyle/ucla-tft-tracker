@@ -140,6 +140,9 @@ for (const { snaps, games } of perPlayer) {
   site.latestActivity = Math.max(site.latestActivity ?? 0, latest) || null;
 }
 writeJson(path.join(outDir, 'site.json'), site, 3);
+// When this build ran, for the site's "Last updated" line. Its own small file, kept out of git (.gitignore),
+// so a check that finds nothing new doesn't make a commit.
+writeJson(path.join(outDir, 'status.json'), { updatedAt: now });
 
 // ---- weeks/<key>.json
 const byWeek = new Map(weeks.map((w) => [w.key, []]));

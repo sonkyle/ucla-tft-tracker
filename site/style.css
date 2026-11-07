@@ -203,8 +203,7 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .board .traits { margin-bottom: 4px; }
 @media (max-width: 560px) {
   /* Phones: placement + tactician and the LP change share the top line, and the board gets the full width
-     below. Units sit on a 12-column grid and traits on an 18-column grid that scale with the screen, so a
-     full board stays on one row of each (a 13th unit or 19th trait wraps). */
+     below, where units and traits scale to fit one row each (see the rules after .unit-tile). */
   .card { padding: 12px; }
   .match { padding: 8px; }
   .entry { grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 6px; }
@@ -277,8 +276,8 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .unit-tile .unit-items { height: 15px; margin-top: 2px; display: flex; gap: 1px; justify-content: center; }
 .unit-tile .item { width: 15px; height: 15px; border-radius: 2px; display: block; }
 .unit-tile .item.missing { display: grid; place-items: center; font-size: 9px; font-weight: 600; background: var(--grid); color: var(--ink-2); }
-/* Phones: traits on an 18-column grid and units on a 12-column grid that scale with the screen, so a full
-   board stays on one row of each (a 19th trait or 13th unit wraps). Comes after the rules above so it wins. */
+/* Phones: traits on an 18-column grid and units on a 13-column grid that scale with the screen, so a full
+   board stays on one row of each (a 19th trait or 14th unit wraps). Comes after the rules above so it wins. */
 @media (max-width: 560px) {
   .traits { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 3px 2px; align-items: start; }
   .trait { flex-direction: column; gap: 1px; min-width: 0; container-type: inline-size; }
@@ -287,7 +286,7 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
   .trait .n { font-size: 9px; line-height: 1; }
   .trait-text { grid-column: span 6; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .units { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px 2px; }
+  .units { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 4px 2px; }
   .unit-tile { width: auto; min-width: 0; container-type: inline-size; }
   .unit-tile .stars { height: 38cqi; line-height: 38cqi; font-size: 34cqi; letter-spacing: -0.5px; }
   .unit-tile .portrait { width: 100%; height: auto; aspect-ratio: 1; border-width: 1.5px; border-radius: 3px; }
