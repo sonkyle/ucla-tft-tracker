@@ -77,12 +77,10 @@ function scoreLabel(v, step) {
   return step >= 400 ? t : `${t} ${DIVS[Math.floor((v % 400) / 100)]}`;
 }
 
-let fmtDay, fmtDateTime, fmtFull;
+let fmtDateTime;
 function initFormats() {
   const tz = site.timezone;
-  fmtDay = new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric' });
   fmtDateTime = new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-  fmtFull = new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric', year: 'numeric' });
 }
 function weekLabel(key) {
   const [y, m, d] = key.split('-').map(Number);
@@ -580,20 +578,13 @@ async function renderPlayer(slug, weekKey, myId) {
   const idx = weekIndex(weekKey);
   const week = site.weeks[idx];
   const w = p.weeks[week.key];
-  const cov = p.lpCoverage;
   const isCurrent = idx === 0;
 
   const head = h('section', { class: 'card' },
     h('div', { class: 'player-head' },
       h('div', {},
         h('h1', {}, p.name, ' ', h('span', { class: 'muted', style: 'font-weight:400;font-size:15px' }, p.riotId)),
-        h('div', { class: 'hero' }, rankText(p.current))),
-      h('div', { class: 'facts' },
-        // Riot's TFT league "wins" are top-4 finishes.
-        p.current ? h('span', {}, `Season: ${p.current.wins + p.current.losses} ranked games · ${Math.round((p.current.wins / Math.max(1, p.current.wins + p.current.losses)) * 100)}% top 4`) : null,
-        p.peak ? h('span', {}, `Peak while tracked: ${rankText(p.peak)} (${fmtDay.format(p.peak.t)})`) : null,
-        p.trackedSince ? h('span', {}, `Rank tracked since ${fmtFull.format(p.trackedSince)}`) : h('span', {}, 'Rank not tracked yet'),
-        cov.games ? h('span', { title: 'Share of ranked games since tracking began that have an exact LP change' }, `LP known for ${cov.matched} of ${cov.games} tracked games`) : null)));
+        h('div', { class: 'hero' }, rankText(p.current)))));
 
   const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k)));
 

@@ -281,7 +281,6 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 /* player header */
 .player-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-end; }
 .hero { font-size: 48px; font-weight: 600; line-height: 1.05; }
-.facts { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--ink-2); font-size: 13px; margin-top: 6px; }
 
 /* charts */
 .chart { position: relative; width: 100%; }
