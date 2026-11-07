@@ -591,11 +591,7 @@ async function renderPlayer(slug, weekKey, myId) {
         p.trackedSince ? h('span', {}, `Rank tracked since ${fmtFull.format(p.trackedSince)}`) : h('span', {}, 'Rank not tracked yet'),
         cov.games ? h('span', { title: 'Share of ranked games since tracking began that have an exact LP change' }, `LP known for ${cov.matched} of ${cov.games} tracked games`) : null)));
 
-  const nav = h('div', { class: 'filters' },
-    weekNav(idx, (k) => playerHref(slug, k)),
-    h('label', { class: 'toggle' },
-      h('input', { type: 'checkbox', checked: ui.rankedOnly, onchange: (e) => { ui.rankedOnly = e.target.checked; render(); } }),
-      'Ranked games only'));
+  const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k)));
 
   const lpNote = w?.lp == null ? 'rank not tracked this week'
     : w.partial ? '* tracking started mid-week'
@@ -608,7 +604,12 @@ async function renderPlayer(slug, weekKey, myId) {
     tile('Avg placement', avg(w?.ranked.avg), 'ranked games'),
     tile('Top 4 rate', pct(w?.ranked.top4), w?.ranked.firsts ? `${w.ranked.firsts} first${w.ranked.firsts > 1 ? 's' : ''}` : 'ranked games'));
 
-  const gamesTitle = () => h('h2', { class: 'week-title' }, `${weekName(week.key)} games`, weekNum(week.key) ? h('span', { class: 'week-dates' }, weekLabel(week.key)) : null);
+  // The games list header: title on the left, the ranked-only filter on the right.
+  const gamesTitle = () => h('div', { class: 'card-head' },
+    h('h2', { class: 'week-title' }, `${weekName(week.key)} games`, weekNum(week.key) ? h('span', { class: 'week-dates' }, weekLabel(week.key)) : null),
+    h('label', { class: 'toggle' },
+      h('input', { type: 'checkbox', checked: ui.rankedOnly, onchange: (e) => { ui.rankedOnly = e.target.checked; render(); } }),
+      'Ranked games only'));
   const games = h('section', { class: 'card' }, gamesTitle(), h('p', { class: 'sub' }, 'Loading…'));
 
   const charts = h('div', { class: 'grid-2' },
