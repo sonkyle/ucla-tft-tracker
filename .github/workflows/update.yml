@@ -2,7 +2,9 @@ name: Update data & deploy site
 
 on:
   schedule:
-    - cron: '*/15 * * * *'   # GitHub may run these a few minutes late; that's fine
+    # Every 15 minutes, on off-peak minutes: GitHub delays or drops scheduled runs most often at
+    # :00/:15/:30/:45, when every other repo's cron fires. Runs can still start a few minutes late.
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
