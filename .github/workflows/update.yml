@@ -43,8 +43,9 @@ jobs:
       - name: Keep the last check time
         if: github.event_name == 'push'
         run: |
-          url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data/status.json"
-          if curl -sfL "$url" -o /tmp/status.json && node -e "JSON.parse(require('fs').readFileSync('/tmp/status.json')).updatedAt > 0 || process.exit(1)"; then
+          # the query string skips GitHub Pages' CDN cache, which can lag a few minutes behind the last deploy
+          url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/data/status.json?t=$(date +%s)"
+          if curl -sfL -H 'Cache-Control: no-cache' "$url" -o /tmp/status.json && node -e "JSON.parse(require('fs').readFileSync('/tmp/status.json')).updatedAt > 0 || process.exit(1)"; then
             mv /tmp/status.json site/data/status.json
           fi
 

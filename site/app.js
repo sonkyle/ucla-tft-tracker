@@ -11,6 +11,9 @@ const QUEUES = { 1090: 'Normal', 1100: 'Ranked', 1130: 'Hyper Roll', 1150: 'Doub
 
 let site;
 const weekCache = new Map();
+// "?v=<build time>" on data URLs, so each build's files are fetched fresh past GitHub Pages' CDN cache
+// (which can keep serving the previous build's copy for a few minutes after a deploy).
+let dataVersion = '';
 const ui = { sort: { key: 'rank', dir: -1 }, rankedOnly: false };
 let redraws = [];
 let renderId = 0;
@@ -100,7 +103,7 @@ const duration = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)
 
 async function loadWeek(key) {
   if (!weekCache.has(key)) {
-    weekCache.set(key, fetch(`data/weeks/${key}.json`, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : { key, matches: [] })));
+    weekCache.set(key, fetch(`data/weeks/${key}.json${dataVersion}`, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : { key, matches: [] })));
   }
   return weekCache.get(key);
 }
@@ -713,7 +716,8 @@ let checking = false;
 
 async function fetchStatus() {
   try {
-    const res = await fetch('data/status.json', { cache: 'no-cache' });
+    // a new query string every time, so neither the browser nor the CDN answers from a cached copy
+    const res = await fetch(`data/status.json?t=${Date.now()}`, { cache: 'no-store' });
     return res.ok ? (await res.json()).updatedAt ?? null : null;
   } catch {
     return null;
@@ -743,11 +747,13 @@ async function checkForUpdate() {
   try {
     const t = await fetchStatus();
     if (!t || t <= (updatedAt ?? 0)) return;
-    const res = await fetch('data/site.json', { cache: 'no-cache' });
+    const version = `?v=${t}`;
+    const res = await fetch(`data/site.json${version}`, { cache: 'no-cache' });
     if (!res.ok) return; // try again next time
     const next = await res.json();
     if (!next.players?.length || !next.weeks?.length) return;
     site = next;
+    dataVersion = version;
     weekCache.clear();
     traitIconSet = unitIconSet = itemIconSet = tacticianIconSet = undefined;
     // Load the week on screen before redrawing, so the games list doesn't flash "Loading…" and the page keeps its height.
@@ -772,7 +778,8 @@ async function boot() {
   try {
     // status first: if a deploy lands in between, the page just refreshes once more at the next check
     updatedAt = await fetchStatus();
-    const res = await fetch('data/site.json', { cache: 'no-cache' });
+    dataVersion = updatedAt ? `?v=${updatedAt}` : '';
+    const res = await fetch(`data/site.json${dataVersion}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(res.status);
     site = await res.json();
   } catch {
