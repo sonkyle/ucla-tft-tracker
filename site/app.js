@@ -503,13 +503,17 @@ const weekPath = (key) => (key && key !== site.weeks[0].key ? `/${key}` : '');
 const teamHref = (key) => (weekPath(key) ? `#/week/${key}` : '#/');
 const playerHref = (slug, key) => `#/player/${slug}${weekPath(key)}`;
 
+// Drawn chevrons for the ‹ › buttons: text glyphs sit low in the line, these center exactly.
+const chevron = (dir) => s('svg', { class: 'chev', viewBox: '0 0 16 16', 'aria-hidden': 'true' },
+  s('path', { d: dir < 0 ? 'M10 3.5 5.5 8l4.5 4.5' : 'M6 3.5 10.5 8 6 12.5' }));
+
 function weekNav(idx, hrefFor) {
   const weeks = site.weeks;
   const older = idx < weeks.length - 1, newer = idx > 0;
   return h('div', { class: 'week-nav' },
-    h('a', { class: 'btn', href: older ? hrefFor(weeks[idx + 1].key) : null, 'aria-disabled': older ? null : 'true', 'aria-label': 'Previous week' }, '‹'),
+    h('a', { class: 'btn', href: older ? hrefFor(weeks[idx + 1].key) : null, 'aria-disabled': older ? null : 'true', 'aria-label': 'Previous week' }, chevron(-1)),
     h('div', { class: 'week-label' }, weekTitle(weeks[idx].key), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null),
-    h('a', { class: 'btn', href: newer ? hrefFor(weeks[idx - 1].key) : null, 'aria-disabled': newer ? null : 'true', 'aria-label': 'Next week' }, '›'));
+    h('a', { class: 'btn', href: newer ? hrefFor(weeks[idx - 1].key) : null, 'aria-disabled': newer ? null : 'true', 'aria-label': 'Next week' }, chevron(1)));
 }
 
 // ---------------------------------------------------------------- team overview

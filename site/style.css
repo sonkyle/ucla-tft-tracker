@@ -146,6 +146,7 @@ footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--m
   text-decoration: none; font: inherit; cursor: pointer;
 }
 .btn:hover { background: var(--hover); }
+.btn .chev { width: 16px; height: 16px; display: block; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 .btn[aria-disabled="true"] { opacity: 0.35; pointer-events: none; }
 .pill { font-size: 11px; padding: 1px 8px; border-radius: 99px; background: var(--mid); color: var(--ink-2); }
 .toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); cursor: pointer; }
