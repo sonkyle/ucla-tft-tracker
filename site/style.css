@@ -202,13 +202,18 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .board > .name:hover { text-decoration: underline; }
 .board .traits { margin-bottom: 4px; }
 @media (max-width: 560px) {
-  /* narrow: LP change sits above the board, so the board gets everything right of the placement column */
-  .entry { grid-template-columns: 42px 1fr; column-gap: 10px; row-gap: 4px; }
-  .entry .entry-left { grid-row: 1 / span 2; }
-  .entry .entry-lp { grid-column: 2; grid-row: 1; text-align: right; min-width: 0; }
-  .entry .board { grid-column: 2; grid-row: 2; }
-  .place { width: 40px; height: 40px; font-size: 14px; }
-  .tactician, .tactician img, .tactician .blank { width: 42px; height: 42px; }
+  /* Phones: placement + tactician and the LP change share the top line, and the board gets the full width
+     below. Units sit on a 12-column grid and traits on an 18-column grid that scale with the screen, so a
+     full board stays on one row of each (a 13th unit or 19th trait wraps). */
+  .card { padding: 12px; }
+  .match { padding: 8px; }
+  .entry { grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 6px; }
+  .entry .entry-left { grid-column: 1; grid-row: 1; flex-direction: row; gap: 10px; }
+  .entry .entry-lp { grid-column: 2; grid-row: 1; align-self: center; text-align: right; min-width: 0; }
+  .entry .board { grid-column: 1 / -1; grid-row: 2; }
+  .place { width: 34px; height: 34px; font-size: 13px; border-radius: 7px; }
+  .tactician, .tactician img, .tactician .blank { width: 34px; height: 34px; }
+  .tactician .lvl { width: 17px; height: 17px; font-size: 10px; }
 }
 .entry + .entry { border-top: 1px solid var(--grid); padding-top: 8px; }
 .place {
@@ -272,6 +277,23 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .unit-tile .unit-items { height: 15px; margin-top: 2px; display: flex; gap: 1px; justify-content: center; }
 .unit-tile .item { width: 15px; height: 15px; border-radius: 2px; display: block; }
 .unit-tile .item.missing { display: grid; place-items: center; font-size: 9px; font-weight: 600; background: var(--grid); color: var(--ink-2); }
+/* Phones: traits on an 18-column grid and units on a 12-column grid that scale with the screen, so a full
+   board stays on one row of each (a 19th trait or 13th unit wraps). Comes after the rules above so it wins. */
+@media (max-width: 560px) {
+  .traits { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 3px 2px; align-items: start; }
+  .trait { flex-direction: column; gap: 1px; min-width: 0; container-type: inline-size; }
+  .trait .hex { width: 100%; height: auto; aspect-ratio: 22 / 24; }
+  .trait .glyph { width: 66cqi; height: 66cqi; }
+  .trait .n { font-size: 9px; line-height: 1; }
+  .trait-text { grid-column: span 6; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .units { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px 2px; }
+  .unit-tile { width: auto; min-width: 0; container-type: inline-size; }
+  .unit-tile .stars { height: 38cqi; line-height: 38cqi; font-size: 34cqi; letter-spacing: -0.5px; }
+  .unit-tile .portrait { width: 100%; height: auto; aspect-ratio: 1; border-width: 1.5px; border-radius: 3px; }
+  .unit-tile .unit-items { width: 100%; height: auto; aspect-ratio: 3 / 1; margin-top: 1px; gap: 0; }
+  .unit-tile .item { width: 33.333%; height: auto; aspect-ratio: 1; border-radius: 1px; }
+}
 .augments { font-size: 12px; color: var(--ink-2); margin-top: 4px; }
 .entry-lp { text-align: right; min-width: 72px; }
 .entry-lp .lp { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
