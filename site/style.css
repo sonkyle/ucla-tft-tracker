@@ -341,8 +341,21 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .notice code { background: var(--mid); padding: 1px 5px; border-radius: 4px; }
 
 /* light/dark toggle */
-.theme-toggle { min-width: 32px; width: 32px; padding: 0; color: var(--ink-2); }
-.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle, .icon-btn { min-width: 32px; width: 32px; padding: 0; color: var(--ink-2); }
+.theme-toggle svg, .icon-btn svg { width: 16px; height: 16px; }
+/* "Check for new games": the arrows spin while an update runs */
+.topbar .check-btn { margin-right: -8px; } /* sits closer to the theme toggle than the topbar gap */
+.check-btn:disabled { cursor: default; }
+.check-btn.busy svg { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .check-btn.busy svg { animation-duration: 3s; } }
+/* "Last updated" on wide screens, "Updated" on phones */
+.narrow-only { display: none; }
+@media (max-width: 480px) {
+  .wide-only { display: none; }
+  .narrow-only { display: inline; }
+  .topbar { gap: 12px; }
+}
 .theme-toggle .sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .sun { display: block; }
 :root[data-theme="dark"] .theme-toggle .moon { display: none; }

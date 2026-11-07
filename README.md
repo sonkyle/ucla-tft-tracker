@@ -101,6 +101,19 @@ is a free outside timer that starts the workflow through GitHub's API every 15 m
   `Content-Type: application/json` and body `{"ref":"main"}`. A test run should return 204.
 - When the token expires (GitHub emails you first), regenerate it and paste the new one into the cron job.
 
+### 5. "Check for new games" button (optional)
+A refresh button in the site's header lets anyone start an update instead of waiting for the next 15-minute check.
+The new data is usually live in under a minute, and the page redraws itself. Starting an update needs a GitHub
+token, which can't go in a public page, so a small free Cloudflare Worker ([worker/update-button.js](worker/update-button.js))
+holds it and starts the workflow, at most once every 2 minutes and never while an update is already running.
+1. Make another fine-grained token like the one above (this repo only, **Actions: Read and write**).
+2. In the [Cloudflare dashboard](https://dash.cloudflare.com) (free account): **Workers & Pages → Create → Create Worker**,
+   name it (e.g. `tft-update`), **Deploy**, then **Edit code**: replace everything with `worker/update-button.js` and **Deploy**.
+   If your repo or site address isn't `sonkyle/ucla-tft-tracker`, change `REPO` and `SITE_ORIGINS` at the top first.
+3. The worker's **Settings → Variables and Secrets → Add**: type **Secret**, name `GITHUB_TOKEN`, value = the token.
+4. Add the worker's address to `config.json` (`"updateUrl": "https://tft-update.<you>.workers.dev"`) and push.
+   The button appears once that deploy finishes.
+
 Notes:
 - If the key expires or is wrong, the workflow fails and GitHub emails you. Update the secret and it recovers.
   LP for games played while it was down will show as combined totals or "LP n/a".
@@ -110,6 +123,7 @@ Notes:
 ## Project layout
 ```
 config.json          players + settings
+worker/              Cloudflare Worker for the "Check for new games" button
 src/poll.js          one polling pass: rank snapshots + new matches -> data/
 src/build.js         data/ -> site/data/ (LP attribution, weekly roll-ups)
 src/stats.js         ladder math, week math, LP attribution (unit-tested)

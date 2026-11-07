@@ -93,6 +93,9 @@ const weeks = weekRange(earliest, now, cfg.timezone, cfg.weekStartsOn);
 // Weeks before it, or every week when weekOne isn't set, have no number.
 const dayIndex = (key) => { const [y, m, d] = key.split('-').map(Number); return Date.UTC(y, m - 1, d) / 86400e3; };
 if (cfg.weekOne && !/^\d{4}-\d{2}-\d{2}$/.test(cfg.weekOne)) throw new Error(`weekOne "${cfg.weekOne}" must look like 2026-09-23`);
+// The "Check for new games" button's worker (worker/update-button.js); no button without it.
+if (cfg.updateUrl && !/^https:\/\/\S+$/.test(cfg.updateUrl)) throw new Error(`updateUrl "${cfg.updateUrl}" must be an https:// URL`);
+
 const weekNumber = (key) => {
   if (!cfg.weekOne) return null;
   const n = Math.floor((dayIndex(key) - dayIndex(cfg.weekOne)) / 7) + 1;
@@ -103,6 +106,7 @@ const weekNumber = (key) => {
 const pick = (s) => (s && s.tier ? { tier: s.tier, rank: s.rank, lp: s.lp } : null);
 const site = {
   teamName: cfg.teamName ?? 'TFT Team',
+  updateUrl: cfg.updateUrl ?? null,
   timezone: cfg.timezone,
   rankedQueue: RANKED_QUEUE,
   queueNames: cfg.queueNames ?? {},

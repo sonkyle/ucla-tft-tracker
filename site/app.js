@@ -713,6 +713,7 @@ const CHECK_EVERY_MS = 2 * 60e3;
 let updatedAt = null; // build time of the data on screen
 let lastCheck = 0;
 let checking = false;
+let headerNote = null; // replaces "Last updated …" while the button is working
 
 async function fetchStatus() {
   try {
@@ -736,12 +737,15 @@ function agoText(t) {
 
 function showUpdated() {
   const el = document.getElementById('updated');
-  el.textContent = updatedAt ? `Last updated ${agoText(updatedAt)}` : '';
+  if (headerNote) el.replaceChildren(headerNote);
+  else if (updatedAt) el.replaceChildren(h('span', { class: 'wide-only' }, 'Last updated'), h('span', { class: 'narrow-only' }, 'Updated'), ` ${agoText(updatedAt)}`);
+  else el.replaceChildren();
   el.title = updatedAt ? fmtDateTime.format(updatedAt) : '';
 }
 
-async function checkForUpdate() {
-  if (checking || document.hidden) return;
+/** Returns once the check is done (or right away if another check is already running). */
+async function checkForUpdate({ force = false } = {}) {
+  if (checking || (document.hidden && !force)) return;
   checking = true;
   lastCheck = Date.now();
   try {
@@ -773,6 +777,66 @@ async function checkForUpdate() {
   }
 }
 
+// ---------------------------------------------------------------- "Check for new games" button
+// Asks the worker in site.updateUrl (worker/update-button.js) to start an update, then watches data/status.json
+// until the new build is live (usually under a minute) and redraws in place. Hidden when updateUrl isn't set.
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function setupCheckButton() {
+  const btn = document.getElementById('check-btn');
+  if (!site.updateUrl) return;
+  btn.hidden = false;
+  btn.addEventListener('click', () => requestUpdate(btn));
+}
+
+async function requestUpdate(btn) {
+  const note = async (text, ms) => { headerNote = text; showUpdated(); if (ms) { await sleep(ms); headerNote = null; showUpdated(); } };
+  btn.disabled = true;
+  btn.classList.add('busy');
+  try {
+    let reply = {};
+    try {
+      const res = await fetch(site.updateUrl, { method: 'POST' });
+      reply = await res.json().catch(() => ({ error: res.status }));
+    } catch {
+      reply = { error: 'offline' };
+    }
+    if (reply.status === 'recent') {
+      // a check started moments ago: show its result if it's out, and say when another can start
+      await checkForUpdate({ force: true });
+      btn.classList.remove('busy');
+      await note(`Just checked · try again in ${reply.retryIn}s`, 5000);
+      return;
+    }
+    if (reply.status !== 'started' && reply.status !== 'running') {
+      btn.classList.remove('busy');
+      await note('Couldn’t start an update', 5000);
+      return;
+    }
+    await note('Checking for new games…');
+    const before = updatedAt ?? 0;
+    const deadline = Date.now() + 4 * 60e3; // updates normally finish in about a minute
+    let done = false;
+    while (!done && Date.now() < deadline) {
+      await sleep(5000);
+      const t = await fetchStatus();
+      if (t && t > before) {
+        while (checking) await sleep(250); // a background check may be redrawing already
+        await checkForUpdate({ force: true });
+        done = (updatedAt ?? 0) > before;
+      }
+    }
+    btn.classList.remove('busy');
+    headerNote = null;
+    if (!done) await note('Still updating · check back in a minute', 6000);
+    else showUpdated();
+  } finally {
+    btn.classList.remove('busy');
+    btn.disabled = false;
+  }
+}
+
 async function boot() {
   setupThemeToggle();
   try {
@@ -791,6 +855,7 @@ async function boot() {
   document.getElementById('brand').textContent = site.teamName;
   showUpdated();
   setInterval(showUpdated, 30e3);
+  setupCheckButton();
   if (!site.players.length || !site.weeks?.length) {
     app.replaceChildren(h('div', { class: 'notice' }, 'No players found. Add Riot IDs to ', h('code', {}, 'config.json'), ' and run ', h('code', {}, 'npm run update'), '.'));
     return;
