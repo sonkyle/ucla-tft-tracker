@@ -100,7 +100,7 @@ const duration = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)
 
 async function loadWeek(key) {
   if (!weekCache.has(key)) {
-    weekCache.set(key, fetch(`data/weeks/${key}.json`).then((r) => (r.ok ? r.json() : { key, matches: [] })));
+    weekCache.set(key, fetch(`data/weeks/${key}.json`, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : { key, matches: [] })));
   }
   return weekCache.get(key);
 }
@@ -252,19 +252,25 @@ function matchCard(m, focus, seen) {
     entries.map((e) => entryRow(e, m, !focus, seen)));
 }
 
+// How many games the newest list is showing (it grows with "Show more"), so a live refresh can keep them open.
+let shownCount = 0, keepShown = 0;
 function matchList(matches, focus, pageSize = 25) {
   const box = h('div', { class: 'matches' });
   let shown = 0;
+  const target = keepShown;
+  keepShown = 0;
   const seen = new Set(); // combined-LP groups already shown (matches are newest first)
   const more = h('button', { class: 'btn more', onclick: () => next() }, 'Show more');
   function next() {
     more.remove();
     for (const m of matches.slice(shown, shown + pageSize)) box.append(matchCard(m, focus, seen));
     shown += pageSize;
+    shownCount = shown;
     if (shown < matches.length) box.append(more);
   }
+  shownCount = 0;
   if (!matches.length) box.append(h('p', { class: 'muted' }, 'No games.'));
-  else next();
+  else do next(); while (shown < target && shown < matches.length);
   return box;
 }
 
@@ -694,33 +700,78 @@ function setupThemeToggle() {
   label();
 }
 
-/** "Last updated 5 minutes ago" in the header, from the time of the last build (data/status.json). */
-async function showUpdated() {
-  const el = document.getElementById('updated');
-  let at = null;
+// ---------------------------------------------------------------- live refresh
+// The data is rebuilt about every 15 minutes, and each build stamps data/status.json with its time.
+// An open page shows "Last updated X minutes ago" from that stamp (re-counted every 30 seconds on the
+// viewer's clock), checks the stamp every 2 minutes and whenever the tab comes back into view, and when
+// there's a newer build it reloads the data and redraws in place: same page, week, scroll position and filters.
+
+const CHECK_EVERY_MS = 2 * 60e3;
+let updatedAt = null; // build time of the data on screen
+let lastCheck = 0;
+let checking = false;
+
+async function fetchStatus() {
   try {
     const res = await fetch('data/status.json', { cache: 'no-cache' });
-    if (res.ok) at = (await res.json()).updatedAt;
-  } catch {}
-  if (!at) return;
-  const ago = () => {
-    const min = Math.floor((Date.now() - at) / 60e3);
-    if (min < 1) return 'just now';
-    if (min < 60) return `${min} minute${min === 1 ? '' : 's'} ago`;
-    const hr = Math.floor(min / 60);
-    if (hr < 24) return `${hr} hour${hr === 1 ? '' : 's'} ago`;
-    const d = Math.floor(hr / 24);
-    return `${d} day${d === 1 ? '' : 's'} ago`;
-  };
-  const tick = () => { el.textContent = `Last updated ${ago()}`; };
-  el.title = fmtDateTime.format(at);
-  tick();
-  setInterval(tick, 30e3);
+    return res.ok ? (await res.json()).updatedAt ?? null : null;
+  } catch {
+    return null;
+  }
+}
+
+function agoText(t) {
+  const min = Math.floor((Date.now() - t) / 60e3);
+  if (min < 1) return 'just now';
+  if (min < 60) return `${min} minute${min === 1 ? '' : 's'} ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr} hour${hr === 1 ? '' : 's'} ago`;
+  const d = Math.floor(hr / 24);
+  return `${d} day${d === 1 ? '' : 's'} ago`;
+}
+
+function showUpdated() {
+  const el = document.getElementById('updated');
+  el.textContent = updatedAt ? `Last updated ${agoText(updatedAt)}` : '';
+  el.title = updatedAt ? fmtDateTime.format(updatedAt) : '';
+}
+
+async function checkForUpdate() {
+  if (checking || document.hidden) return;
+  checking = true;
+  lastCheck = Date.now();
+  try {
+    const t = await fetchStatus();
+    if (!t || t <= (updatedAt ?? 0)) return;
+    const res = await fetch('data/site.json', { cache: 'no-cache' });
+    if (!res.ok) return; // try again next time
+    const next = await res.json();
+    if (!next.players?.length || !next.weeks?.length) return;
+    site = next;
+    weekCache.clear();
+    traitIconSet = unitIconSet = itemIconSet = tacticianIconSet = undefined;
+    // Load the week on screen before redrawing, so the games list doesn't flash "Loading…" and the page keeps its height.
+    const [route, a, b] = location.hash.replace(/^#\/?/, '').split('/');
+    await loadWeek(site.weeks[weekIndex(route === 'player' ? b : route === 'week' ? a : null)].key).catch(() => {});
+    const y = window.scrollY;
+    keepShown = shownCount; // keep any "Show more" pages that were open
+    await render();
+    keepShown = 0; // only for this redraw (unused if the page has no games list)
+    window.scrollTo(0, y);
+    updatedAt = t;
+    showUpdated();
+  } catch {
+    // network hiccup: the next check retries
+  } finally {
+    checking = false;
+  }
 }
 
 async function boot() {
   setupThemeToggle();
   try {
+    // status first: if a deploy lands in between, the page just refreshes once more at the next check
+    updatedAt = await fetchStatus();
     const res = await fetch('data/site.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(res.status);
     site = await res.json();
@@ -732,6 +783,7 @@ async function boot() {
   document.title = `${site.teamName} · TFT Tracker`;
   document.getElementById('brand').textContent = site.teamName;
   showUpdated();
+  setInterval(showUpdated, 30e3);
   if (!site.players.length || !site.weeks?.length) {
     app.replaceChildren(h('div', { class: 'notice' }, 'No players found. Add Riot IDs to ', h('code', {}, 'config.json'), ' and run ', h('code', {}, 'npm run update'), '.'));
     return;
@@ -740,6 +792,10 @@ async function boot() {
   let t;
   window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => redraws.forEach((f) => f()), 150); });
   render();
+  setInterval(checkForUpdate, CHECK_EVERY_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && Date.now() - lastCheck > 30e3) checkForUpdate();
+  });
 }
 
 boot();
