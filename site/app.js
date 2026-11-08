@@ -708,7 +708,7 @@ async function renderLive(myId) {
       h('span', { class: 'muted' }, queueName(g.queue)),
       h('span', { class: 'muted num', 'data-since': g.start }, minutesSince(g.start)),
       players.length > 1 ? h('span', { class: 'pill' }, 'same lobby') : null));
-  const checked = live?.checkedAt ? `As of the last check, ${agoText(live.checkedAt)}.` : 'Shows up after the next update.';
+  const checked = live?.checkedAt ? `Last checked ${agoText(live.checkedAt)}` : 'Shows up after the next update.';
   const now = h('section', { class: 'card' },
     h('h2', {}, 'In game now'),
     h('p', { class: 'sub' }, checked),
