@@ -819,7 +819,7 @@ async function requestUpdate(btn) {
     const deadline = Date.now() + 4 * 60e3; // updates normally finish in about a minute
     let done = false;
     while (!done && Date.now() < deadline) {
-      await sleep(5000);
+      await sleep(2500);
       const t = await fetchStatus();
       if (t && t > before) {
         while (checking) await sleep(250); // a background check may be redrawing already

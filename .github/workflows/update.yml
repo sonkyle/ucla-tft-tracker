@@ -20,9 +20,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # One job that checks, builds and publishes: a separate deploy job would wait ~6 s for a second machine.
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -71,12 +75,6 @@ jobs:
         with:
           path: site
 
-  deploy:
-    needs: update
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
+      - name: Deploy site
+        id: deployment
         uses: actions/deploy-pages@v4
