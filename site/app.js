@@ -711,10 +711,10 @@ async function renderLive(myId) {
   const checked = live?.checkedAt ? `As of the last check, ${agoText(live.checkedAt)}.` : 'Shows up after the next update.';
   const now = h('section', { class: 'card' },
     h('h2', {}, 'In game now'),
-    h('p', { class: 'sub' }, `${checked} Riot shows games in progress, not who’s in queue.`),
+    h('p', { class: 'sub' }, checked),
     rows.length ? h('ul', { class: 'live-list' }, rows) : h('p', { class: 'muted' }, 'Nobody is in a game right now.'));
 
-  const recentHead = () => [h('h2', {}, 'Recent games'), h('p', { class: 'sub' }, 'Every player’s games from this week and last, newest first.')];
+  const recentHead = () => [h('h2', { class: 'section-title' }, 'Recent games')];
   const recent = h('section', { class: 'card' }, recentHead(), h('p', { class: 'muted' }, 'Loading…'));
   app.replaceChildren(now, recent);
 

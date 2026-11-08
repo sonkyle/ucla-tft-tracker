@@ -127,6 +127,7 @@ footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--m
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
 .card > h2 { margin-bottom: 4px; }
+.card > h2.section-title { margin-bottom: 12px; } /* a title with no description line under it */
 .card > .sub { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
 /* card title with a control on the right (wraps under the title on narrow screens) */
 .card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; margin-bottom: 4px; }
