@@ -1,6 +1,6 @@
 {
   "teamName": "UCLA TFT",
-  "updateUrl": null,
+  "updateUrl": "https://tft-update.sonkyle0420.workers.dev",
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
