@@ -686,9 +686,10 @@ function inGame(slug) {
 }
 const liveDot = () => h('span', { class: 'live-dot', 'aria-label': 'in a game' });
 const minutesSince = (t) => `${Math.max(0, Math.floor((Date.now() - t) / 60e3))} min`;
-/** Re-count the "12 min" in-game timers (they carry data-since) without redrawing. */
+/** Re-count the "12 min" in-game timers (data-since) and "3 minutes ago" texts (data-ago) without redrawing. */
 function tickLive() {
   for (const el of document.querySelectorAll('[data-since]')) el.textContent = minutesSince(Number(el.dataset.since));
+  for (const el of document.querySelectorAll('[data-ago]')) el.textContent = agoText(Number(el.dataset.ago));
 }
 
 async function renderLive(myId) {
@@ -708,7 +709,9 @@ async function renderLive(myId) {
       h('span', { class: 'muted' }, queueName(g.queue)),
       h('span', { class: 'muted num', 'data-since': g.start }, minutesSince(g.start)),
       players.length > 1 ? h('span', { class: 'pill' }, 'same lobby') : null));
-  const checked = live?.checkedAt ? `Last checked ${agoText(live.checkedAt)}` : 'Shows up after the next update.';
+  const checked = live?.checkedAt
+    ? ['Last checked ', h('span', { 'data-ago': live.checkedAt }, agoText(live.checkedAt))]
+    : 'Shows up after the next update.';
   const now = h('section', { class: 'card' },
     h('h2', {}, 'In game now'),
     h('p', { class: 'sub' }, checked),
