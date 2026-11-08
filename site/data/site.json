@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1794116716226,
+  "latestActivity": 1794117264425,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -638,7 +638,7 @@
       "peak": {"tier":"MASTER","rank":"I","lp":263,"t":1794089715358},
       "trackedSince": 1793873589498,
       "lpCoverage": {"games":15,"matched":15},
-      "weeks": {"2026-11-04":{"lp":62,"partial":false,"fromGames":true,"ranked":{"games":15,"avg":4.2,"top4":53.3,"firsts":2},"otherGames":2,"endRank":{"tier":"MASTER","rank":"I","lp":253}},"2026-10-28":{"lp":146,"partial":false,"fromGames":true,"ranked":{"games":13,"avg":3.77,"top4":69.2,"firsts":2},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":191}},"2026-10-21":{"lp":345,"partial":false,"fromGames":true,"ranked":{"games":19,"avg":3.42,"top4":73.7,"firsts":5},"otherGames":1,"endRank":{"tier":"MASTER","rank":"I","lp":45}}},
+      "weeks": {"2026-11-04":{"lp":62,"partial":false,"fromGames":true,"ranked":{"games":15,"avg":4.2,"top4":53.3,"firsts":2},"otherGames":3,"endRank":{"tier":"MASTER","rank":"I","lp":253}},"2026-10-28":{"lp":146,"partial":false,"fromGames":true,"ranked":{"games":13,"avg":3.77,"top4":69.2,"firsts":2},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":191}},"2026-10-21":{"lp":345,"partial":false,"fromGames":true,"ranked":{"games":19,"avg":3.42,"top4":73.7,"firsts":5},"otherGames":1,"endRank":{"tier":"MASTER","rank":"I","lp":45}}},
       "history": [[1792610231202,2500,"DIAMOND"],[1792609803002,2510,"DIAMOND"],[1792612390927,2550,"DIAMOND"],[1792617451864,2601,"DIAMOND"],[1792631860320,2658,"DIAMOND"],[1792633794936,2606,"DIAMOND"],[1792649194944,2600,"DIAMOND"],[1792710070598,2610,"DIAMOND"],[1792780237783,2632,"DIAMOND"],[1792782206127,2611,"DIAMOND"],[1792784228792,2624,"DIAMOND"],[1793044571787,2660,"DIAMOND"],[1793046602698,2650,"DIAMOND"],[1793072483631,2704,"DIAMOND"],[1793074318663,2700,"DIAMOND"],[1793092567658,2742,"DIAMOND"],[1793095171105,2781,"DIAMOND"],[1793097490202,2791,"DIAMOND"],[1793099885193,2835,"MASTER"],[1793141804699,2845,"MASTER"],[1793217121210,2835,"MASTER"],[1793219230999,2855,"MASTER"],[1793221708243,2908,"MASTER"],[1793301493268,2918,"MASTER"],[1793596259906,2941,"MASTER"],[1793598129723,2918,"MASTER"],[1793599628067,2869,"MASTER"],[1793737246294,2890,"MASTER"],[1793739271527,2912,"MASTER"],[1793742171330,2951,"MASTER"],[1793744666270,2987,"MASTER"],[1793746900203,3039,"MASTER"],[1793751565246,2991,"MASTER"],[1793906262439,2957,"MASTER"],[1793908544182,2982,"MASTER"],[1793910269088,2938,"MASTER"],[1793912315436,2928,"MASTER"],[1793914663377,2918,"MASTER"],[1793994959849,2928,"MASTER"],[1793997044659,2946,"MASTER"],[1794018958297,2936,"MASTER"],[1794035429914,2917,"MASTER"],[1794037927197,2927,"MASTER"],[1794040307609,2960,"MASTER"],[1794084826241,3006,"MASTER"],[1794086876640,3016,"MASTER"],[1794089096040,3063,"MASTER"],[1794091816186,3053,"MASTER"]]
     },
     {
