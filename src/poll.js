@@ -5,7 +5,7 @@
 
 import path from 'node:path';
 import { RiotClient } from './riot.js';
-import { ROOT, arg, loadEnv, loadConfig, DataStore, normalizeMatch } from './store.js';
+import { ROOT, arg, loadEnv, loadConfig, DataStore, normalizeMatch, writeJson } from './store.js';
 import { RANKED_QUEUE, matchTime, apexCutoff } from './stats.js';
 import { fetchProfileLp } from './tactics.js';
 import { syncIcons, idsInMatches } from './icons.js';
@@ -80,6 +80,23 @@ if (now - (store.cutoffs.t ?? 0) >= 60 * 60e3) {
     console.warn(`! apex cutoff lookup failed: ${err.message}`);
   }
 }
+
+// 2c. Who's in a game right now, for the site's Live page (Riot shows games in progress; there's no way to
+//     see who's in queue). Saved to data/live.json, which isn't committed: it's only true until the next
+//     check, and committing it would make a commit every run. Failures are warnings only.
+const live = { checkedAt: now, players: {} };
+for (const p of active) {
+  try {
+    const g = await riot.activeGame(p.puuid);
+    if (!g) continue;
+    // gameStartTime is 0 during loading; gameLength (seconds) counts from the start of the game
+    live.players[p.puuid] = { gameId: g.gameId ?? null, queue: g.gameQueueConfigId ?? null, start: g.gameStartTime || null, length: g.gameLength ?? null };
+    log(`live  ${p.name} is in a game (queue ${g.gameQueueConfigId}, ${Math.round((g.gameLength ?? 0) / 60)} min)`);
+  } catch (err) {
+    console.warn(`! live game lookup failed for ${p.name}: ${err.message}`);
+  }
+}
+writeJson(path.join(store.dir, 'live.json'), live);
 
 // 3. Match history. First run pages back to `trackFrom`; later runs stop at
 //    the first match we already have. `--max-matches` caps API use per run so

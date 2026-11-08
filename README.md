@@ -5,6 +5,8 @@ It runs free on GitHub: a scheduled GitHub Action checks the Riot API every ~15 
 publishes a static site on GitHub Pages.
 
 - **Team page:** team totals for the week and a leaderboard.
+- **Live page:** who's in a game right now (as of the last check, with a green dot on their tab on every page) and every
+  player's recent games, newest first. Riot shows games in progress; there's no way to see who's in queue.
 - **Player pages** (one tab per player in the header): that player's net LP and games for the selected week, plus their
   current and peak rank, a rank-over-time chart, net LP per week, and a week-by-week table. Only that player's results are shown.
   The week you're looking at carries over when you switch between the team page and player pages.

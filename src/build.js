@@ -144,9 +144,16 @@ for (const { snaps, games } of perPlayer) {
   site.latestActivity = Math.max(site.latestActivity ?? 0, latest) || null;
 }
 writeJson(path.join(outDir, 'site.json'), site, 3);
-// When this build ran, for the site's "Last updated" line. Its own small file, kept out of git (.gitignore),
+// When this build ran (the site's "Last updated" line) and who was in a game at the last check (the Live page
+// and the green dots), from data/live.json. Its own small file, kept out of git (.gitignore) like live.json,
 // so a check that finds nothing new doesn't make a commit.
-writeJson(path.join(outDir, 'status.json'), { updatedAt: now });
+let live = null;
+try {
+  const raw = JSON.parse(fs.readFileSync(path.join(store.dir, 'live.json'), 'utf8'));
+  live = { checkedAt: raw.checkedAt, players: {} };
+  for (const [puuid, g] of Object.entries(raw.players ?? {})) if (slugOf.has(puuid)) live.players[slugOf.get(puuid)] = g;
+} catch {} // no check has run here yet
+writeJson(path.join(outDir, 'status.json'), { updatedAt: now, live }, 3);
 
 // ---- weeks/<key>.json
 const byWeek = new Map(weeks.map((w) => [w.key, []]));

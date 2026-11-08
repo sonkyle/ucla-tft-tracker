@@ -95,6 +95,11 @@ export class RiotClient {
     return this.get(this.platform, `/tft/league/v1/${tier}`, { queue: 'RANKED_TFT' });
   }
 
+  /** The game a player is in right now (spectator data), or null when they aren't in one. */
+  activeGame(puuid) {
+    return this.get(this.platform, `/lol/spectator/tft/v5/active-games/by-puuid/${puuid}`);
+  }
+
   matchIds(puuid, { start = 0, count = 20, startTime } = {}) {
     return this.get(this.region, `/tft/match/v1/matches/by-puuid/${puuid}/ids`, { start, count, startTime });
   }
