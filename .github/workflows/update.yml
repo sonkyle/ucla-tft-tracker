@@ -75,6 +75,11 @@ jobs:
         with:
           path: site
 
+      # Publishing the instant the upload finishes occasionally fails with "No artifacts named github-pages":
+      # GitHub can take a moment to register the upload.
+      - name: Wait for the upload to register
+        run: sleep 5
+
       - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
