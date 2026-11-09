@@ -66,8 +66,8 @@ for (const p of active) {
 }
 
 // 2b. Grandmaster / Challenger LP cutoffs (they move daily), for the rank chart's tier bands.
-//     Three league calls, at most once an hour. Failures are warnings only.
-if (now - (store.cutoffs.t ?? 0) >= 60 * 60e3) {
+//     Three league calls, at most twice a day. Failures are warnings only, and the next run tries again.
+if (now - (store.cutoffs.t ?? 0) >= 12 * 3600e3) {
   try {
     const lps = async (tier) => ((await riot.apexLeague(tier))?.entries ?? []).map((e) => e.leaguePoints);
     const [m, gm, ch] = [await lps('master'), await lps('grandmaster'), await lps('challenger')];
