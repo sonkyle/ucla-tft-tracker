@@ -652,79 +652,29 @@ async function renderPlayer(slug, weekKey, myId) {
 
 // ---------------------------------------------------------------- boot + routing
 
-/** Header tabs: Team, Live, then one per player (a green dot while they're in a game). Links keep the week you're looking at. */
+/** Header tabs: Team, Recent games, then one per player. Links keep the week you're looking at. */
 function renderPages(route, slug, weekKey) {
   const nav = document.getElementById('pages');
   const players = [...site.players].sort((x, y) => x.name.localeCompare(y.name));
-  const anyoneLive = players.some((p) => inGame(p.slug));
   nav.replaceChildren(
-    h('a', { href: teamHref(weekKey), 'aria-current': route !== 'player' && route !== 'live' ? 'page' : null }, 'Team'),
-    h('a', { href: '#/live', 'aria-current': route === 'live' ? 'page' : null, title: anyoneLive ? 'Someone is in a game' : null },
-      anyoneLive ? liveDot() : null, 'Live'),
+    h('a', { href: teamHref(weekKey), 'aria-current': route !== 'player' && route !== 'recent' ? 'page' : null }, 'Team'),
+    h('a', { href: '#/recent', 'aria-current': route === 'recent' ? 'page' : null }, 'Recent games'),
     h('span', { class: 'sep', 'aria-hidden': 'true' }),
-    ...players.map((p) => {
-      const g = inGame(p.slug);
-      return h('a', { href: playerHref(p.slug, weekKey), 'aria-current': route === 'player' && slug === p.slug ? 'page' : null,
-        title: g ? `In a game: ${queueName(g.queue)}` : null }, g ? liveDot() : null, p.name);
-    }));
+    ...players.map((p) => h('a', { href: playerHref(p.slug, weekKey), 'aria-current': route === 'player' && slug === p.slug ? 'page' : null }, p.name)));
   nav.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 }
 
-// ---------------------------------------------------------------- live page
+// ---------------------------------------------------------------- recent games page
 
-// A game still listed this long after it started is surely over (the last check is up to ~15 minutes old).
-const LIVE_MAX_MIN = 75;
-
-/** { queue, gameId, start } if the player was in a game at the last check (and it can't be over yet), else null. */
-function inGame(slug) {
-  const g = live?.players?.[slug];
-  if (!g) return null;
-  // gameStartTime is 0 while loading; then count back from the game length at the check instead
-  const start = g.start || (live.checkedAt - (g.length ?? 0) * 1000);
-  if (Date.now() - start > LIVE_MAX_MIN * 60e3) return null;
-  return { queue: g.queue, gameId: g.gameId, start };
-}
-const liveDot = () => h('span', { class: 'live-dot', 'aria-label': 'in a game' });
-const minutesSince = (t) => `${Math.max(0, Math.floor((Date.now() - t) / 60e3))} min`;
-/** Re-count the "12 min" in-game timers (data-since) and "3 minutes ago" texts (data-ago) without redrawing. */
-function tickLive() {
-  for (const el of document.querySelectorAll('[data-since]')) el.textContent = minutesSince(Number(el.dataset.since));
-  for (const el of document.querySelectorAll('[data-ago]')) el.textContent = agoText(Number(el.dataset.ago));
-}
-
-async function renderLive(myId) {
-  // Who's in a game, teammates in the same lobby grouped together, longest-running first.
-  const lobbies = new Map();
-  for (const p of site.players) {
-    const g = inGame(p.slug);
-    if (!g) continue;
-    const key = g.gameId ?? p.slug;
-    if (!lobbies.has(key)) lobbies.set(key, { g, players: [] });
-    lobbies.get(key).players.push(p);
-  }
-  const rows = [...lobbies.values()].sort((x, y) => x.g.start - y.g.start).map(({ g, players }) =>
-    h('li', { class: 'live-row' },
-      liveDot(),
-      h('span', { class: 'live-names' }, players.flatMap((p, i) => [i ? ', ' : null, h('a', { href: playerHref(p.slug, site.weeks[0].key) }, p.name)])),
-      h('span', { class: 'muted' }, queueName(g.queue)),
-      h('span', { class: 'muted num', 'data-since': g.start }, minutesSince(g.start)),
-      players.length > 1 ? h('span', { class: 'pill' }, 'same lobby') : null));
-  const checked = live?.checkedAt
-    ? ['Last checked ', h('span', { 'data-ago': live.checkedAt }, agoText(live.checkedAt))]
-    : 'Shows up after the next update.';
-  const now = h('section', { class: 'card' },
-    h('h2', {}, 'In game now'),
-    h('p', { class: 'sub' }, checked),
-    rows.length ? h('ul', { class: 'live-list' }, rows) : h('p', { class: 'muted' }, 'Nobody is in a game right now.'));
-
-  const recentHead = () => [h('h2', { class: 'section-title' }, 'Recent games')];
-  const recent = h('section', { class: 'card' }, recentHead(), h('p', { class: 'muted' }, 'Loading…'));
-  app.replaceChildren(now, recent);
+async function renderRecent(myId) {
+  const head = () => [h('h2', { class: 'section-title' }, 'Most recent games')];
+  const recent = h('section', { class: 'card' }, head(), h('p', { class: 'muted' }, 'Loading…'));
+  app.replaceChildren(recent);
 
   const weeks = await Promise.all(site.weeks.slice(0, 2).map((w) => loadWeek(w.key)));
   if (myId !== renderId) return;
   const matches = weeks.flatMap((w) => w.matches).sort((x, y) => y.time - x.time);
-  recent.replaceChildren(...recentHead(), matchList(matches, null, 10));
+  recent.replaceChildren(...head(), matchList(matches, null, 10));
 }
 
 async function render() {
@@ -737,7 +687,7 @@ async function render() {
   renderPages(route, a, weekKey);
   try {
     if (route === 'player') await renderPlayer(a, weekKey, myId);
-    else if (route === 'live') await renderLive(myId);
+    else if (route === 'recent') await renderRecent(myId);
     else renderOverview(weekKey);
   } finally {
     if (myId === renderId) app.classList.remove('loading');
@@ -779,7 +729,6 @@ let updatedAt = null; // build time of the data on screen
 let lastCheck = 0;
 let checking = false;
 let headerNote = null; // replaces "Last updated …" while the button is working
-let live = null; // who was in a game at the last check: { checkedAt, players: { slug: { gameId, queue, start, length } } }
 
 /** data/status.json: { updatedAt, live }, or null if it can't be read. */
 async function fetchStatus() {
@@ -825,7 +774,6 @@ async function checkForUpdate({ force = false } = {}) {
     const next = await res.json();
     if (!next.players?.length || !next.weeks?.length) return;
     site = next;
-    live = status.live ?? null;
     dataVersion = version;
     weekCache.clear();
     traitIconSet = unitIconSet = itemIconSet = tacticianIconSet = undefined;
@@ -912,7 +860,6 @@ async function boot() {
     // status first: if a deploy lands in between, the page just refreshes once more at the next check
     const status = await fetchStatus();
     updatedAt = status?.updatedAt ?? null;
-    live = status?.live ?? null;
     dataVersion = updatedAt ? `?v=${updatedAt}` : '';
     const res = await fetch(`data/site.json${dataVersion}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(res.status);
@@ -925,7 +872,7 @@ async function boot() {
   document.title = `${site.teamName} · TFT Tracker`;
   document.getElementById('brand').textContent = site.teamName;
   showUpdated();
-  setInterval(() => { showUpdated(); tickLive(); }, 30e3);
+  setInterval(showUpdated, 30e3);
   setupCheckButton();
   if (!site.players.length || !site.weeks?.length) {
     app.replaceChildren(h('div', { class: 'notice' }, 'No players found. Add Riot IDs to ', h('code', {}, 'config.json'), ' and run ', h('code', {}, 'npm run update'), '.'));

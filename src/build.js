@@ -144,9 +144,9 @@ for (const { snaps, games } of perPlayer) {
   site.latestActivity = Math.max(site.latestActivity ?? 0, latest) || null;
 }
 writeJson(path.join(outDir, 'site.json'), site, 3);
-// When this build ran (the site's "Last updated" line) and who was in a game at the last check (the Live page
-// and the green dots), from data/live.json. Its own small file, kept out of git (.gitignore) like live.json,
-// so a check that finds nothing new doesn't make a commit.
+// When this build ran (the site's "Last updated" line) and who was in a game at the last check, from
+// data/live.json (not shown on the site at the moment; see poll.js). Its own small file, kept out of git
+// (.gitignore) like live.json, so a check that finds nothing new doesn't make a commit.
 let live = null;
 try {
   const raw = JSON.parse(fs.readFileSync(path.join(store.dir, 'live.json'), 'utf8'));

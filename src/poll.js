@@ -81,9 +81,10 @@ if (now - (store.cutoffs.t ?? 0) >= 60 * 60e3) {
   }
 }
 
-// 2c. Who's in a game right now, for the site's Live page (Riot shows games in progress; there's no way to
-//     see who's in queue). Saved to data/live.json, which isn't committed: it's only true until the next
-//     check, and committing it would make a commit every run. Failures are warnings only.
+// 2c. Who's in a game right now (Riot shows games in progress; there's no way to see who's in queue). Saved to
+//     data/live.json, which isn't committed: it's only true until the next check, and committing it would make
+//     a commit every run. Failures are warnings only. The site doesn't show this at the moment: in Nov 2026
+//     Riot's lookup answered 404 for a player who was in a game.
 const live = { checkedAt: now, players: {} };
 for (const p of active) {
   try {

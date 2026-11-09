@@ -106,21 +106,6 @@ h2 { font-size: 15px; }
 .pages a[aria-current="page"] { background: var(--ink); color: var(--page); font-weight: 600; }
 .pages .sep { flex: none; width: 1px; height: 18px; background: var(--border); margin: 0 6px; }
 
-/* "in a game" dot (tabs and the Live page) */
-.live-dot {
-  display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px;
-  background: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); animation: live-pulse 2s ease-out infinite;
-}
-@keyframes live-pulse { 70% { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-@media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
-.live-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.live-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 0; }
-.live-row + .live-row { border-top: 1px solid var(--grid); }
-.live-row .live-dot { margin-right: -4px; }
-.live-names { font-weight: 600; }
-.live-names a { text-decoration: none; }
-.live-names a:hover { text-decoration: underline; }
-
 main { max-width: 1120px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 16px; transition: opacity 0.15s; }
 main.loading { opacity: 0.55; }
 footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--muted); font-size: 12px; }
