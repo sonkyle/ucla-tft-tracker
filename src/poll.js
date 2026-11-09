@@ -99,6 +99,24 @@ for (const p of active) {
 }
 writeJson(path.join(store.dir, 'live.json'), live);
 
+// Riot only reports a player's rank right now, so a lookup counts as their rank for a game only if the game just
+// ended. Games found later than this, and re-downloads of older games, get no rank.
+const RANK_FRESH_MS = 60 * 60e3;
+
+/** Everyone in a game: puuid -> { tier, rank, lp }, or null if unranked. A failed lookup just leaves that player out. */
+async function lobbyRanks(raw) {
+  const ranks = new Map();
+  for (const { puuid } of raw.info.participants) {
+    try {
+      const e = (await riot.leagueEntries(puuid))?.find((x) => x.queueType === 'RANKED_TFT');
+      ranks.set(puuid, e ? { tier: e.tier, rank: e.rank, lp: e.leaguePoints } : null);
+    } catch (err) {
+      console.warn(`! rank lookup failed: ${err.message}`);
+    }
+  }
+  return ranks;
+}
+
 // 3. Match history. First run pages back to `trackFrom`; later runs stop at
 //    the first match we already have. `--max-matches` caps API use per run so
 //    a big backfill is spread over several runs instead of timing out.
@@ -124,7 +142,9 @@ for (const p of active) {
       const raw = await riot.match(id);
       budget--;
       if (!raw) continue;
-      store.matches.set(id, normalizeMatch(raw, tracked, store.matches.get(id)));
+      const existing = store.matches.get(id);
+      const justEnded = !existing && now - raw.info.game_datetime < RANK_FRESH_MS;
+      store.matches.set(id, normalizeMatch(raw, tracked, existing, justEnded ? await lobbyRanks(raw) : undefined));
       fetched++;
     }
     if (reachedEnd && todo.length === fresh.length) {
@@ -140,12 +160,13 @@ for (const p of active) {
   store.save(); // save as we go so an interrupted backfill keeps its progress
 }
 
-// 3b. Matches saved before the tracker kept each player's tactician: re-download them (newest first)
-//     with whatever is left of this run's match budget, so the backfill spreads over a few runs.
+// 3b. Matches saved before the tracker kept each player's tactician and the other boards in the lobby:
+//     re-download them (newest first) with whatever is left of this run's match budget, so the backfill
+//     spreads over a few runs.
 let refreshed = 0;
 {
   const stale = [...store.matches.values()]
-    .filter((m) => Object.entries(m.players).some(([puuid, pp]) => tracked.has(puuid) && !('tactician' in pp)))
+    .filter((m) => !m.others || Object.entries(m.players).some(([puuid, pp]) => tracked.has(puuid) && !('tactician' in pp)))
     .sort((a, b) => b.datetime - a.datetime);
   for (const m of stale.slice(0, Math.max(0, budget))) {
     try {
@@ -160,7 +181,7 @@ let refreshed = 0;
       break;
     }
   }
-  if (refreshed) log(`games re-downloaded ${refreshed} older match(es) for tacticians${stale.length > refreshed ? `, ${stale.length - refreshed} left for next run` : ''}`);
+  if (refreshed) log(`games re-downloaded ${refreshed} older match(es)${stale.length > refreshed ? `, ${stale.length - refreshed} left for next run` : ''}`);
 }
 
 // 4. Per-game LP from tactics.tools, to fill in games whose LP Riot can't give us

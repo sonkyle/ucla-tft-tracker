@@ -3,6 +3,7 @@
 
 const app = document.getElementById('app');
 const tip = document.getElementById('tooltip');
+const lobbyEl = document.getElementById('lobby');
 const RANKED = 1100;
 const APEX = 2800;
 const TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'EMERALD', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
@@ -251,9 +252,137 @@ function matchCard(m, focus, seen) {
       h('span', { class: 'queue', title: `Queue ID ${m.queue}` }, queueName(m.queue)),
       h('span', {}, fmtDateTime.format(m.time)),
       h('span', {}, duration(m.length)),
-      m.patch ? h('span', {}, `Patch ${m.patch}`) : null),
+      m.patch ? h('span', {}, `Patch ${m.patch}`) : null,
+      m.lobby > 1 ? lobbyButton(m) : null),
     entries.map((e) => entryRow(e, m, !focus, seen)));
 }
+
+// ---------------------------------------------------------------- all-boards popup
+// Floats over the page from a game's "All 8 boards" button, so nothing moves. Hovering shows it; clicking or
+// tapping keeps it open until Esc, the ×, or a click elsewhere. Each game's boards are their own small file
+// (data/lobbies/<id>.json), fetched the first time they're wanted.
+
+const HOVER_OPEN_MS = 150, HOVER_CLOSE_MS = 220;
+const lobbyCache = new Map();
+const lobby = { btn: null, pinned: false, token: 0, timer: 0 }; // token: newest open/close, so a slow fetch can't undo it
+
+function loadLobby(id) {
+  if (!lobbyCache.has(id)) {
+    const req = fetch(`data/lobbies/${id}.json`).then((r) => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    });
+    req.catch(() => lobbyCache.delete(id)); // a later hover can try again
+    lobbyCache.set(id, req);
+  }
+  return lobbyCache.get(id);
+}
+
+/** Riot's emblem for a rank, none when unranked. Decorative: the rank is written next to it. */
+const rankCrest = (r) => (r ? h('img', { class: 'rank-crest', src: `img/ranks/${r.tier.toLowerCase()}.png`, alt: '', width: 20, height: 20 }) : null);
+
+/** One player's board. Teammates link to their page and are highlighted. Older games have no rank saved. */
+function lobbyBoard(b) {
+  const p = b.player ? player(b.player) : null;
+  const units = [...b.units].sort((x, y) => unitCost(y) - unitCost(x) || y.star - x.star);
+  return h('div', { class: `lobby-board${p ? ' team' : ''}` },
+    h('div', { class: `place p${b.placement}`, title: `Placed ${ordinal(b.placement)}` }, ordinal(b.placement)),
+    tacticianBadge(b),
+    h('div', { class: 'board' },
+      h('div', { class: 'lobby-name' },
+        p ? h('a', { href: `#/player/${b.player}` }, p.name) : h('span', { title: b.tag ? `${b.name}#${b.tag}` : null }, b.name ?? 'Unknown player'),
+        b.rank !== undefined ? h('span', { class: 'lobby-rank muted', title: 'Rank right after this game' }, rankCrest(b.rank), rankText(b.rank)) : null),
+      h('div', { class: 'traits' }, sortTraits(b.traits).map(traitBadge)),
+      h('div', { class: 'units' }, units.map(unitTile))));
+}
+
+/** Just under the button, or above it if there's no room, kept on screen (it may cover the button on short screens). */
+function placeLobby(btn) {
+  const b = btn.getBoundingClientRect(), p = lobbyEl.getBoundingClientRect();
+  const edge = 8, gap = 6, vw = document.documentElement.clientWidth, vh = window.innerHeight;
+  const above = b.top - gap - p.height;
+  const top = b.bottom + gap + p.height <= vh - edge ? b.bottom + gap : above >= edge ? above : Math.max(edge, vh - p.height - edge);
+  lobbyEl.style.left = `${Math.max(edge, Math.min(vw - p.width - edge, b.right - p.width))}px`;
+  lobbyEl.style.top = `${top}px`;
+}
+
+function closeLobby({ refocus = false } = {}) {
+  clearTimeout(lobby.timer);
+  lobby.token++;
+  const { btn } = lobby;
+  lobby.btn = null;
+  lobby.pinned = false;
+  lobbyEl.hidden = true;
+  lobbyEl.replaceChildren();
+  btn?.setAttribute('aria-expanded', 'false');
+  if (refocus) btn?.focus({ preventScroll: true });
+}
+
+async function openLobby(btn, m, pin) {
+  clearTimeout(lobby.timer);
+  const token = ++lobby.token;
+  lobby.pinned = pin;
+  let boards = null;
+  try { ({ boards } = await loadLobby(m.id)); } catch {} // shown as a message below
+  if (token !== lobby.token) return;
+  lobby.btn?.setAttribute('aria-expanded', 'false');
+  lobby.btn = btn;
+  btn.setAttribute('aria-expanded', 'true');
+  const close = h('button', { class: 'lobby-close', type: 'button', 'aria-label': 'Close', onclick: () => closeLobby({ refocus: true }) }, '×');
+  lobbyEl.replaceChildren(
+    h('div', { class: 'lobby-head' },
+      h('span', { class: 'queue' }, queueName(m.queue)),
+      h('span', {}, fmtDateTime.format(m.time)),
+      h('span', {}, duration(m.length)),
+      close),
+    boards
+      ? h('div', { class: 'lobby-boards' }, boards.map(lobbyBoard))
+      : h('p', { class: 'muted' }, 'Couldn’t load this game’s boards.'));
+  lobbyEl.hidden = false;
+  placeLobby(btn);
+  if (pin) close.focus({ preventScroll: true });
+}
+
+function hoverLobby(btn, m) {
+  clearTimeout(lobby.timer);
+  if (lobby.btn === btn || lobby.pinned) return; // a popup that was clicked open stays until it's closed
+  loadLobby(m.id).catch(() => {}); // start fetching now, so it's ready when the popup opens
+  lobby.timer = setTimeout(() => openLobby(btn, m, false), lobby.btn ? 0 : HOVER_OPEN_MS);
+}
+
+function leaveLobby() {
+  clearTimeout(lobby.timer);
+  if (lobby.pinned) return;
+  lobby.token++; // a hover that's still fetching shouldn't open after the pointer has left
+  if (lobby.btn) lobby.timer = setTimeout(closeLobby, HOVER_CLOSE_MS);
+}
+
+function clickLobby(btn, m) {
+  if (lobby.btn === btn && lobby.pinned) return closeLobby({ refocus: true });
+  if (lobby.btn !== btn) return openLobby(btn, m, true);
+  clearTimeout(lobby.timer); // already open from hovering: keep it open
+  lobby.pinned = true;
+  lobbyEl.querySelector('.lobby-close').focus({ preventScroll: true });
+}
+
+function lobbyButton(m) {
+  const btn = h('button', {
+    class: 'lobby-btn', type: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false',
+    onpointerenter: (e) => { if (e.pointerType !== 'touch') hoverLobby(btn, m); },
+    onpointerleave: (e) => { if (e.pointerType !== 'touch') leaveLobby(); },
+    onclick: () => clickLobby(btn, m),
+  }, `All ${m.lobby} boards`);
+  return btn;
+}
+
+lobbyEl.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') clearTimeout(lobby.timer); });
+lobbyEl.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'touch') leaveLobby(); });
+// The popup often covers its own button, so a click anywhere in it keeps it open too.
+lobbyEl.addEventListener('click', () => { if (lobby.btn) { clearTimeout(lobby.timer); lobby.pinned = true; } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lobbyEl.hidden) closeLobby({ refocus: lobby.pinned }); });
+document.addEventListener('pointerdown', (e) => { if (!lobbyEl.hidden && !lobbyEl.contains(e.target) && !e.target.closest('.lobby-btn')) closeLobby(); });
+window.addEventListener('scroll', () => { if (!lobbyEl.hidden && !lobby.pinned) closeLobby(); }, { passive: true });
+window.addEventListener('resize', () => { if (!lobbyEl.hidden) placeLobby(lobby.btn); });
 
 // How many games the newest list is showing (it grows with "Show more"), so a live refresh can keep them open.
 let shownCount = 0, keepShown = 0;
@@ -681,6 +810,7 @@ async function render() {
   const myId = ++renderId;
   redraws = [];
   hideTip();
+  closeLobby();
   app.classList.add('loading');
   const [route, a, b] = location.hash.replace(/^#\/?/, '').split('/');
   const weekKey = site.weeks[weekIndex(route === 'player' ? b : route === 'week' ? a : null)].key;

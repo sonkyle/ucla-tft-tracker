@@ -1,6 +1,7 @@
 // Turn data/ (raw snapshots + matches) into the JSON the website reads:
 //   site/data/site.json         players, current ranks, weekly LP + stats, rank history
 //   site/data/weeks/<key>.json  every tracked player's games that week, with LP deltas
+//   site/data/lobbies/<id>.json every board in one game, for the all-boards popup (not committed)
 //
 //   node src/build.js [--data data] [--out site/data] [--config config.json]
 
@@ -155,6 +156,23 @@ try {
 } catch {} // no check has run here yet
 writeJson(path.join(outDir, 'status.json'), { updatedAt: now, live }, 3);
 
+// ---- lobbies/<matchId>.json: fetched only when someone opens the popup, so the week files stay small.
+// Rebuilt from data/ on every run and kept out of git (.gitignore).
+const lobbyDir = path.join(outDir, 'lobbies');
+const lobbyFiles = new Set();
+/** Writes the game's lobby file and returns its number of boards, or null if the other boards aren't saved yet. */
+function writeLobby(m) {
+  if (!m.others) return null;
+  const team = Object.entries(m.players)
+    .filter(([puuid]) => slugOf.has(puuid))
+    .map(([puuid, pp]) => ({ player: slugOf.get(puuid), placement: pp.placement, level: pp.level, tactician: pp.tactician ?? null, rank: pp.rank, traits: pp.traits, units: pp.units }));
+  const boards = [...team, ...m.others].sort((a, b) => a.placement - b.placement);
+  const file = `${m.id}.json`;
+  writeJson(path.join(lobbyDir, file), { id: m.id, boards }, 0);
+  lobbyFiles.add(file);
+  return boards.length;
+}
+
 // ---- weeks/<key>.json
 const byWeek = new Map(weeks.map((w) => [w.key, []]));
 for (const m of matches) {
@@ -177,7 +195,7 @@ for (const m of matches) {
   const time = matchTime(m);
   const week = weeks.find((w) => time >= w.start && time < w.end);
   if (!week) continue;
-  byWeek.get(week.key).push({ id: m.id, time, queue: m.queue, set: m.set, patch: m.patch, length: m.length, entries });
+  byWeek.get(week.key).push({ id: m.id, time, queue: m.queue, set: m.set, patch: m.patch, length: m.length, lobby: writeLobby(m), entries });
 }
 const weekDir = path.join(outDir, 'weeks');
 fs.mkdirSync(weekDir, { recursive: true });
@@ -188,6 +206,8 @@ for (const [key, matches] of byWeek) {
   keep.add(`${key}.json`);
 }
 for (const f of fs.readdirSync(weekDir)) if (!keep.has(f)) fs.rmSync(path.join(weekDir, f));
+fs.mkdirSync(lobbyDir, { recursive: true });
+for (const f of fs.readdirSync(lobbyDir)) if (!lobbyFiles.has(f)) fs.rmSync(path.join(lobbyDir, f));
 
 const totalMatches = [...byWeek.values()].reduce((s, l) => s + l.length, 0);
 console.log(`built ${outDir}: ${players.length} players, ${weeks.length} weeks, ${totalMatches} matches`);

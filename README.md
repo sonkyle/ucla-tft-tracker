@@ -6,6 +6,8 @@ publishes a static site on GitHub Pages.
 
 - **Team page:** team totals for the week and a leaderboard.
 - **Recent games page:** every player's most recent games, newest first.
+- **All 8 boards:** hover the button on any game to see everyone's tactician, level and board in a popup, plus their rank
+  right after the game for games played since ranks started being saved. Click or tap to keep it open.
 - **Player pages** (one tab per player in the header): that player's net LP and games for the selected week, plus their
   current and peak rank, a rank-over-time chart, net LP per week, and a week-by-week table. Only that player's results are shown.
   The week you're looking at carries over when you switch between the team page and player pages.

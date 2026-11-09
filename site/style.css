@@ -300,6 +300,67 @@ th[aria-sort="ascending"] button::after { content: " ↑"; }
 .entry-lp .note { display: block; font-size: 11px; color: var(--muted); }
 .more { justify-self: center; margin-top: 4px; }
 
+/* "All 8 boards" button on a game, and the popup it opens over the page */
+.lobby-btn {
+  margin-left: auto; padding: 0 9px; font: inherit; line-height: 16px; color: var(--ink-2); cursor: pointer;
+  background: none; border: 1px solid var(--border); border-radius: 99px;
+}
+.lobby-btn:hover, .lobby-btn[aria-expanded="true"] { background: var(--hover); color: var(--ink); }
+.lobby-btn:focus-visible, .lobby-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.lobby {
+  position: fixed; z-index: 15; width: min(1100px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.lobby-head { display: flex; align-items: center; gap: 4px 12px; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+.lobby-head .queue { font-weight: 600; color: var(--ink); }
+.lobby-close {
+  margin-left: auto; width: 24px; height: 24px; padding: 0; font-size: 18px; line-height: 1; cursor: pointer;
+  color: var(--ink-2); background: none; border: 0; border-radius: 6px;
+}
+.lobby-close:hover { background: var(--hover); color: var(--ink); }
+.lobby-boards { display: grid; gap: 2px; }
+.lobby-board { display: grid; grid-template-columns: 34px 34px minmax(0, 1fr); gap: 10px; padding: 6px 8px; border-radius: 8px; }
+.lobby-board.team { background: var(--hover); box-shadow: inset 2px 0 0 var(--accent); }
+.lobby-board .place { width: 34px; height: 34px; font-size: 13px; border-radius: 7px; }
+.lobby .tactician, .lobby .tactician img, .lobby .tactician .blank { width: 34px; height: 34px; }
+.lobby .tactician .lvl { width: 16px; height: 16px; font-size: 10px; right: -3px; bottom: -3px; }
+.lobby-name { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 13px; font-weight: 600; }
+.lobby-rank { display: inline-flex; align-items: center; gap: 4px; }
+.rank-crest { display: block; width: 20px; height: 20px; }
+.lobby-name > :first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lobby-name a { text-decoration: none; }
+.lobby-name a:hover { text-decoration: underline; }
+.lobby-name .muted { flex: none; font-size: 11px; font-weight: 400; }
+/* Smaller tiles so eight boards fit on one screen. Phones keep their scale-to-fit grids instead. */
+@media (min-width: 561px) {
+  .lobby .traits { gap: 3px 6px; font-size: 11px; }
+  .lobby .trait .hex { width: 19px; height: 21px; }
+  .lobby .trait .glyph { width: 13px; height: 13px; }
+  .lobby .units { gap: 3px 4px; }
+  .lobby .unit-tile { width: 38px; }
+  .lobby .unit-tile .stars { height: 10px; line-height: 10px; font-size: 9px; }
+  .lobby .unit-tile .portrait { width: 38px; height: 38px; }
+  .lobby .unit-tile .unit-items { height: 12px; }
+  .lobby .unit-tile .item { width: 12px; height: 12px; }
+}
+/* Wide screens: each board on one line (name and traits, then units), so all eight fit stacked and the units line up. */
+@media (min-width: 1000px) {
+  .lobby-board { align-items: center; }
+  .lobby .board { display: grid; grid-template-columns: 430px minmax(0, 1fr); column-gap: 14px; }
+  .lobby .lobby-name { grid-column: 1; grid-row: 1; }
+  .lobby .board .traits { grid-column: 1; grid-row: 2; margin-bottom: 0; }
+  .lobby .units { grid-column: 2; grid-row: 1 / span 2; align-self: center; margin-top: 0; }
+}
+/* Phones: placement, tactician and name share the top line, and the traits and units get the full width below. */
+@media (max-width: 560px) {
+  .lobby-board { align-items: center; row-gap: 6px; }
+  .lobby .board { display: contents; }
+  .lobby .lobby-name { margin-bottom: 0; }
+  .lobby .board .traits, .lobby .units { grid-column: 1 / -1; margin: 0; }
+}
+
 /* player header */
 .player-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: flex-end; }
 .hero { font-size: 48px; font-weight: 600; line-height: 1.05; }

@@ -171,12 +171,32 @@ function normalizeParticipant(p) {
   };
 }
 
-/** Keep only what the site needs, and only for tracked players in the lobby. */
-export function normalizeMatch(raw, trackedPuuids, existing) {
+/** Someone else in the lobby: just their name and board, for the site's all-boards popup. */
+function normalizeOpponent(p) {
+  const { placement, level, traits, units, tactician } = normalizeParticipant(p);
+  return { name: p.riotIdGameName ?? null, tag: p.riotIdTagline ?? null, placement, level, traits, units, tactician };
+}
+
+const opponentKey = (o) => `${o.name}#${o.tag}`;
+// rank: { tier, rank, lp }, null when the player was unranked, left off when it was never looked up
+const withRank = (board, rank) => (rank === undefined ? board : { ...board, rank });
+
+/**
+ * Keep only what the site needs: full detail for tracked players, name and board for everyone else.
+ * `ranks` (puuid -> rank) is passed only right after a game ends; a re-download keeps whatever was saved.
+ */
+export function normalizeMatch(raw, trackedPuuids, existing, ranks) {
   const info = raw.info;
   const players = { ...(existing?.players ?? {}) };
+  const others = [];
+  const savedRank = new Map((existing?.others ?? []).map((o) => [opponentKey(o), o.rank]));
   for (const p of info.participants) {
-    if (trackedPuuids.has(p.puuid)) players[p.puuid] = normalizeParticipant(p);
+    if (trackedPuuids.has(p.puuid)) {
+      players[p.puuid] = withRank(normalizeParticipant(p), ranks?.get(p.puuid) ?? existing?.players?.[p.puuid]?.rank);
+    } else {
+      const board = normalizeOpponent(p);
+      others.push(withRank(board, ranks?.has(p.puuid) ? ranks.get(p.puuid) : savedRank.get(opponentKey(board))));
+    }
   }
   return {
     id: raw.metadata.match_id,
@@ -187,5 +207,6 @@ export function normalizeMatch(raw, trackedPuuids, existing) {
     set: info.tft_set_number,
     patch: parsePatch(info.game_version),
     players,
+    others,
   };
 }
