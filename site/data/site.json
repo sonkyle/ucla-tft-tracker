@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1794283223782,
+  "latestActivity": 1794287720302,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -1457,12 +1457,12 @@
       "slug": "aliya",
       "name": "Aliya",
       "riotId": "UCLA meiybox#00000",
-      "current": {"tier":"GOLD","rank":"II","lp":26,"wins":25,"losses":19},
-      "peak": {"tier":"GOLD","rank":"II","lp":26,"t":1793873589498},
+      "current": {"tier":"GOLD","rank":"II","lp":92,"wins":26,"losses":19},
+      "peak": {"tier":"GOLD","rank":"II","lp":92,"t":1794287720302},
       "trackedSince": 1793873589498,
-      "lpCoverage": {"games":0,"matched":0},
-      "weeks": {"2026-11-04":{"lp":0,"partial":true,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
-      "history": [[1792794771964,1237,"GOLD"],[1792794771764,1303,"GOLD"],[1792801648229,1370,"GOLD"],[1792884610913,1328,"GOLD"],[1792905984678,1376,"GOLD"],[1793064831695,1445,"GOLD"],[1793139488168,1435,"GOLD"],[1793141206173,1400,"GOLD"],[1793143462384,1454,"GOLD"],[1793166629081,1505,"GOLD"],[1793168627823,1500,"GOLD"],[1793310704684,1475,"GOLD"],[1793395350157,1446,"GOLD"],[1793397443210,1456,"GOLD"],[1793424391688,1428,"GOLD"],[1793580970156,1418,"GOLD"],[1793745418076,1432,"GOLD"],[1793747340011,1400,"GOLD"],[1793749099930,1375,"GOLD"],[1793760321912,1426,"GOLD"]]
+      "lpCoverage": {"games":1,"matched":1},
+      "weeks": {"2026-11-04":{"lp":66,"partial":false,"fromGames":true,"ranked":{"games":1,"avg":1,"top4":100,"firsts":1},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":92}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
+      "history": [[1792794771964,1237,"GOLD"],[1792794771764,1303,"GOLD"],[1792801648229,1370,"GOLD"],[1792884610913,1328,"GOLD"],[1792905984678,1376,"GOLD"],[1793064831695,1445,"GOLD"],[1793139488168,1435,"GOLD"],[1793141206173,1400,"GOLD"],[1793143462384,1454,"GOLD"],[1793166629081,1505,"GOLD"],[1793168627823,1500,"GOLD"],[1793310704684,1475,"GOLD"],[1793395350157,1446,"GOLD"],[1793397443210,1456,"GOLD"],[1793424391688,1428,"GOLD"],[1793580970156,1418,"GOLD"],[1793745418076,1432,"GOLD"],[1793747340011,1400,"GOLD"],[1793749099930,1375,"GOLD"],[1793760321912,1426,"GOLD"],[1794287720302,1492,"GOLD"]]
     },
     {
       "slug": "alvin",
