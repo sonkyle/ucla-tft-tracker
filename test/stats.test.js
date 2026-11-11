@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseProfile, profileUrl } from '../src/tactics.js';
 import {
-  ladderScore, attributeLp, mergeLp, rankHistory, rankPoints, apexCutoff, parseRank, weekOf, weekRange, weeklySummary, elimTime, matchTime, RANKED_QUEUE,
+  ladderScore, attributeLp, mergeLp, rankHistory, rankPoints, apexCutoff, parseRank, weekOf, weekOfFrom, weekFromKey, weekRange, weeklySummary, elimTime, matchTime, RANKED_QUEUE,
 } from '../src/stats.js';
 
 const TZ = 'America/Los_Angeles';
@@ -31,6 +31,45 @@ test('weeks start Monday midnight Pacific, across the DST change', () => {
   assert.equal(prev.end, w.start);
   const range = weekRange(Date.UTC(2026, 9, 20), Date.UTC(2026, 10, 5), TZ);
   assert.deepEqual(range.map((x) => x.key), ['2026-11-02', '2026-10-26', '2026-10-19']);
+});
+
+test('weeks can start Wednesday 10pm Pacific and are named by their Thursday', () => {
+  const at = (key) => weekOf(key, TZ, 3, 22 * 60);
+  // Wed Nov 4 2026 (PST, UTC-8): 21:59 is still the old week, 22:00 starts the new one
+  assert.equal(at(Date.UTC(2026, 10, 5, 5, 59)).key, '2026-10-29');
+  const w = at(Date.UTC(2026, 10, 5, 6, 0));
+  assert.equal(w.key, '2026-11-05');
+  assert.equal(w.start, Date.UTC(2026, 10, 5, 6));
+  assert.equal(w.end, Date.UTC(2026, 10, 12, 6));
+  // Thursday through Wednesday afternoon are in the same week
+  assert.equal(at(Date.UTC(2026, 10, 5, 20)).key, '2026-11-05');
+  assert.equal(at(Date.UTC(2026, 10, 11, 20)).key, '2026-11-05');
+  // A week that spans the DST change (Sun Nov 1) still starts and ends at 22:00 local
+  const dst = at(Date.UTC(2026, 9, 31));
+  assert.equal(dst.key, '2026-10-29');
+  assert.equal(dst.start, Date.UTC(2026, 9, 29, 5)); // Wed Oct 28 22:00 PDT
+  assert.equal(dst.end, w.start); // Wed Nov 4 22:00 PST
+  assert.deepEqual(weekFromKey('2026-11-05', TZ, 22 * 60), { key: '2026-11-05', start: w.start, end: w.end });
+  const range = weekRange(Date.UTC(2026, 9, 22, 12), Date.UTC(2026, 10, 6), TZ, 3, 22 * 60);
+  assert.deepEqual(range.map((x) => x.key), ['2026-11-05', '2026-10-29', '2026-10-22']);
+});
+
+test('switching to a 10pm start leaves earlier weeks alone and stretches the last old week', () => {
+  const at = (t) => weekOfFrom(t, TZ, 3, 22 * 60, '2026-11-11');
+  const old = (t) => weekOf(t, TZ, 3);
+  // earlier weeks: unchanged Wednesday-midnight weeks
+  for (const t of [Date.UTC(2026, 9, 21, 12), Date.UTC(2026, 9, 30), Date.UTC(2026, 10, 4, 7, 59)]) assert.deepEqual(at(t), old(t));
+  // Week of Nov 4 runs from Wed Nov 4 00:00 to Wed Nov 11 22:00 PST, so all of Wednesday Nov 11 until 10pm is in it
+  const stretched = { key: '2026-11-04', start: Date.UTC(2026, 10, 4, 8), end: Date.UTC(2026, 10, 12, 6) };
+  assert.deepEqual(at(Date.UTC(2026, 10, 4, 8)), stretched);
+  assert.deepEqual(at(Date.UTC(2026, 10, 11, 9)), stretched); // Wed Nov 11, 1am
+  assert.deepEqual(at(Date.UTC(2026, 10, 12, 5, 59)), stretched); // Wed Nov 11, 9:59pm
+  // from then on, weeks start Wednesday 10pm and are named by their Thursday
+  assert.deepEqual(at(Date.UTC(2026, 10, 12, 6)), { key: '2026-11-12', start: Date.UTC(2026, 10, 12, 6), end: Date.UTC(2026, 10, 19, 6) });
+  assert.equal(at(Date.UTC(2026, 10, 19, 6)).key, '2026-11-19');
+  const range = weekRange(Date.UTC(2026, 9, 29), Date.UTC(2026, 10, 20), TZ, 3, 22 * 60, '2026-11-11');
+  assert.deepEqual(range.map((w) => w.key), ['2026-11-19', '2026-11-12', '2026-11-04', '2026-10-28']);
+  assert.ok(range.every((w, i) => i === 0 || w.end === range[i - 1].start), 'weeks leave no gaps');
 });
 
 test('elimination time is measured back from game end', () => {

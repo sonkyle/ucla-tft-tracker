@@ -74,6 +74,10 @@ Edit `config.json`:
 
 `riotId` is the in-game `Name#TAG`. `trackFrom` sets how far back match history is backfilled
 (use the current set's launch date). `weekOne` is the first day of "Week 1"; the site labels weeks by number from there (Week 1, Week 2, …), with the dates shown smaller. Leave it out to label weeks by date only. Change it when a new set starts. `weekStartsOn`: 0 = Sunday, 1 = Monday.
+`weekStartsAt` (optional, default `"00:00"`) is the time of day the week starts, e.g. `"22:00"` for after a Wednesday
+night meeting. A week that starts late in a day is named after its first full day, so Wednesday 22:00 weeks are named by
+their Thursday. `weekStartsAtFrom` (optional) is the first start day that time applies to; earlier weeks keep starting
+at midnight, and the last of them runs on until the new start time.
 
 ### 3. Run locally
 ```sh

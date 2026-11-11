@@ -257,35 +257,60 @@ function tzOffset(t, tz) {
   return Date.UTC(p.y, p.m - 1, p.d, p.h, p.mi, p.s) - Math.floor(t / 1000) * 1000;
 }
 
-/** UTC ms of local midnight on y-m-d in tz (DST-safe). */
-export function zonedMidnight(y, m, d, tz) {
-  const guess = Date.UTC(y, m - 1, d);
+/** UTC ms of local time on y-m-d in tz, `minutes` after midnight (DST-safe; out-of-range days roll over). */
+export function zonedTime(y, m, d, minutes, tz) {
+  const guess = Date.UTC(y, m - 1, d, 0, minutes);
   const first = guess - tzOffset(guess, tz);
   return guess - tzOffset(first, tz);
 }
 
-/** Week containing instant t. key = local date of the week's first day, e.g. "2026-11-02". */
-export function weekOf(t, tz, weekStartsOn = 1) {
+/** UTC ms of local midnight on y-m-d in tz (DST-safe). */
+export const zonedMidnight = (y, m, d, tz) => zonedTime(y, m, d, 0, tz);
+
+/**
+ * Week containing instant t. Weeks start on weekday `weekStartsOn` (0 = Sunday) at `startMinutes` after local
+ * midnight. key = local date of the week's first full day: the start day itself when weeks start at midnight,
+ * otherwise the day after (weeks starting Wednesday 22:00 are named by their Thursday), e.g. "2026-11-05".
+ */
+export function weekOf(t, tz, weekStartsOn = 1, startMinutes = 0) {
   const p = zonedParts(t, tz);
-  const back = (p.wd - weekStartsOn + 7) % 7;
-  const day = new Date(Date.UTC(p.y, p.m - 1, p.d - back));
-  return weekFromKey(day.toISOString().slice(0, 10), tz);
+  let back = (p.wd - weekStartsOn + 7) % 7;
+  if (back === 0 && p.h * 60 + p.mi < startMinutes) back = 7; // on the start day, but before the start time
+  const day = new Date(Date.UTC(p.y, p.m - 1, p.d - back + (startMinutes ? 1 : 0)));
+  return weekFromKey(day.toISOString().slice(0, 10), tz, startMinutes);
 }
 
-export function weekFromKey(key, tz) {
+export function weekFromKey(key, tz, startMinutes = 0) {
   const [y, m, d] = key.split('-').map(Number);
-  return { key, start: zonedMidnight(y, m, d, tz), end: zonedMidnight(y, m, d + 7, tz) };
+  const startDay = startMinutes ? d - 1 : d;
+  return { key, start: zonedTime(y, m, startDay, startMinutes, tz), end: zonedTime(y, m, startDay + 7, startMinutes, tz) };
+}
+
+/**
+ * Like weekOf, but the start time only applies from the week starting on local date `since` (a start day).
+ * Weeks before then keep starting at midnight, and the last of them runs on until the new start time.
+ */
+export function weekOfFrom(t, tz, weekStartsOn = 1, startMinutes = 0, since = null) {
+  if (!since || !startMinutes) return weekOf(t, tz, weekStartsOn, startMinutes);
+  const [y, m, d] = since.split('-').map(Number);
+  const change = zonedTime(y, m, d, startMinutes, tz);
+  if (t >= change) return weekOf(t, tz, weekStartsOn, startMinutes);
+  const w = weekOf(t, tz, weekStartsOn, 0);
+  if (w.end < zonedMidnight(y, m, d, tz)) return w;
+  const last = weekFromKey(new Date(Date.UTC(y, m - 1, d - 7)).toISOString().slice(0, 10), tz);
+  return { ...last, end: change };
 }
 
 /** Every week from the one containing `from` to the one containing `to`, newest first. */
-export function weekRange(from, to, tz, weekStartsOn = 1) {
+export function weekRange(from, to, tz, weekStartsOn = 1, startMinutes = 0, since = null) {
+  const at = (t) => weekOfFrom(t, tz, weekStartsOn, startMinutes, since);
   const weeks = [];
-  let w = weekOf(to, tz, weekStartsOn);
-  const first = weekOf(from, tz, weekStartsOn).key;
+  let w = at(to);
+  const first = at(from).key;
   while (true) {
     weeks.push(w);
     if (w.key <= first) break;
-    w = weekOf(w.start - 1, tz, weekStartsOn);
+    w = at(w.start - 1);
   }
   return weeks;
 }

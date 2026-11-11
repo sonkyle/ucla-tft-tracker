@@ -26,6 +26,17 @@ export function loadConfig(file = path.join(ROOT, 'config.json')) {
   cfg.platform ??= 'na1';
   cfg.timezone ??= 'America/Los_Angeles';
   cfg.weekStartsOn ??= 1;
+  // Time of day the week starts, e.g. "22:00" (default midnight). Weeks are named after their first full day.
+  const clock = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(cfg.weekStartsAt ?? '00:00');
+  if (!clock) throw new Error(`weekStartsAt "${cfg.weekStartsAt}" must be a 24-hour time like 22:00`);
+  cfg.weekStartMinutes = Number(clock[1]) * 60 + Number(clock[2]);
+  // Optional: the start day (date) weekStartsAt begins on. Earlier weeks keep starting at midnight.
+  if (cfg.weekStartsAtFrom) {
+    const [y, m, d] = cfg.weekStartsAtFrom.split('-').map(Number);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(cfg.weekStartsAtFrom) || new Date(Date.UTC(y, m - 1, d)).getUTCDay() !== cfg.weekStartsOn) {
+      throw new Error(`weekStartsAtFrom "${cfg.weekStartsAtFrom}" must be a date like 2026-11-11 that falls on weekStartsOn`);
+    }
+  }
   // trackFrom means midnight in the team's timezone, not UTC.
   if (cfg.trackFrom) {
     const [y, m, d] = cfg.trackFrom.split('-').map(Number);

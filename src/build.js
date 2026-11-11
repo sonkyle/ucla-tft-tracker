@@ -88,7 +88,7 @@ function withEndRankOverrides(p, weeksOut) {
   return weeksOut;
 }
 
-const weeks = weekRange(earliest, now, cfg.timezone, cfg.weekStartsOn);
+const weeks = weekRange(earliest, now, cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
 
 // Week numbers count from config.weekOne (the first day of week 1, e.g. the set's launch week).
 // Weeks before it, or every week when weekOne isn't set, have no number.

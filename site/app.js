@@ -86,9 +86,15 @@ function initFormats() {
   const tz = site.timezone;
   fmtDateTime = new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
 }
+let fmtLocalDay;
+/** "Nov 4 – 11": the week's name date through the local day it ends on (weeks can run long or start late in a day). */
 function weekLabel(key) {
   const [y, m, d] = key.split('-').map(Number);
-  const a = new Date(Date.UTC(y, m - 1, d)), b = new Date(Date.UTC(y, m - 1, d + 6));
+  const a = new Date(Date.UTC(y, m - 1, d));
+  const week = site.weeks.find((w) => w.key === key);
+  fmtLocalDay ??= new Intl.DateTimeFormat('en-US', { timeZone: site.timezone, year: 'numeric', month: 'numeric', day: 'numeric' });
+  const last = week && Object.fromEntries(fmtLocalDay.formatToParts(week.end - 1).map((p) => [p.type, Number(p.value)]));
+  const b = last ? new Date(Date.UTC(last.year, last.month - 1, last.day)) : new Date(Date.UTC(y, m - 1, d + 6));
   const f = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' });
   return `${f.format(a)} – ${a.getUTCMonth() === b.getUTCMonth() ? b.getUTCDate() : f.format(b)}`;
 }
