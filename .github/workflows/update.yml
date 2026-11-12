@@ -26,9 +26,14 @@ jobs:
     timeout-minutes: 30
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.redeploy.outputs.page_url }}
     steps:
+      # Check out the branch as it is now, not the commit the run was triggered on. Runs wait their turn
+      # (concurrency above), so by the time one starts, the run before it has usually pushed new data;
+      # starting from the older commit made "Commit data" fail with a rebase conflict in the data files.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -63,8 +68,14 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "Update TFT data"
-            git pull --rebase
-            git push
+            # The branch can still move between checkout and here (a code push): try a few times.
+            pushed=false
+            for attempt in 1 2 3; do
+              if git pull --rebase && git push; then pushed=true; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep 5
+            done
+            if [ "$pushed" != true ]; then echo "::error::Could not push the data commit"; exit 1; fi
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -80,6 +91,21 @@ jobs:
       - name: Wait for the upload to register
         run: sleep 5
 
+      # GitHub Pages sometimes rejects or stalls a deploy through no fault of the site ("No artifacts named
+      # github-pages", "in progress deployment", "Deployment failed, try again later"). Give up on a stalled
+      # one after 3 minutes instead of the default 10, and try once more before failing the run.
       - name: Deploy site
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+        with:
+          timeout: 180000
+
+      - name: Wait before retrying the deploy
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 30
+
+      - name: Deploy site (second try)
+        id: redeploy
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
