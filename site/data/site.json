@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1794469518709,
+  "latestActivity": 1794478288221,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -1511,7 +1511,7 @@
       "peak": {"tier":"MASTER","rank":"I","lp":209,"t":1794467718575},
       "trackedSince": 1793873589498,
       "lpCoverage": {"games":13,"matched":13},
-      "weeks": {"2026-11-12":{"lp":48,"partial":false,"fromGames":false,"ranked":{"games":1,"avg":1,"top4":100,"firsts":1},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":209}},"2026-11-04":{"lp":119,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":3.88,"top4":64.7,"firsts":4},"otherGames":12,"endRank":{"tier":"MASTER","rank":"I","lp":161}},"2026-10-28":{"lp":-43,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.71,"top4":35.3,"firsts":1},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":42}},"2026-10-21":{"lp":-5,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.35,"top4":58.8,"firsts":0},"otherGames":5,"endRank":{"tier":"MASTER","rank":"I","lp":85}}},
+      "weeks": {"2026-11-12":{"lp":48,"partial":false,"fromGames":false,"ranked":{"games":1,"avg":1,"top4":100,"firsts":1},"otherGames":1,"endRank":{"tier":"MASTER","rank":"I","lp":209}},"2026-11-04":{"lp":119,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":3.88,"top4":64.7,"firsts":4},"otherGames":12,"endRank":{"tier":"MASTER","rank":"I","lp":161}},"2026-10-28":{"lp":-43,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.71,"top4":35.3,"firsts":1},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":42}},"2026-10-21":{"lp":-5,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.35,"top4":58.8,"firsts":0},"otherGames":5,"endRank":{"tier":"MASTER","rank":"I","lp":85}}},
       "history": [[1792631207192,2890,"MASTER"],[1792630653692,2848,"MASTER"],[1792632342127,2808,"MASTER"],[1792634276856,2800,"MASTER"],[1792641073225,2817,"MASTER"],[1792643207585,2800,"MASTER"],[1792645524830,2832,"MASTER"],[1792650170151,2820,"MASTER"],[1792701468650,2838,"MASTER"],[1792820331885,2858,"MASTER"],[1792970682712,2878,"MASTER"],[1792972749595,2888,"MASTER"],[1792975618733,2898,"MASTER"],[1793052870287,2933,"MASTER"],[1793160271817,2873,"MASTER"],[1793162426000,2909,"MASTER"],[1793163906837,2853,"MASTER"],[1793166243122,2885,"MASTER"],[1793179499873,2875,"MASTER"],[1793181840106,2865,"MASTER"],[1793184036922,2855,"MASTER"],[1793266200048,2876,"MASTER"],[1793344924740,2822,"MASTER"],[1793347167964,2835,"MASTER"],[1793350070171,2820,"MASTER"],[1793352393284,2830,"MASTER"],[1793430708018,2849,"MASTER"],[1793590795220,2826,"MASTER"],[1793664132123,2800,"MASTER"],[1793666622594,2832,"MASTER"],[1793736584319,2822,"MASTER"],[1793738518137,2812,"MASTER"],[1793740659303,2802,"MASTER"],[1793771253095,2800,"MASTER"],[1793773362780,2842,"MASTER"],[1793783722949,2886,"MASTER"],[1793827813301,2915,"MASTER"],[1793865059733,2856,"MASTER"],[1793867599138,2876,"MASTER"],[1793870076278,2911,"MASTER"],[1794022018930,2921,"MASTER"],[1794197528640,2969,"MASTER"],[1794204561168,2932,"MASTER"],[1794206735634,2922,"MASTER"],[1794208573491,2871,"MASTER"],[1794210950743,2916,"MASTER"],[1794221082562,2879,"MASTER"],[1794223242681,2863,"MASTER"],[1794225352828,2873,"MASTER"],[1794261564046,2918,"MASTER"],[1794264016112,2951,"MASTER"],[1794345423861,2961,"MASTER"],[1794467607973,3009,"MASTER"]]
     },
     {
