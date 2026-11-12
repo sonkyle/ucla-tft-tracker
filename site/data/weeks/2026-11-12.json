@@ -1,4 +1,6 @@
 {
   "key": "2026-11-12",
-  "matches": []
+  "matches": [
+    {"id":"NA1_5678317623","time":1794463691282,"queue":1100,"set":18,"patch":null,"length":2307.1,"lobby":8,"entries":[{"player":"alvin","placement":4,"level":8,"round":34,"dmg":0,"lp":{"delta":10,"games":1},"traits":[{"name":"DA_Juggernaut18","units":6,"style":4},{"name":"DA_18_ZyraUniqueTrait","units":1,"style":3},{"name":"DA_Primal18","units":2,"style":1},{"name":"DA_18_Summoner","units":2,"style":1}],"units":[{"id":"DA_18_Yorick","star":2,"rarity":0,"items":["DA_InfinityEdge","DA_JeweledGauntlet"]},{"id":"DA_18_Rakan","star":2,"rarity":0,"items":[]},{"id":"DA_Scuttlecrab18","star":2,"rarity":1,"items":[]},{"id":"DA_18_Sejuani","star":1,"rarity":1,"items":[]},{"id":"DA_Vi18","star":2,"rarity":2,"items":["DA_DragonsClaw","DA_WarmogsArmor","DA_Crownguard"]},{"id":"DA_Nidalee18_AP","star":2,"rarity":3,"items":["DA_VoidStaff","DA_RedBuff","DA_RabadonsDeathcap"]},{"id":"DA_18_Zyra","star":2,"rarity":3,"items":["DA_ArchangelsStaff","DA_ArchangelsStaff","DA_HextechGunblade"]},{"id":"DA_Amumu18","star":2,"rarity":3,"items":["DA_SpiritVisage","DA_GargoyleStoneplate","DA_SpiritVisage"]}],"tactician":"5601b81d-dfe2-40d7-81c5-4795ac9f6f3f"}]}
+  ]
 }
