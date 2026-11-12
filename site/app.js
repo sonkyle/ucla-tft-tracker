@@ -687,12 +687,13 @@ function renderOverview(key) {
   const isCurrent = idx === 0;
   const columns = [
     { key: 'name', label: 'Player', cell: (r) => h('span', { class: 'player-cell' }, h('a', { href: playerHref(r.p.slug, week.key) }, r.p.name), h('span', { class: 'muted' }, r.p.riotId)) },
-    { key: 'rank', label: isCurrent ? 'Rank' : 'Rank at end of week', sort: (r) => scoreOf(r.rank), cell: (r) => (r.rank || isCurrent ? rankText(r.rank) : h('span', { class: 'muted', title: 'Rank was not being tracked yet' }, '—')) },
+    { key: 'rank', label: isCurrent ? 'Rank' : 'Rank at end of week', sort: (r) => scoreOf(r.rank), cell: (r) => (r.rank || isCurrent ? h('span', { class: 'rank-cell' }, rankCrest(r.rank) ?? h('span', { class: 'rank-crest' }), rankText(r.rank)) : h('span', { class: 'muted', title: 'Rank was not being tracked yet' }, '—')) },
     { key: 'lp', label: 'Net LP', right: true, clickable: true, sort: (r) => r.w?.lp, cell: (r) => (r.w?.lp == null ? h('span', { class: 'muted', title: 'Not tracked yet' }, '—') : h('span', { class: deltaClass(r.w.lp) }, signed(r.w.lp) + (r.w.partial ? '*' : ''))) },
     { key: 'games', label: 'Games', right: true, clickable: true, sort: (r) => r.w?.ranked.games ?? 0, cell: (r) => r.w?.ranked.games ?? 0 },
     { key: 'avg', label: 'Avg place', right: true, clickable: true, sort: (r) => r.w?.ranked.avg, cell: (r) => avg(r.w?.ranked.avg) },
     { key: 'top4', label: 'Top 4', right: true, clickable: true, sort: (r) => r.w?.ranked.top4, cell: (r) => pct(r.w?.ranked.top4) },
     { key: 'firsts', label: '1sts', right: true, clickable: true, sort: (r) => r.w?.ranked.firsts ?? 0, cell: (r) => r.w?.ranked.firsts ?? 0 },
+    { key: 'eighths', label: '8ths', right: true, clickable: true, sort: (r) => r.w?.ranked.eighths ?? 0, cell: (r) => r.w?.ranked.eighths ?? 0 },
   ];
   const rows = site.players.map((p) => ({ p, w: p.weeks[week.key], rank: isCurrent ? p.current : p.weeks[week.key]?.endRank }));
   // Clicking a column cycles: its natural order (best first) -> reversed -> back to rank.
@@ -727,8 +728,8 @@ async function renderPlayer(slug, weekKey, myId) {
   const head = h('section', { class: 'card' },
     h('div', { class: 'player-head' },
       h('div', {},
-        h('h1', {}, p.name, ' ', h('span', { class: 'muted', style: 'font-weight:400;font-size:15px' }, p.riotId)),
-        h('div', { class: 'hero' }, rankText(p.current)))));
+        h('h1', {}, p.name, ' ', h('span', { class: 'riot-id' }, p.riotId)),
+        h('div', { class: 'hero' }, rankCrest(p.current), rankText(p.current)))));
 
   const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k)));
 

@@ -318,13 +318,14 @@ export function weekRange(from, to, tz, weekStartsOn = 1, startMinutes = 0, sinc
 // ---------------------------------------------------------------- weekly roll-up
 
 function placementStats(list) {
-  if (!list.length) return { games: 0, avg: null, top4: null, firsts: 0 };
+  if (!list.length) return { games: 0, avg: null, top4: null, firsts: 0, eighths: 0 };
   const sum = list.reduce((s, p) => s + p, 0);
   return {
     games: list.length,
     avg: Math.round((sum / list.length) * 100) / 100,
     top4: Math.round((list.filter((p) => p <= 4).length / list.length) * 1000) / 10,
     firsts: list.filter((p) => p === 1).length,
+    eighths: list.filter((p) => p === 8).length,
   };
 }
 

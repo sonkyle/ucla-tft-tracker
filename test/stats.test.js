@@ -138,7 +138,7 @@ test('weekly summary sums LP per week, including decay, and flags partial weeks'
   assert.equal(s[w1.key].partial, true);
   assert.equal(s[w2.key].lp, 5);
   assert.equal(s[w2.key].partial, false);
-  assert.deepEqual(s[w2.key].ranked, { games: 1, avg: 3, top4: 100, firsts: 0 });
+  assert.deepEqual(s[w2.key].ranked, { games: 1, avg: 3, top4: 100, firsts: 0, eighths: 0 });
   assert.equal(s[w2.key].otherGames, 1);
   assert.deepEqual(s[w2.key].endRank, { tier: 'GOLD', rank: 'II', lp: 95 });
 });
