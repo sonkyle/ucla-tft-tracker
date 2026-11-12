@@ -51,7 +51,8 @@
     {"t":1794435318766,"tier":"GRANDMASTER","rank":"I","lp":476,"wins":160,"losses":117},
     {"t":1794461421567,"tier":"GRANDMASTER","rank":"I","lp":526,"wins":161,"losses":117},
     {"t":1794466828805,"tier":"GRANDMASTER","rank":"I","lp":513,"wins":161,"losses":118},
-    {"t":1794469518709,"tier":"GRANDMASTER","rank":"I","lp":566,"wins":162,"losses":118}
+    {"t":1794469518709,"tier":"GRANDMASTER","rank":"I","lp":566,"wins":162,"losses":118},
+    {"t":1794527122805,"tier":"GRANDMASTER","rank":"I","lp":623,"wins":163,"losses":118}
   ],
   "HfAbyhL7SHm5clayOBrDsCtzZyrygkKpW1BJ5uCTzDpdf50yukGUutvj2UrMjvQ6mQcsEAsJnvn3OQ": [
     {"t":1793873589498,"tier":"MASTER","rank":"I","lp":55,"wins":147,"losses":127},
@@ -145,7 +146,8 @@
     {"t":1794374119313,"tier":"MASTER","rank":"I","lp":41,"wins":119,"losses":100},
     {"t":1794436223645,"tier":"MASTER","rank":"I","lp":85,"wins":120,"losses":100},
     {"t":1794439136457,"tier":"MASTER","rank":"I","lp":131,"wins":121,"losses":100},
-    {"t":1794524426247,"tier":"MASTER","rank":"I","lp":119,"wins":121,"losses":101}
+    {"t":1794524426247,"tier":"MASTER","rank":"I","lp":119,"wins":121,"losses":101},
+    {"t":1794527122805,"tier":"MASTER","rank":"I","lp":130,"wins":122,"losses":101}
   ],
   "VCtYVjMfW7Il38ROfJRVkxKMRI2kutPr45fAy4eopUPUfiNmzQMGnLIEZ1YTJzRrMSxxWXIjawuqNg": [
     {"t":1793873589498,"tier":"GRANDMASTER","rank":"I","lp":375,"wins":171,"losses":126},
@@ -243,6 +245,7 @@
     {"t":1794002820851,"tier":"EMERALD","rank":"I","lp":12,"wins":45,"losses":32},
     {"t":1794204024546,"tier":"EMERALD","rank":"I","lp":2,"wins":45,"losses":33},
     {"t":1794206721945,"tier":"EMERALD","rank":"I","lp":30,"wins":46,"losses":33},
-    {"t":1794525317664,"tier":"EMERALD","rank":"I","lp":0,"wins":46,"losses":34}
+    {"t":1794525317664,"tier":"EMERALD","rank":"I","lp":0,"wins":46,"losses":34},
+    {"t":1794527122805,"tier":"EMERALD","rank":"I","lp":10,"wins":47,"losses":34}
   ]
 }
