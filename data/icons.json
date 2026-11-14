@@ -656,10 +656,12 @@
     "f8a8c5c9-7355-4ca8-be02-296a5322c4a1": "Chibi Ezreal",
     "7b4009d4-1c30-4c39-ac6a-6e591e322d46": "Atlantean Choncc",
     "96332559-bfe0-4743-a16e-c1ffe2e9ae61": "Super Scuttle",
-    "8c27f67c-90b3-4355-9e90-6e92325c6016": "Eternal Hushtail"
+    "8c27f67c-90b3-4355-9e90-6e92325c6016": "Eternal Hushtail",
+    "e2e88924-c509-45cd-b9fb-22ea9ab7ee06": "Last Wish Fuwa"
   },
   "missing": {
-    "8c27f67c-90b3-4355-9e90-6e92325c6016": 1794625227919
+    "8c27f67c-90b3-4355-9e90-6e92325c6016": 1794625227919,
+    "e2e88924-c509-45cd-b9fb-22ea9ab7ee06": 1794651325844
   },
   "costs": {
     "DA_18_Akali_AD": 1,
