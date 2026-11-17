@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1794889824429,
+  "latestActivity": 1794892520186,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -1525,7 +1525,7 @@
       "slug": "jae-vin",
       "name": "Jae Vin",
       "riotId": "UCLAKermithefrog#Frog",
-      "current": {"tier":"MASTER","rank":"I","lp":0,"wins":138,"losses":116},
+      "current": {"tier":"MASTER","rank":"I","lp":0,"wins":138,"losses":117},
       "peak": {"tier":"MASTER","rank":"I","lp":233,"t":1794548718998},
       "trackedSince": 1793873589498,
       "lpCoverage": {"games":29,"matched":29},
