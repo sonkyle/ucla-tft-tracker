@@ -128,8 +128,10 @@ footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--m
 /* card title with a control on the right (wraps under the title on narrow screens) */
 .card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; margin-bottom: 2px; }
 .card-head .toggle { font-size: 13px; }
-.cutoffs { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
-.cutoffs b { color: var(--ink); font-weight: 600; }
+.cutoffs { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.cutoff { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.cutoff b { color: var(--ink); font-weight: 600; }
+.cutoffs .rank-crest { flex: none; width: 18px; height: 18px; }
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
 @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; } }
 

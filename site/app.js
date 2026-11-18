@@ -590,12 +590,16 @@ function tierBands() {
   return [...bands, [APEX, APEX + c.grandmaster, 'MASTER'],
     [APEX + c.grandmaster, APEX + c.challenger, 'GRANDMASTER'], [APEX + c.challenger, Infinity, 'CHALLENGER']];
 }
-/** "Grandmaster 311 LP · Challenger 688 LP" for a card header, from today's estimated cutoffs. */
-function apexCutoffNote() {
+/**
+ * "[icon] Grandmaster 311 LP · [icon] Challenger 688 LP" for a card header, from today's estimated
+ * cutoffs. `prefix` (e.g. "Cutoffs:") goes in front when the card doesn't make the meaning obvious.
+ */
+function apexCutoffNote(prefix) {
   const c = site.apexCutoffs;
   if (!c) return null;
+  const part = (tier, lp) => h('span', { class: 'cutoff' }, rankCrest({ tier }), h('b', {}, title(tier)), ` ${lp} LP`);
   return h('span', { class: 'cutoffs', title: `Ladder cutoffs, estimated ${agoText(c.t)}. They move daily.` },
-    'Cutoffs: ', h('b', {}, 'Grandmaster'), ` ${c.grandmaster} LP · `, h('b', {}, 'Challenger'), ` ${c.challenger} LP`);
+    prefix ? h('span', {}, prefix) : null, part('GRANDMASTER', c.grandmaster), h('span', { 'aria-hidden': 'true' }, '·'), part('CHALLENGER', c.challenger));
 }
 const tierColor = (tier) => (tier && TIERS.includes(tier) ? `var(--t-${tier.toLowerCase()})` : 'var(--pos)');
 
@@ -719,7 +723,7 @@ function renderOverview(key) {
   app.replaceChildren(
     h('div', { class: 'filters' }, weekNav(idx, teamHref)),
     tiles,
-    h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Leaderboard'), apexCutoffNote()),
+    h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Leaderboard'), apexCutoffNote('Cutoffs:')),
       h('p', { class: 'sub' }, 'Ranked games only. Click a column to sort, or a player to see their games this week.'), board));
 }
 
@@ -765,7 +769,7 @@ async function renderPlayer(slug, weekKey, myId) {
 
   const charts = h('div', { class: 'grid-2' },
     h('section', { class: 'card' }, h('h2', {}, 'Net LP by week'), h('p', { class: 'sub' }, 'Click a bar to see that week’s games.'), weeklyChart(p, week.key)),
-    h('section', { class: 'card' }, h('h2', {}, 'Rank over time'), h('p', { class: 'sub' }, 'Rank after each game, oldest to newest. Hover for details.', site.apexCutoffs ? ` Grandmaster starts at ${site.apexCutoffs.grandmaster} LP and Challenger at ${site.apexCutoffs.challenger} LP today.` : ''), rankChart(p)));
+    h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Rank over time'), apexCutoffNote()), h('p', { class: 'sub' }, 'Rank after each game, oldest to newest. Hover for details.'), rankChart(p)));
 
   const weekRows = site.weeks.filter((x) => p.weeks[x.key] && (p.weeks[x.key].ranked.games || p.weeks[x.key].lp || p.weeks[x.key].otherGames));
   const weekTable = h('section', { class: 'card' }, h('h2', {}, 'Week by week'), h('p', { class: 'sub' }, 'Click a week to see its games.'),
