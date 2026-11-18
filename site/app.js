@@ -51,6 +51,8 @@ const deltaClass = (n) => (n > 0 ? 'up' : n < 0 ? 'down' : '');
 const ordinal = (n) => n + (['th', 'st', 'nd', 'rd'][n] ?? 'th');
 const pct = (x) => (x == null ? '—' : `${Math.round(x)}%`);
 const avg = (x) => (x == null ? '—' : x.toFixed(2));
+/** Share of ranked games finished 1st, as a percent (null with no games). */
+const firstRate = (r) => (r?.games ? (r.firsts / r.games) * 100 : null);
 const queueName = (q) => site.queueNames?.[q] ?? QUEUES[q] ?? 'Other mode';
 const player = (slug) => site.players.find((p) => p.slug === slug);
 // Riot IDs look like TFT16_Ahri, TFT_Item_InfinityEdge, DA_18_Rakan, DA_KogMaw18_AD,
@@ -588,6 +590,13 @@ function tierBands() {
   return [...bands, [APEX, APEX + c.grandmaster, 'MASTER'],
     [APEX + c.grandmaster, APEX + c.challenger, 'GRANDMASTER'], [APEX + c.challenger, Infinity, 'CHALLENGER']];
 }
+/** "Grandmaster 311 LP · Challenger 688 LP" for a card header, from today's estimated cutoffs. */
+function apexCutoffNote() {
+  const c = site.apexCutoffs;
+  if (!c) return null;
+  return h('span', { class: 'cutoffs', title: `Ladder cutoffs, estimated ${agoText(c.t)}. They move daily.` },
+    'Cutoffs: ', h('b', {}, 'Grandmaster'), ` ${c.grandmaster} LP · `, h('b', {}, 'Challenger'), ` ${c.challenger} LP`);
+}
 const tierColor = (tier) => (tier && TIERS.includes(tier) ? `var(--t-${tier.toLowerCase()})` : 'var(--pos)');
 
 /** Net LP per week: diverging columns from a zero baseline. */
@@ -661,16 +670,17 @@ function weekNav(idx, hrefFor) {
 // ---------------------------------------------------------------- team overview
 
 function teamTotals(key) {
-  let games = 0, placeSum = 0, top4 = 0, lp = 0, tracked = 0;
+  let games = 0, placeSum = 0, top4 = 0, firsts = 0, lp = 0, tracked = 0;
   for (const p of site.players) {
     const w = p.weeks[key];
     if (!w) continue;
     games += w.ranked.games;
     placeSum += (w.ranked.avg ?? 0) * w.ranked.games;
     top4 += ((w.ranked.top4 ?? 0) / 100) * w.ranked.games;
+    firsts += w.ranked.firsts ?? 0;
     if (w.lp != null) { lp += w.lp; tracked++; }
   }
-  return { games, avg: games ? placeSum / games : null, top4: games ? (top4 / games) * 100 : null, lp: tracked ? lp : null, tracked };
+  return { games, avg: games ? placeSum / games : null, top4: games ? (top4 / games) * 100 : null, first: games ? (firsts / games) * 100 : null, lp: tracked ? lp : null, tracked };
 }
 
 function renderOverview(key) {
@@ -682,7 +692,7 @@ function renderOverview(key) {
     tile('Team net LP', T.lp == null ? '—' : signed(T.lp), T.tracked < site.players.length ? `${T.tracked} of ${site.players.length} players (LP unknown for the rest)` : 'all players combined', T.lp != null ? deltaClass(T.lp) : ''),
     tile('Ranked games', String(T.games), 'all players combined'),
     tile('Average placement', avg(T.avg), 'ranked games'),
-    tile('Top 4 rate', pct(T.top4), 'ranked games'));
+    tile('Top 4 rate', pct(T.top4), T.first == null ? 'ranked games' : `${pct(T.first)} 1st rate`));
 
   const isCurrent = idx === 0;
   const columns = [
@@ -692,6 +702,7 @@ function renderOverview(key) {
     { key: 'games', label: 'Games', right: true, clickable: true, sort: (r) => r.w?.ranked.games ?? 0, cell: (r) => r.w?.ranked.games ?? 0 },
     { key: 'avg', label: 'Avg place', right: true, clickable: true, sort: (r) => r.w?.ranked.avg, cell: (r) => avg(r.w?.ranked.avg) },
     { key: 'top4', label: 'Top 4', right: true, clickable: true, sort: (r) => r.w?.ranked.top4, cell: (r) => pct(r.w?.ranked.top4) },
+    { key: 'first', label: '1st rate', right: true, clickable: true, sort: (r) => firstRate(r.w?.ranked), cell: (r) => pct(firstRate(r.w?.ranked)) },
     { key: 'firsts', label: '1sts', right: true, clickable: true, sort: (r) => r.w?.ranked.firsts ?? 0, cell: (r) => r.w?.ranked.firsts ?? 0 },
     { key: 'eighths', label: '8ths', right: true, clickable: true, sort: (r) => r.w?.ranked.eighths ?? 0, cell: (r) => r.w?.ranked.eighths ?? 0 },
   ];
@@ -708,7 +719,7 @@ function renderOverview(key) {
   app.replaceChildren(
     h('div', { class: 'filters' }, weekNav(idx, teamHref)),
     tiles,
-    h('section', { class: 'card' }, h('h2', {}, 'Leaderboard'),
+    h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Leaderboard'), apexCutoffNote()),
       h('p', { class: 'sub' }, 'Ranked games only. Click a column to sort, or a player to see their games this week.'), board));
 }
 
@@ -742,7 +753,7 @@ async function renderPlayer(slug, weekKey, myId) {
     tile('Net LP', w?.lp == null ? '—' : signed(w.lp) + (w.partial ? '*' : ''), lpNote, w?.lp != null ? deltaClass(w.lp) : ''),
     tile('Ranked games', String(w?.ranked.games ?? 0), w?.otherGames ? `+ ${w.otherGames} other` : null),
     tile('Avg placement', avg(w?.ranked.avg), 'ranked games'),
-    tile('Top 4 rate', pct(w?.ranked.top4), w?.ranked.firsts ? `${w.ranked.firsts} first${w.ranked.firsts > 1 ? 's' : ''}` : 'ranked games'));
+    tile('Top 4 rate', pct(w?.ranked.top4), w?.ranked.games ? `${pct(firstRate(w.ranked))} 1st rate (${w.ranked.firsts} first${w.ranked.firsts === 1 ? '' : 's'})` : 'ranked games'));
 
   // The games list header: title on the left, the ranked-only filter on the right.
   const gamesTitle = () => h('div', { class: 'card-head' },
@@ -754,12 +765,12 @@ async function renderPlayer(slug, weekKey, myId) {
 
   const charts = h('div', { class: 'grid-2' },
     h('section', { class: 'card' }, h('h2', {}, 'Net LP by week'), h('p', { class: 'sub' }, 'Click a bar to see that week’s games.'), weeklyChart(p, week.key)),
-    h('section', { class: 'card' }, h('h2', {}, 'Rank over time'), h('p', { class: 'sub' }, 'Rank after each game, oldest to newest. Hover for details.'), rankChart(p)));
+    h('section', { class: 'card' }, h('h2', {}, 'Rank over time'), h('p', { class: 'sub' }, 'Rank after each game, oldest to newest. Hover for details.', site.apexCutoffs ? ` Grandmaster starts at ${site.apexCutoffs.grandmaster} LP and Challenger at ${site.apexCutoffs.challenger} LP today.` : ''), rankChart(p)));
 
   const weekRows = site.weeks.filter((x) => p.weeks[x.key] && (p.weeks[x.key].ranked.games || p.weeks[x.key].lp || p.weeks[x.key].otherGames));
   const weekTable = h('section', { class: 'card' }, h('h2', {}, 'Week by week'), h('p', { class: 'sub' }, 'Click a week to see its games.'),
     h('div', { class: 'table-wrap' }, h('table', {},
-      h('thead', {}, h('tr', {}, ['Week', 'Net LP', 'Ranked games', 'Avg place', 'Top 4', '1sts', 'Other games', 'Rank at end'].map((c, i) => h('th', { class: i && i < 7 ? 'r' : null }, c)))),
+      h('thead', {}, h('tr', {}, ['Week', 'Net LP', 'Ranked games', 'Avg place', 'Top 4', '1st rate', '1sts', 'Other games', 'Rank at end'].map((c, i) => h('th', { class: i && i < 8 ? 'r' : null }, c)))),
       h('tbody', {}, weekRows.map((x) => {
         const wk = p.weeks[x.key];
         return h('tr', { class: `link ${x.key === week.key ? 'selected' : ''}`, tabindex: 0,
@@ -770,6 +781,7 @@ async function renderPlayer(slug, weekKey, myId) {
           h('td', { class: 'r' }, wk.ranked.games),
           h('td', { class: 'r' }, avg(wk.ranked.avg)),
           h('td', { class: 'r' }, pct(wk.ranked.top4)),
+          h('td', { class: 'r' }, pct(firstRate(wk.ranked))),
           h('td', { class: 'r' }, wk.ranked.firsts),
           h('td', { class: 'r' }, wk.otherGames),
           h('td', {}, wk.endRank ? rankText(wk.endRank) : h('span', { class: 'muted' }, 'not tracked')));
