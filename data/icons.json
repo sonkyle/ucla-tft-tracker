@@ -667,7 +667,8 @@
     "21a8b570-ceef-4fa3-8d5b-412fee1303f1": "Yasuo Cosplay Pengu",
     "4bc07f9a-638d-4ba1-ac68-34ea83aa9352": "Moontipped Hushtail",
     "cfd5e273-43c1-4283-864e-16d705f3d14f": "Lost Silverwing",
-    "1d454cd7-5445-4fec-a1aa-afe34fb1c2ce": "Fenroar"
+    "1d454cd7-5445-4fec-a1aa-afe34fb1c2ce": "Fenroar",
+    "DA_18_Lux_Sunbeam": "Lux (Solar)"
   },
   "missing": {},
   "costs": {
@@ -735,6 +736,7 @@
     "DA_CrimsonRaptor18": 3,
     "DA_18_Tristana": 3,
     "DA_18_Caitlyn": 2,
-    "DA_18_Warwick": 2
+    "DA_18_Warwick": 2,
+    "DA_18_Lux_Sunbeam": 5
   }
 }
