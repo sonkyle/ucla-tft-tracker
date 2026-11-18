@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1794973663842,
+  "latestActivity": 1794975325936,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -1476,7 +1476,7 @@
       "slug": "kyle",
       "name": "Kyle",
       "riotId": "UCLA sws#tft",
-      "current": {"tier":"MASTER","rank":"I","lp":0,"wins":183,"losses":168},
+      "current": {"tier":"MASTER","rank":"I","lp":0,"wins":183,"losses":169},
       "peak": {"tier":"MASTER","rank":"I","lp":128,"t":1794199985662},
       "trackedSince": 1793873589498,
       "lpCoverage": {"games":77,"matched":77},
