@@ -50,6 +50,8 @@ const signed = (n) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : '0');
 const deltaClass = (n) => (n > 0 ? 'up' : n < 0 ? 'down' : '');
 const ordinal = (n) => n + (['th', 'st', 'nd', 'rd'][n] ?? 'th');
 const pct = (x) => (x == null ? '—' : `${Math.round(x)}%`);
+/** "A, B and C" */
+const listJoin = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 const avg = (x) => (x == null ? '—' : x.toFixed(2));
 /** Share of ranked games finished 1st, as a percent (null with no games). */
 const firstRate = (r) => (r?.games ? (r.firsts / r.games) * 100 : null);
@@ -662,9 +664,10 @@ const playerHref = (slug, key) => `#/player/${slug}${weekPath(key)}`;
 const chevron = (dir) => s('svg', { class: 'chev', viewBox: '0 0 16 16', 'aria-hidden': 'true' },
   s('path', { d: dir < 0 ? 'M10 3.5 5.5 8l4.5 4.5' : 'M6 3.5 10.5 8 6 12.5' }));
 
-function weekNav(idx, hrefFor) {
+/** `oldest`: index of the oldest week to allow (a player who joined mid-season has no earlier weeks). */
+function weekNav(idx, hrefFor, oldest = site.weeks.length - 1) {
   const weeks = site.weeks;
-  const older = idx < weeks.length - 1, newer = idx > 0;
+  const older = idx < oldest, newer = idx > 0;
   return h('div', { class: 'week-nav' },
     h('a', { class: 'btn', href: older ? hrefFor(weeks[idx + 1].key) : null, 'aria-disabled': older ? null : 'true', 'aria-label': 'Previous week' }, chevron(-1)),
     h('div', { class: 'week-label' }, weekTitle(weeks[idx].key), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null),
@@ -673,9 +676,15 @@ function weekNav(idx, hrefFor) {
 
 // ---------------------------------------------------------------- team overview
 
+/** Is the player listed on the site this week? (Players added mid-season start at their firstWeek.) */
+const onSiteIn = (p, key) => !p.firstWeek || key >= p.firstWeek;
+/** Does the player count toward the team page's totals this week? (config: teamTotalsExcludedFrom) */
+const inTeamTotals = (p, key) => onSiteIn(p, key) && !(p.teamTotalsExcludedFrom && key >= p.teamTotalsExcludedFrom);
+
 function teamTotals(key) {
   let games = 0, placeSum = 0, top4 = 0, firsts = 0, lp = 0, tracked = 0;
-  for (const p of site.players) {
+  const counted = site.players.filter((p) => inTeamTotals(p, key));
+  for (const p of counted) {
     const w = p.weeks[key];
     if (!w) continue;
     games += w.ranked.games;
@@ -684,17 +693,20 @@ function teamTotals(key) {
     firsts += w.ranked.firsts ?? 0;
     if (w.lp != null) { lp += w.lp; tracked++; }
   }
-  return { games, avg: games ? placeSum / games : null, top4: games ? (top4 / games) * 100 : null, first: games ? (firsts / games) * 100 : null, lp: tracked ? lp : null, tracked };
+  return { games, avg: games ? placeSum / games : null, top4: games ? (top4 / games) * 100 : null, first: games ? (firsts / games) * 100 : null, lp: tracked ? lp : null, tracked, counted };
 }
 
 function renderOverview(key) {
   const idx = weekIndex(key);
   const week = site.weeks[idx];
   const T = teamTotals(week.key);
+  const listed = site.players.filter((p) => onSiteIn(p, week.key));
+  const left = listed.filter((p) => !inTeamTotals(p, week.key)).map((p) => p.name).sort((a, b) => a.localeCompare(b));
+  const combined = left.length ? `${T.counted.length} players combined` : 'all players combined';
 
   const tiles = h('div', { class: 'tiles' },
-    tile('Team net LP', T.lp == null ? '—' : signed(T.lp), T.tracked < site.players.length ? `${T.tracked} of ${site.players.length} players (LP unknown for the rest)` : 'all players combined', T.lp != null ? deltaClass(T.lp) : ''),
-    tile('Ranked games', String(T.games), 'all players combined'),
+    tile('Team net LP', T.lp == null ? '—' : signed(T.lp), T.tracked < T.counted.length ? `${T.tracked} of ${T.counted.length} players (LP unknown for the rest)` : combined, T.lp != null ? deltaClass(T.lp) : ''),
+    tile('Ranked games', String(T.games), combined),
     tile('Average placement', avg(T.avg), 'ranked games'),
     tile('Top 4 rate', pct(T.top4), T.first == null ? 'ranked games' : `${pct(T.first)} 1st rate`));
 
@@ -710,7 +722,7 @@ function renderOverview(key) {
     { key: 'firsts', label: '1sts', right: true, clickable: true, sort: (r) => r.w?.ranked.firsts ?? 0, cell: (r) => r.w?.ranked.firsts ?? 0 },
     { key: 'eighths', label: '8ths', right: true, clickable: true, sort: (r) => r.w?.ranked.eighths ?? 0, cell: (r) => r.w?.ranked.eighths ?? 0 },
   ];
-  const rows = site.players.map((p) => ({ p, w: p.weeks[week.key], rank: isCurrent ? p.current : p.weeks[week.key]?.endRank }));
+  const rows = listed.map((p) => ({ p, w: p.weeks[week.key], rank: isCurrent ? p.current : p.weeks[week.key]?.endRank }));
   // Clicking a column cycles: its natural order (best first) -> reversed -> back to rank.
   const board = sortableTable(columns, rows, ui.sort, (c) => {
     const first = c.key === 'avg' ? 1 : -1; // lower average placement is better
@@ -724,7 +736,8 @@ function renderOverview(key) {
     h('div', { class: 'filters' }, weekNav(idx, teamHref)),
     tiles,
     h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Leaderboard'), apexCutoffNote('Cutoffs:')),
-      h('p', { class: 'sub' }, 'Ranked games only. Click a column to sort, or a player to see their games this week.'), board));
+      h('p', { class: 'sub' }, 'Ranked games only. Click a column to sort, or a player to see their games this week.',
+        left.length ? ` The team totals above leave out ${listJoin(left)}.` : ''), board));
 }
 
 // ---------------------------------------------------------------- player page
@@ -735,7 +748,8 @@ async function renderPlayer(slug, weekKey, myId) {
     app.replaceChildren(h('p', { class: 'notice' }, 'Player not found. ', h('a', { href: '#/' }, 'Back to the team page')));
     return;
   }
-  const idx = weekIndex(weekKey);
+  const oldest = p.firstWeek ? weekIndex(p.firstWeek) : site.weeks.length - 1;
+  const idx = Math.min(weekIndex(weekKey), oldest);
   const week = site.weeks[idx];
   const w = p.weeks[week.key];
   const isCurrent = idx === 0;
@@ -746,7 +760,7 @@ async function renderPlayer(slug, weekKey, myId) {
         h('h1', {}, p.name, ' ', h('span', { class: 'riot-id' }, p.riotId)),
         h('div', { class: 'hero' }, rankCrest(p.current), rankText(p.current)))));
 
-  const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k)));
+  const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k), oldest));
 
   const lpNote = w?.lp == null ? 'rank not tracked this week'
     : w.partial ? '* tracking started mid-week'

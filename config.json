@@ -14,11 +14,13 @@
     { "riotId": "UCLA sws#tft", "name": "Kyle", "endRanks": { "2026-10-14": "D2 75" } },
     { "riotId": "UCLA dude kisser#8888", "name": "Edward", "endRanks": { "2026-10-14": "D4 8", "2026-10-21": "D3 26" } },
     { "riotId": "UCLA TheSky#jlfan", "name": "Will", "endRanks": { "2026-10-14": "GM 367" } },
-    { "riotId": "UCLA meiybox#00000", "name": "Aliya" },
-    { "riotId": "UCLA MotherYoshi#BIG8", "name": "Alvin" },
+    { "riotId": "UCLA meiybox#00000", "name": "Aliya", "teamTotalsExcludedFrom": "2026-11-19" },
+    { "riotId": "UCLA MotherYoshi#BIG8", "name": "Alvin", "teamTotalsExcludedFrom": "2026-11-19" },
     { "riotId": "UCLAKermithefrog#Frog", "name": "Jae Vin" },
     { "riotId": "UCLA What#8888", "name": "Neil", "endRanks": { "2026-10-14": "E3 75" } },
     { "riotId": "UCLA hyomaker#hyo", "name": "Hyo" },
-    { "riotId": "UCLA weorge#1111", "name": "George", "endRanks": { "2026-10-14": "D4 0" } }
+    { "riotId": "UCLA weorge#1111", "name": "George", "endRanks": { "2026-10-14": "D4 0" } },
+    { "riotId": "UCLA Radish#nom", "name": "Cynthia", "firstWeek": "2026-11-19", "teamTotalsExcludedFrom": "2026-11-19" },
+    { "riotId": "schuridae#tft", "name": "Rei", "firstWeek": "2026-11-19", "teamTotalsExcludedFrom": "2026-11-19" }
   ]
 }

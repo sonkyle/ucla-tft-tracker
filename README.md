@@ -40,6 +40,12 @@ Set `"tacticsTools": false` in `config.json` to turn this off.
 `config.json`, keyed by the week's start date: `"endRanks": { "2026-10-21": "D3 26" }`. Short (`D3 26`, `GM 512`)
 and long (`Diamond III 26 LP`) forms both work, and a hand-entered rank wins over computed ones.
 
+**Adding a player mid-season, or leaving one out of the team totals.** Two optional per-player settings in `config.json`,
+each naming a week by its key (the week's first full day, e.g. `"2026-11-19"` for Week 9):
+- `"firstWeek"`: the player shows up on the site from this week on. Their games from before it aren't fetched or shown.
+- `"teamTotalsExcludedFrom"`: from this week on, the team page's totals (net LP, games, average, top 4 and 1st rate)
+  leave the player out. They stay on the leaderboard, and earlier weeks are unchanged.
+
 **Trait, item and champion icons.** Each poll downloads icons (and in-game names) for any trait, item or champion
 that doesn't have one yet from [Community Dragon](https://communitydragon.org) into `site/img/traits/`, `items/` and `units/`
 (about once per set), so the site serves them itself. Run `node src/icons.js` to fetch them by hand.

@@ -17,7 +17,6 @@ const cfg = loadConfig(arg('config', path.join(ROOT, 'config.json')));
 const store = new DataStore(arg('data', path.join(ROOT, 'data')));
 let budget = Number(arg('max-matches', 400));
 const riot = new RiotClient(process.env.RIOT_API_KEY, cfg.platform);
-const startTime = cfg.trackFromMs ? Math.floor(cfg.trackFromMs / 1000) : undefined;
 
 const sameState = (a, b) =>
   a.tier === b.tier && a.rank === b.rank && a.lp === b.lp && a.wins === b.wins && a.losses === b.losses;
@@ -125,6 +124,8 @@ for (const p of active) {
   const rec = store.players[p.key];
   // Caught up = history already downloaded back to (at least) the current trackFrom.
   // Moving trackFrom earlier makes this false, so older games get fetched once.
+  // A player added mid-season (firstWeek in config) only has games from that week on fetched.
+  const startTime = Math.floor(Math.max(cfg.trackFromMs ?? 0, p.firstWeekMs ?? 0) / 1000) || undefined;
   const caughtUp = rec.backfilled && (rec.backfilledFrom ?? Infinity) <= (startTime ?? 0);
   try {
     const fresh = [];

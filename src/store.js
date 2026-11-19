@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { zonedMidnight } from './stats.js';
+import { zonedMidnight, weekOfFrom } from './stats.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -43,6 +43,14 @@ export function loadConfig(file = path.join(ROOT, 'config.json')) {
     cfg.trackFromMs = zonedMidnight(y, m, d, cfg.timezone);
     if (!Number.isFinite(cfg.trackFromMs)) throw new Error(`trackFrom "${cfg.trackFrom}" must look like 2026-10-21`);
   }
+  // A week named in config (by its first full day, e.g. "2026-11-19") -> when that week starts.
+  const weekStart = (key, what) => {
+    const [y, m, d] = String(key).split('-').map(Number);
+    const w = /^\d{4}-\d{2}-\d{2}$/.test(key)
+      && weekOfFrom(zonedMidnight(y, m, d, cfg.timezone) + 12 * 3600e3, cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
+    if (!w || w.key !== key) throw new Error(`${what} "${key}" isn't a week's name (weeks are named by their first full day${w ? `, e.g. "${w.key}"` : ''})`);
+    return w.start;
+  };
   cfg.players = cfg.players.map((p) => {
     const hash = p.riotId.lastIndexOf('#');
     if (hash < 1) throw new Error(`Riot ID "${p.riotId}" must look like Name#TAG`);
@@ -55,8 +63,12 @@ export function loadConfig(file = path.join(ROOT, 'config.json')) {
       key: `${gameName}#${tagLine}`.toLowerCase(),
       name: p.name || gameName,
       slug: slugify(p.name || gameName),
+      // Optional. firstWeek: the player is on the site from this week on; earlier games are left off.
+      // teamTotalsExcludedFrom: from this week on, the team page's totals leave the player out.
+      firstWeekMs: p.firstWeek ? weekStart(p.firstWeek, `${p.riotId}: firstWeek`) : null,
     };
   });
+  for (const p of cfg.players) if (p.teamTotalsExcludedFrom) weekStart(p.teamTotalsExcludedFrom, `${p.riotId}: teamTotalsExcludedFrom`); // just checks it
   const slugs = new Set();
   for (const p of cfg.players) {
     while (slugs.has(p.slug)) p.slug += '-2';

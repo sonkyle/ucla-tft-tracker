@@ -22,6 +22,10 @@ const players = cfg.players
   .map((p) => ({ ...p, rec: store.players[p.key] }))
   .filter((p) => p.rec?.puuid);
 const slugOf = new Map(players.map((p) => [p.rec.puuid, p.slug]));
+// Players added mid-season (firstWeek in config): nothing from before that week is shown for them.
+const fromOf = new Map(players.map((p) => [p.rec.puuid, p.firstWeekMs ?? 0]));
+/** True if this game counts for this tracked player (it's from their firstWeek on). */
+const shownFor = (puuid, m) => slugOf.has(puuid) && matchTime(m) >= fromOf.get(puuid);
 // Games before trackFrom stay on disk but are left off the site.
 const matches = [...store.matches.values()].filter((m) => !cfg.trackFromMs || matchTime(m) >= cfg.trackFromMs);
 
@@ -31,11 +35,12 @@ const perPlayer = [];
 let earliest = now;
 for (const p of players) {
   const puuid = p.rec.puuid;
-  const snaps = [...(store.snapshots[puuid] ?? [])].sort((a, b) => a.t - b.t);
+  const from = fromOf.get(puuid);
+  const snaps = (store.snapshots[puuid] ?? []).filter((s) => s.t >= from).sort((a, b) => a.t - b.t);
   const games = [];
   for (const m of matches) {
     const pp = m.players[puuid];
-    if (!pp) continue;
+    if (!pp || !shownFor(puuid, m)) continue;
     games.push({ id: m.id, time: matchTime(m), e: elimTime(m, pp), queue: m.queue, placement: pp.placement });
   }
   games.sort((a, b) => a.time - b.time);
@@ -135,7 +140,10 @@ const site = {
       peak: peak?.tier ? { ...pick(peak), t: peak.t } : null,
       trackedSince: snaps[0]?.t ?? null,
       lpCoverage: { games: trackedRanked.length, matched: trackedRanked.filter((g) => gameLp.get(g.id)?.games === 1).length },
-      weeks: withEndRankOverrides(p, weeklySummary({ snaps, transitions, games, weeks, now, gameLp, rankPoints: points })),
+      firstWeek: p.firstWeek ?? null,
+      teamTotalsExcludedFrom: p.teamTotalsExcludedFrom ?? null,
+      // weeks before firstWeek are left out, so the site doesn't list the player there
+      weeks: withEndRankOverrides(p, weeklySummary({ snaps, transitions, games, weeks: weeks.filter((w) => w.end > (p.firstWeekMs ?? 0)), now, gameLp, rankPoints: points })),
       history,
     };
   }),
@@ -165,7 +173,7 @@ function writeLobby(m) {
   if (!m.others) return null;
   const team = Object.entries(m.players)
     .filter(([puuid]) => slugOf.has(puuid))
-    .map(([puuid, pp]) => ({ player: slugOf.get(puuid), placement: pp.placement, level: pp.level, tactician: pp.tactician ?? null, rank: pp.rank, traits: pp.traits, units: pp.units }));
+    .map(([puuid, pp]) => ({ player: shownFor(puuid, m) ? slugOf.get(puuid) : null, placement: pp.placement, level: pp.level, tactician: pp.tactician ?? null, rank: pp.rank, traits: pp.traits, units: pp.units }));
   const boards = [...team, ...m.others].sort((a, b) => a.placement - b.placement);
   const file = `${m.id}.json`;
   writeJson(path.join(lobbyDir, file), { id: m.id, boards }, 0);
@@ -177,7 +185,7 @@ function writeLobby(m) {
 const byWeek = new Map(weeks.map((w) => [w.key, []]));
 for (const m of matches) {
   const entries = Object.entries(m.players)
-    .filter(([puuid]) => slugOf.has(puuid))
+    .filter(([puuid]) => shownFor(puuid, m))
     .map(([puuid, pp]) => ({
       player: slugOf.get(puuid),
       placement: pp.placement,
