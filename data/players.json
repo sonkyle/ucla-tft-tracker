@@ -64,5 +64,17 @@
     "puuid": "ViVxXqksCNHyuyDRK3hRjXXOkTbdsUmLQDjsO0usYikT9DQVKZzy0eG0a3n3NlJ-ASHXY7oJMH9UrQ",
     "backfilled": true,
     "backfilledFrom": 1792566000
+  },
+  "ucla radish#nom": {
+    "riotId": "UCLA Radish#nom",
+    "puuid": "J4ME8qwmyrhqpd2DbYEZB17YcyZ1Co16mJ-k_TZj0AHoM92JCJfRp4AkGoQl2G481391aWITMYSV6g",
+    "backfilled": true,
+    "backfilledFrom": 1795068000
+  },
+  "schuridae#tft": {
+    "riotId": "schuridae#tft",
+    "puuid": "4WMD9YNRafg4ptBnaHeq8fb9MgUJaTA9InADp7c8Gm-qadAJ3nAtIjtPKoVeyXzdphXMJIy5Iwv9Aw",
+    "backfilled": true,
+    "backfilledFrom": 1795068000
   }
 }
