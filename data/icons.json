@@ -684,7 +684,8 @@
     "2a705022-688c-4405-bee4-3598b6441fc7": "Moontipped Hushtail",
     "527bd81d-9a26-402d-ada6-076dcce08a1b": "PROJECT: Elder Dragon",
     "39540456-aac7-4bc2-bbfd-c9da1e00f830": "Summer Splash Ao Shin",
-    "c83b0cac-51a1-4fe2-84cc-38c51f859e22": "Bee Poro"
+    "c83b0cac-51a1-4fe2-84cc-38c51f859e22": "Bee Poro",
+    "DA_18_Lux_Primal": "Lux (Primal)"
   },
   "missing": {},
   "costs": {
@@ -753,6 +754,7 @@
     "DA_18_Tristana": 3,
     "DA_18_Caitlyn": 2,
     "DA_18_Warwick": 2,
-    "DA_18_Lux_Sunbeam": 5
+    "DA_18_Lux_Sunbeam": 5,
+    "DA_18_Lux_Primal": 5
   }
 }
