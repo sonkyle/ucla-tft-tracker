@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795152624989,
+  "latestActivity": 1795154759705,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -360,6 +360,7 @@
     "3da7e2a2_ffdf_4676_9803_6e8784ec3316",
     "3f358058_03dc_491a_9e3f_93723e10f99f",
     "4019202d_7c48_41e6_bb2f_f0c35a08b339",
+    "40b07f3d_4060_4db5_b908_e4e8ac485c49",
     "4102ee29_7445_4d43_87df_cc19dc5074da",
     "4182fa61_fe17_4aa1_aa77_0c5fb14c0b83",
     "4185abde_0e4c_4e62_ab40_f76305336260",
@@ -489,6 +490,7 @@
     "89222483_2823_410c_8a05_d2044e7c9a76",
     "8a5a8621_64f6_42d4_81a3_dd7b606ed08f",
     "8a910892_0a08_4e5a_8fdc_66740907e982",
+    "8a98be83_d421_4577_919e_3ffae4047de0",
     "8beab4fa_feea_411e_af54_24bd14821ada",
     "8c27f67c_90b3_4355_9e90_6e92325c6012",
     "8c27f67c_90b3_4355_9e90_6e92325c6013",
@@ -559,6 +561,7 @@
     "aa4e9432_f693_46cf_97f3_5ad087b1d47a",
     "aab45604_6f82_40fb_b273_0262d88ecf86",
     "ab37883f_9dab_4e3c_a856_5e5aefed04df",
+    "abe6f9e9_6b26_4ff2_b09e_8977314bd230",
     "ac6d8c45_6606_421b_99f8_6c1c273c5c5a",
     "acc611d2_a068_45ae_b523_ad9c745bbe03",
     "ad464e8e_30f6_4ae9_8dc4_e198f040970c",
@@ -1385,7 +1388,10 @@
     "527bd81d-9a26-402d-ada6-076dcce08a1b": "PROJECT: Elder Dragon",
     "39540456-aac7-4bc2-bbfd-c9da1e00f830": "Summer Splash Ao Shin",
     "c83b0cac-51a1-4fe2-84cc-38c51f859e22": "Bee Poro",
-    "DA_18_Lux_Primal": "Lux (Primal)"
+    "DA_18_Lux_Primal": "Lux (Primal)",
+    "40b07f3d-4060-4db5-b908-e4e8ac485c49": "Nimblefoot",
+    "8a98be83-d421-4577-919e-3ffae4047de0": "Vacation Baron",
+    "abe6f9e9-6b26-4ff2-b09e-8977314bd230": "Squink"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1595,7 +1601,7 @@
       "lpCoverage": {"games":40,"matched":40},
       "firstWeek": null,
       "teamTotalsExcludedFrom": null,
-      "weeks": {"2026-11-19":{"lp":93,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":3.2,"top4":100,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":134}},"2026-11-12":{"lp":-120,"partial":false,"fromGames":false,"ranked":{"games":23,"avg":5.04,"top4":47.8,"firsts":2,"eighths":7},"otherGames":6,"endRank":{"tier":"MASTER","rank":"I","lp":41}},"2026-11-04":{"lp":119,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":3.88,"top4":64.7,"firsts":4,"eighths":2},"otherGames":12,"endRank":{"tier":"MASTER","rank":"I","lp":161}},"2026-10-28":{"lp":-43,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.71,"top4":35.3,"firsts":1,"eighths":2},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":42}},"2026-10-21":{"lp":-5,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.35,"top4":58.8,"firsts":0,"eighths":2},"otherGames":5,"endRank":{"tier":"MASTER","rank":"I","lp":85}}},
+      "weeks": {"2026-11-19":{"lp":93,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":3.2,"top4":100,"firsts":1,"eighths":0},"otherGames":1,"endRank":{"tier":"MASTER","rank":"I","lp":134}},"2026-11-12":{"lp":-120,"partial":false,"fromGames":false,"ranked":{"games":23,"avg":5.04,"top4":47.8,"firsts":2,"eighths":7},"otherGames":6,"endRank":{"tier":"MASTER","rank":"I","lp":41}},"2026-11-04":{"lp":119,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":3.88,"top4":64.7,"firsts":4,"eighths":2},"otherGames":12,"endRank":{"tier":"MASTER","rank":"I","lp":161}},"2026-10-28":{"lp":-43,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.71,"top4":35.3,"firsts":1,"eighths":2},"otherGames":0,"endRank":{"tier":"MASTER","rank":"I","lp":42}},"2026-10-21":{"lp":-5,"partial":false,"fromGames":true,"ranked":{"games":17,"avg":4.35,"top4":58.8,"firsts":0,"eighths":2},"otherGames":5,"endRank":{"tier":"MASTER","rank":"I","lp":85}}},
       "history": [[1792631207192,2890,"MASTER"],[1792630653692,2848,"MASTER"],[1792632342127,2808,"MASTER"],[1792634276856,2800,"MASTER"],[1792641073225,2817,"MASTER"],[1792643207585,2800,"MASTER"],[1792645524830,2832,"MASTER"],[1792650170151,2820,"MASTER"],[1792701468650,2838,"MASTER"],[1792820331885,2858,"MASTER"],[1792970682712,2878,"MASTER"],[1792972749595,2888,"MASTER"],[1792975618733,2898,"MASTER"],[1793052870287,2933,"MASTER"],[1793160271817,2873,"MASTER"],[1793162426000,2909,"MASTER"],[1793163906837,2853,"MASTER"],[1793166243122,2885,"MASTER"],[1793179499873,2875,"MASTER"],[1793181840106,2865,"MASTER"],[1793184036922,2855,"MASTER"],[1793266200048,2876,"MASTER"],[1793344924740,2822,"MASTER"],[1793347167964,2835,"MASTER"],[1793350070171,2820,"MASTER"],[1793352393284,2830,"MASTER"],[1793430708018,2849,"MASTER"],[1793590795220,2826,"MASTER"],[1793664132123,2800,"MASTER"],[1793666622594,2832,"MASTER"],[1793736584319,2822,"MASTER"],[1793738518137,2812,"MASTER"],[1793740659303,2802,"MASTER"],[1793771253095,2800,"MASTER"],[1793773362780,2842,"MASTER"],[1793783722949,2886,"MASTER"],[1793827813301,2915,"MASTER"],[1793865059733,2856,"MASTER"],[1793867599138,2876,"MASTER"],[1793870076278,2911,"MASTER"],[1794022018930,2921,"MASTER"],[1794197528640,2969,"MASTER"],[1794204561168,2932,"MASTER"],[1794206735634,2922,"MASTER"],[1794208573491,2871,"MASTER"],[1794210950743,2916,"MASTER"],[1794221082562,2879,"MASTER"],[1794223242681,2863,"MASTER"],[1794225352828,2873,"MASTER"],[1794261564046,2918,"MASTER"],[1794264016112,2951,"MASTER"],[1794345423861,2961,"MASTER"],[1794467607973,3009,"MASTER"],[1794548648098,3033,"MASTER"],[1794611550516,2988,"MASTER"],[1794613775592,3009,"MASTER"],[1794806207184,2985,"MASTER"],[1794808006895,2961,"MASTER"],[1794809717824,2912,"MASTER"],[1794812329525,2860,"MASTER"],[1794826105971,2912,"MASTER"],[1794864160077,2858,"MASTER"],[1794866096757,2848,"MASTER"],[1794867872886,2800,"MASTER"],[1794871708903,2820,"MASTER"],[1794873737764,2830,"MASTER"],[1794876745391,2850,"MASTER"],[1794888728790,2800,"MASTER"],[1794894447486,2812,"MASTER"],[1794899671097,2846,"MASTER"],[1794903601083,2881,"MASTER"],[1795045986190,2831,"MASTER"],[1795048112441,2841,"MASTER"],[1795073954224,2860,"MASTER"],[1795076413783,2871,"MASTER"],[1795111028935,2881,"MASTER"],[1795112879819,2894,"MASTER"],[1795116091758,2934,"MASTER"]]
     },
     {
