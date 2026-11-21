@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795247119352,
+  "latestActivity": 1795248247538,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -464,6 +464,7 @@
     "7704c9a7_d9d1_4059_a638_192a2b782aff",
     "7714a1e1_b38c_434c_b26d_cb426e791f26",
     "772bad27_b611_407e_9e23_7bb333a08a7d",
+    "77ca7966_f500_4728_8df2_d0481fc9a05d",
     "7838abdc_a647_458e_8d3f_fc771460b7e4",
     "7912543e_5800_4647_b3be_e49e0add7c52",
     "79af830d_b6b6_4335_adf8_ec3f1715bb32",
@@ -700,6 +701,7 @@
     "fa45b634_54dc_4225_84bc_6de2302ecd30",
     "fb3abf69_be44_498e_a034_1d51ef279a36",
     "fb7ee12f_21da_428d_9093_26b3801583bf",
+    "fba69730_83af_4896_9d68_615e601f73fc",
     "fbeaa176_bf5a_42d8_8cd4_7a1910f448c1",
     "fc2c56d4_2bd6_4514_b766_f028343fad5c",
     "fcea42c8_c430_433d_8f55_f18394c2a964",
@@ -1407,7 +1409,9 @@
     "f9f86fba-d6c0-42e6-afe6-a09f44e21504": "Baron",
     "138b870c-cd50-41eb-9409-3c405a5c487a": "Chibi Ahri",
     "f713fb65-c4fd-499d-a135-80022f80fab3": "Lone Loaf Knife Pup",
-    "DA_HealthPotion18_Radiant": "Radiant Health Potion"
+    "DA_HealthPotion18_Radiant": "Radiant Health Potion",
+    "77ca7966-f500-4728-8df2-d0481fc9a05d": "Lotus Bun Bun",
+    "fba69730-83af-4896-9d68-615e601f73fc": "Spirit Springs Kapi"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1591,7 +1595,7 @@
       "lpCoverage": {"games":7,"matched":7},
       "firstWeek": null,
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-12":{"lp":80,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":4.2,"top4":60,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-04":{"lp":25,"partial":false,"fromGames":true,"ranked":{"games":2,"avg":4.5,"top4":50,"firsts":1,"eighths":1},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":51}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0,"eighths":1},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3,"eighths":2},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
+      "weeks": {"2026-11-19":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-12":{"lp":80,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":4.2,"top4":60,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-04":{"lp":25,"partial":false,"fromGames":true,"ranked":{"games":2,"avg":4.5,"top4":50,"firsts":1,"eighths":1},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":51}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0,"eighths":1},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3,"eighths":2},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
       "history": [[1792794771964,1237,"GOLD"],[1792794771764,1303,"GOLD"],[1792801648229,1370,"GOLD"],[1792884610913,1328,"GOLD"],[1792905984678,1376,"GOLD"],[1793064831695,1445,"GOLD"],[1793139488168,1435,"GOLD"],[1793141206173,1400,"GOLD"],[1793143462384,1454,"GOLD"],[1793166629081,1505,"GOLD"],[1793168627823,1500,"GOLD"],[1793310704684,1475,"GOLD"],[1793395350157,1446,"GOLD"],[1793397443210,1456,"GOLD"],[1793424391688,1428,"GOLD"],[1793580970156,1418,"GOLD"],[1793745418076,1432,"GOLD"],[1793747340011,1400,"GOLD"],[1793749099930,1375,"GOLD"],[1793760321912,1426,"GOLD"],[1794287168439,1492,"GOLD"],[1794350426712,1451,"GOLD"],[1794867443236,1520,"GOLD"],[1794882048513,1552,"GOLD"],[1794899887502,1520,"GOLD"],[1795051848558,1500,"GOLD"],[1795054248288,1531,"GOLD"]]
     },
     {
