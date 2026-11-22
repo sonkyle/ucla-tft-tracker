@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795383918910,
+  "latestActivity": 1795385725854,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -375,6 +375,7 @@
     "442fb407_815a_449d_b537_dc2efb3f64d2",
     "4549cc2d_21cd_4958_bcfe_77b20249f2df",
     "45558e94_fab9_48b4_a342_c16bd6302df5",
+    "4591eca0_6b96_445e_b807_8fd93cd198ba",
     "45c735d1_1eae_4d77_aa73_b676bff6f203",
     "48093822_5893_438a_bf8b_c967a4fc2280",
     "4830a047_fa69_4b74_a0d4_5c04aae86d0a",
@@ -1421,7 +1422,8 @@
     "584d4a3c-06bf-4b2e-a2fe-6cd93db2fe70": "Pentakill Choncc",
     "a53cb613-f7f6-4c8d-8724-191e2b86640d": "Birthday Buddy Cuppy",
     "2b9a8f5b-ec1d-4149-adbf-e8776aa1aa6f": "Chibi Yunara",
-    "2f5ab920-e2dd-4f92-8f24-db1c2361f9b5": "Chibi Ashe"
+    "2f5ab920-e2dd-4f92-8f24-db1c2361f9b5": "Chibi Ashe",
+    "4591eca0-6b96-445e-b807-8fd93cd198ba": "Dark Star Ao Shin"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1664,14 +1666,14 @@
       "slug": "george",
       "name": "George",
       "riotId": "UCLA weorge#1111",
-      "current": {"tier":"DIAMOND","rank":"III","lp":0,"wins":101,"losses":91},
+      "current": {"tier":"DIAMOND","rank":"IV","lp":75,"wins":101,"losses":92},
       "peak": {"tier":"DIAMOND","rank":"III","lp":67,"t":1794105017934},
       "trackedSince": 1793873589498,
-      "lpCoverage": {"games":10,"matched":10},
+      "lpCoverage": {"games":11,"matched":11},
       "firstWeek": null,
       "teamTotalsExcludedFrom": null,
-      "weeks": {"2026-11-19":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":5,"endRank":{"tier":"DIAMOND","rank":"III","lp":0}},"2026-11-12":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":0}},"2026-11-04":{"lp":-10,"partial":false,"fromGames":true,"ranked":{"games":14,"avg":4.64,"top4":50,"firsts":1,"eighths":2},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":0}},"2026-10-28":{"lp":81,"partial":false,"fromGames":true,"ranked":{"games":34,"avg":4.59,"top4":50,"firsts":3,"eighths":3},"otherGames":0,"endRank":{"tier":"DIAMOND","rank":"III","lp":10}},"2026-10-21":{"lp":29,"partial":false,"fromGames":false,"ranked":{"games":28,"avg":4.64,"top4":46.4,"firsts":1,"eighths":1},"otherGames":1,"endRank":{"tier":"DIAMOND","rank":"IV","lp":29},"fromRanks":true}},
-      "history": [[1793094809249,2444,"DIAMOND"],[1793094579349,2463,"DIAMOND"],[1793097160645,2486,"DIAMOND"],[1793099369708,2463,"DIAMOND"],[1793159595016,2481,"DIAMOND"],[1793161468689,2471,"DIAMOND"],[1793163290264,2444,"DIAMOND"],[1793165950367,2419,"DIAMOND"],[1793168538555,2429,"DIAMOND"],[1793170939118,2475,"DIAMOND"],[1793172505082,2413,"DIAMOND"],[1793175440827,2402,"DIAMOND"],[1793178548215,2412,"DIAMOND"],[1793181179010,2422,"DIAMOND"],[1793218161097,2432,"DIAMOND"],[1793221719957,2400,"DIAMOND"],[1793250646954,2427,"DIAMOND"],[1793295569091,2417,"DIAMOND"],[1793297474658,2400,"DIAMOND"],[1793350304971,2440,"DIAMOND"],[1793447675356,2410,"DIAMOND"],[1793482763130,2400,"DIAMOND"],[1793523508191,2449,"DIAMOND"],[1793525137155,2408,"DIAMOND"],[1793595776166,2418,"DIAMOND"],[1793598193868,2406,"DIAMOND"],[1793606935790,2433,"DIAMOND"],[1793609407012,2471,"DIAMOND"],[1793612490466,2506,"DIAMOND"],[1793614765437,2543,"DIAMOND"],[1793625979781,2571,"DIAMOND"],[1793675275153,2581,"DIAMOND"],[1793677483531,2591,"DIAMOND"],[1793688143040,2615,"DIAMOND"],[1793697689100,2633,"DIAMOND"],[1793735779265,2600,"DIAMOND"],[1793742057995,2575,"DIAMOND"],[1793744193495,2559,"DIAMOND"],[1793777068830,2510,"DIAMOND"],[1793779279376,2500,"DIAMOND"],[1793860204961,2475,"DIAMOND"],[1793862503669,2490,"DIAMOND"],[1793871783050,2524,"DIAMOND"],[1793875519408,2543,"DIAMOND"],[1793878245783,2553,"DIAMOND"],[1793932563035,2523,"DIAMOND"],[1794102239235,2539,"DIAMOND"],[1794104675509,2567,"DIAMOND"],[1794119437897,2500,"DIAMOND"],[1794123760599,2475,"DIAMOND"],[1794126233683,2457,"DIAMOND"],[1794356672215,2505,"DIAMOND"],[1794393477561,2500,"DIAMOND"]]
+      "weeks": {"2026-11-19":{"lp":-25,"partial":false,"fromGames":false,"ranked":{"games":1,"avg":5,"top4":0,"firsts":0,"eighths":0},"otherGames":5,"endRank":{"tier":"DIAMOND","rank":"IV","lp":75}},"2026-11-12":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":0}},"2026-11-04":{"lp":-10,"partial":false,"fromGames":true,"ranked":{"games":14,"avg":4.64,"top4":50,"firsts":1,"eighths":2},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":0}},"2026-10-28":{"lp":81,"partial":false,"fromGames":true,"ranked":{"games":34,"avg":4.59,"top4":50,"firsts":3,"eighths":3},"otherGames":0,"endRank":{"tier":"DIAMOND","rank":"III","lp":10}},"2026-10-21":{"lp":29,"partial":false,"fromGames":false,"ranked":{"games":28,"avg":4.64,"top4":46.4,"firsts":1,"eighths":1},"otherGames":1,"endRank":{"tier":"DIAMOND","rank":"IV","lp":29},"fromRanks":true}},
+      "history": [[1793094809249,2444,"DIAMOND"],[1793094579349,2463,"DIAMOND"],[1793097160645,2486,"DIAMOND"],[1793099369708,2463,"DIAMOND"],[1793159595016,2481,"DIAMOND"],[1793161468689,2471,"DIAMOND"],[1793163290264,2444,"DIAMOND"],[1793165950367,2419,"DIAMOND"],[1793168538555,2429,"DIAMOND"],[1793170939118,2475,"DIAMOND"],[1793172505082,2413,"DIAMOND"],[1793175440827,2402,"DIAMOND"],[1793178548215,2412,"DIAMOND"],[1793181179010,2422,"DIAMOND"],[1793218161097,2432,"DIAMOND"],[1793221719957,2400,"DIAMOND"],[1793250646954,2427,"DIAMOND"],[1793295569091,2417,"DIAMOND"],[1793297474658,2400,"DIAMOND"],[1793350304971,2440,"DIAMOND"],[1793447675356,2410,"DIAMOND"],[1793482763130,2400,"DIAMOND"],[1793523508191,2449,"DIAMOND"],[1793525137155,2408,"DIAMOND"],[1793595776166,2418,"DIAMOND"],[1793598193868,2406,"DIAMOND"],[1793606935790,2433,"DIAMOND"],[1793609407012,2471,"DIAMOND"],[1793612490466,2506,"DIAMOND"],[1793614765437,2543,"DIAMOND"],[1793625979781,2571,"DIAMOND"],[1793675275153,2581,"DIAMOND"],[1793677483531,2591,"DIAMOND"],[1793688143040,2615,"DIAMOND"],[1793697689100,2633,"DIAMOND"],[1793735779265,2600,"DIAMOND"],[1793742057995,2575,"DIAMOND"],[1793744193495,2559,"DIAMOND"],[1793777068830,2510,"DIAMOND"],[1793779279376,2500,"DIAMOND"],[1793860204961,2475,"DIAMOND"],[1793862503669,2490,"DIAMOND"],[1793871783050,2524,"DIAMOND"],[1793875519408,2543,"DIAMOND"],[1793878245783,2553,"DIAMOND"],[1793932563035,2523,"DIAMOND"],[1794102239235,2539,"DIAMOND"],[1794104675509,2567,"DIAMOND"],[1794119437897,2500,"DIAMOND"],[1794123760599,2475,"DIAMOND"],[1794126233683,2457,"DIAMOND"],[1794356672215,2505,"DIAMOND"],[1794393477561,2500,"DIAMOND"],[1795385725854,2475,"DIAMOND"]]
     },
     {
       "slug": "cynthia",
