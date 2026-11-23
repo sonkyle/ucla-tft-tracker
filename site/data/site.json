@@ -1692,7 +1692,7 @@
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
       "weeks": {"2026-11-19":{"lp":-19,"partial":false,"fromGames":true,"ranked":{"games":1,"avg":6,"top4":0,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"GOLD","rank":"I","lp":48}}},
-      "history": [[1795122921706,1567,"GOLD"],[1795420833101,1548,"GOLD"]]
+      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"]]
     },
     {
       "slug": "rei",
