@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795386306896,
+  "latestActivity": 1795420833101,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -333,6 +333,7 @@
     "2a705022_688c_4405_bee4_3598b6441fc7",
     "2b9a8f5b_ec1d_4149_adbf_e8776aa1aa6f",
     "2bf76851_6efc_4e6f_bb82_73cb19d5ece8",
+    "2c4f22ff_2f51_4d1f_b9e3_2b54551f9f89",
     "2da36fa7_9b58_4992_a72f_c36dcc75ab58",
     "2e1b1417_7712_469e_9b60_a0097f6bb5fa",
     "2e24117d_eb2f_4eb7_875b_660c7ca682a3",
@@ -1425,7 +1426,8 @@
     "2b9a8f5b-ec1d-4149-adbf-e8776aa1aa6f": "Chibi Yunara",
     "2f5ab920-e2dd-4f92-8f24-db1c2361f9b5": "Chibi Ashe",
     "4591eca0-6b96-445e-b807-8fd93cd198ba": "Dark Star Ao Shin",
-    "391dfa64-1381-48e9-bb28-b9a0542848ac": "Meowter Space Astronyan"
+    "391dfa64-1381-48e9-bb28-b9a0542848ac": "Meowter Space Astronyan",
+    "2c4f22ff-2f51-4d1f-b9e3-2b54551f9f89": "Chibi Akali"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1681,14 +1683,14 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"GOLD","rank":"I","lp":67,"wins":30,"losses":25},
+      "current": {"tier":"GOLD","rank":"I","lp":48,"wins":30,"losses":26},
       "peak": {"tier":"GOLD","rank":"I","lp":67,"t":1795122921706},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":0,"matched":0},
+      "lpCoverage": {"games":1,"matched":1},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":0,"partial":true,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"GOLD","rank":"I","lp":67}}},
-      "history": [[1795122921706,1567,"GOLD"]]
+      "weeks": {"2026-11-19":{"lp":-19,"partial":false,"fromGames":true,"ranked":{"games":1,"avg":6,"top4":0,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"GOLD","rank":"I","lp":48}}},
+      "history": [[1795122921706,1567,"GOLD"],[1795420833101,1548,"GOLD"]]
     },
     {
       "slug": "rei",
