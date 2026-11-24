@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795558521156,
+  "latestActivity": 1795558553490,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -641,6 +641,7 @@
     "d07d0b76_cd0d_4517_b4af_f5c3d8140b8b",
     "d1276c4a_9b94_4d6e_8490_365b68833f1e",
     "d12ce15e_7984_4eab_af84_c05b8c3ca41e",
+    "d17f9a59_4ee6_4c41_9ba2_309dfb164885",
     "d1fb8b7a_f34c_4712_a4eb_5f37b12f1a6c",
     "d211a79c_f896_41ad_966d_363a8a0f98b8",
     "d24420df_5830_48b3_add4_3d2310d47c74",
@@ -1443,7 +1444,8 @@
     "054829c0-857a-4efe-af25-0821a8561057": "Red Siege Minion",
     "3c13263e-e76d-4548-b383-a285f2f61ec3": "Sol Harbinger Ao Shin",
     "b59fee17-bb63-49a3-bb8b-4bb34d432f91": "Chibi Zoe",
-    "610a6ada-8907-419c-bc43-decf4360ee80": "Chibi Kayle"
+    "610a6ada-8907-419c-bc43-decf4360ee80": "Chibi Kayle",
+    "d17f9a59-4ee6-4c41-9ba2-309dfb164885": "Chibi Yasuo"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1702,10 +1704,10 @@
       "current": {"tier":"PLATINUM","rank":"IV","lp":6,"wins":32,"losses":29},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":45,"t":1795497319371},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":5,"matched":5},
+      "lpCoverage": {"games":6,"matched":6},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":49,"partial":false,"fromGames":true,"ranked":{"games":5,"avg":4,"top4":40,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":6}}},
+      "weeks": {"2026-11-19":{"lp":39,"partial":false,"fromGames":true,"ranked":{"games":6,"avg":4.17,"top4":33.3,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":6}}},
       "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556729859,1616,"PLATINUM"],[1795558521156,1606,"PLATINUM"]]
     },
     {
