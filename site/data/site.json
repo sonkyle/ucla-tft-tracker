@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795557953949,
+  "latestActivity": 1795558521156,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -1699,14 +1699,14 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"PLATINUM","rank":"IV","lp":16,"wins":32,"losses":28},
+      "current": {"tier":"PLATINUM","rank":"IV","lp":6,"wins":32,"losses":29},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":45,"t":1795497319371},
       "trackedSince": 1795122921706,
       "lpCoverage": {"games":5,"matched":5},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":49,"partial":false,"fromGames":true,"ranked":{"games":5,"avg":4,"top4":40,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":16}}},
-      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556729859,1616,"PLATINUM"]]
+      "weeks": {"2026-11-19":{"lp":49,"partial":false,"fromGames":true,"ranked":{"games":5,"avg":4,"top4":40,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":6}}},
+      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556729859,1616,"PLATINUM"],[1795558521156,1606,"PLATINUM"]]
     },
     {
       "slug": "rei",
