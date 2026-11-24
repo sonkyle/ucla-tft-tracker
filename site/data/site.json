@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795506319539,
+  "latestActivity": 1795554027572,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -364,6 +364,7 @@
     "391dfa64_1381_48e9_bb28_b9a0542848ac",
     "39540456_aac7_4bc2_bbfd_c9da1e00f830",
     "3b3c94bf_ed89_44e9_8c7b_0d847b9d37e0",
+    "3c13263e_e76d_4548_b383_a285f2f61ec3",
     "3d122ca5_58ad_43a8_b725_a48b53ff6a3f",
     "3d204585_19d3_42ee_9305_a012e700b7e7",
     "3d2fdc30_a8c3_45bc_b5f4_d1d17c0fa5ca",
@@ -1437,7 +1438,8 @@
     "41a5b6f7-b6f3-4856-88dd-02ef2400a7e6": "Furyhorn Cosplay Poro",
     "9bf61288-e000-4b03-825e-e0a327abfddc": "Chibi Riven",
     "0085ae00-24f6-47e4-bce3-f6f1a00fed5f": "Pengu Featherknight",
-    "054829c0-857a-4efe-af25-0821a8561057": "Red Siege Minion"
+    "054829c0-857a-4efe-af25-0821a8561057": "Red Siege Minion",
+    "3c13263e-e76d-4548-b383-a285f2f61ec3": "Sol Harbinger Ao Shin"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1693,14 +1695,14 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"PLATINUM","rank":"IV","lp":45,"wins":32,"losses":26},
+      "current": {"tier":"PLATINUM","rank":"IV","lp":26,"wins":32,"losses":27},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":45,"t":1795497319371},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":3,"matched":3},
+      "lpCoverage": {"games":4,"matched":4},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":78,"partial":false,"fromGames":true,"ranked":{"games":3,"avg":3,"top4":66.7,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":45}}},
-      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"]]
+      "weeks": {"2026-11-19":{"lp":59,"partial":false,"fromGames":true,"ranked":{"games":4,"avg":3.75,"top4":50,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":26}}},
+      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795554027572,1626,"PLATINUM"]]
     },
     {
       "slug": "rei",
