@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795555823809,
+  "latestActivity": 1795556729859,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -438,6 +438,7 @@
     "5f5a22be_ecf1_40b5_9caa_5d2a80a5fffa",
     "5ff5c068_1f4f_4c7d_b471_7c19d0e3caa3",
     "60674b50_6911_4521_93c2_e55b69a0a0eb",
+    "610a6ada_8907_419c_bc43_decf4360ee80",
     "6166ada4_50c8_4b63_90ad_847f6f24cc08",
     "6172e820_9c24_46c3_8a7c_f7789c56b8bc",
     "61b6f9a5_1fb9_4645_92b7_afe63d191ea8",
@@ -592,6 +593,7 @@
     "b44708a1_ebac_4eff_a0fc_b4b97bbe9f3d",
     "b4acb78e_14af_4b05_9129_f4e69ae44d68",
     "b4f1a74a_9391_4c4b_931d_bbaf2d15f43b",
+    "b59fee17_bb63_49a3_bb8b_4bb34d432f91",
     "b5ca136c_593c_437c_bcd1_0acca4136aae",
     "b5dae839_0b3a_4ebb_827d_651de94202f8",
     "b6551f1c_19f1_4cbb_8b0d_ea17b15e2700",
@@ -1439,7 +1441,9 @@
     "9bf61288-e000-4b03-825e-e0a327abfddc": "Chibi Riven",
     "0085ae00-24f6-47e4-bce3-f6f1a00fed5f": "Pengu Featherknight",
     "054829c0-857a-4efe-af25-0821a8561057": "Red Siege Minion",
-    "3c13263e-e76d-4548-b383-a285f2f61ec3": "Sol Harbinger Ao Shin"
+    "3c13263e-e76d-4548-b383-a285f2f61ec3": "Sol Harbinger Ao Shin",
+    "b59fee17-bb63-49a3-bb8b-4bb34d432f91": "Chibi Zoe",
+    "610a6ada-8907-419c-bc43-decf4360ee80": "Chibi Kayle"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1513,7 +1517,7 @@
   "apexCutoffs": {
     "grandmaster": 221,
     "challenger": 601,
-    "t": 1795512625186
+    "t": 1795556729859
   },
   "weeks": [
     {
@@ -1695,14 +1699,14 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"PLATINUM","rank":"IV","lp":26,"wins":32,"losses":27},
+      "current": {"tier":"PLATINUM","rank":"IV","lp":16,"wins":32,"losses":28},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":45,"t":1795497319371},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":4,"matched":4},
+      "lpCoverage": {"games":5,"matched":5},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":59,"partial":false,"fromGames":true,"ranked":{"games":4,"avg":3.75,"top4":50,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":26}}},
-      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"]]
+      "weeks": {"2026-11-19":{"lp":49,"partial":false,"fromGames":true,"ranked":{"games":5,"avg":4,"top4":40,"firsts":1,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":16}}},
+      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556729859,1616,"PLATINUM"]]
     },
     {
       "slug": "rei",
