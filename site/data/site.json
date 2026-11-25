@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795646244902,
+  "latestActivity": 1795647636022,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -508,6 +508,7 @@
     "886d11f7_b9ce_4209_82d4_8d14695fb95f",
     "88e7242c_43d7_42c7_9a62_ec96717480b1",
     "89222483_2823_410c_8a05_d2044e7c9a76",
+    "89bb8b2c_344e_4725_aa4d_f5f81e894480",
     "8a5a8621_64f6_42d4_81a3_dd7b606ed08f",
     "8a910892_0a08_4e5a_8fdc_66740907e982",
     "8a98be83_d421_4577_919e_3ffae4047de0",
@@ -1453,7 +1454,8 @@
     "981ae0cb-cd58-439c-89cf-cac0f5369cf4": "Toxic Hauntling",
     "6ec31615-18fc-4395-b09e-5d74a9517ef0": "Chibi Janna",
     "df515967-ff92-4905-a863-3dbf785261d9": "Azure Inktales Featherknight",
-    "7b007263-4e92-4319-b684-da64b46ed0f1": "Snek"
+    "7b007263-4e92-4319-b684-da64b46ed0f1": "Snek",
+    "89bb8b2c-344e-4725-aa4d-f5f81e894480": "Hextech QiQi"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1725,13 +1727,13 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"PLATINUM","rank":"IV","lp":0,"wins":33,"losses":31},
+      "current": {"tier":"PLATINUM","rank":"IV","lp":0,"wins":33,"losses":32},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":61,"t":1795592719364},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":9,"matched":9},
+      "lpCoverage": {"games":10,"matched":10},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-19":{"lp":33,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":4.44,"top4":33.3,"firsts":2,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":0}}},
+      "weeks": {"2026-11-19":{"lp":33,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":4.7,"top4":30,"firsts":2,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":0}}},
       "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556252066,1616,"PLATINUM"],[1795558388190,1606,"PLATINUM"],[1795592592638,1661,"PLATINUM"],[1795594480192,1640,"PLATINUM"],[1795645825392,1600,"PLATINUM"]]
     },
     {
