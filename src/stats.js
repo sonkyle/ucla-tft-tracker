@@ -315,6 +315,56 @@ export function weekRange(from, to, tz, weekStartsOn = 1, startMinutes = 0, sinc
   return weeks;
 }
 
+/**
+ * The team's week calendar when it changes over time (school terms, breaks, a special week like finals).
+ *   cadences  [{ from, weekStartsOn, startMinutes }]: from instant `from` (UTC ms; -Infinity for the first) until the
+ *             next entry's, weeks start on weekday weekStartsOn (0 = Sunday), startMinutes after local midnight.
+ *   fixed     [UTC ms]: instants that always start a week (a term, a special week). Each cadence change is one too.
+ * A regular weekly start that comes less than a week before a fixed one is skipped, so that stretch joins the week
+ * before instead of becoming a stub week. For example, if weeks switch from Wednesday nights to Sundays, the last
+ * Wednesday-night week runs on until that Sunday.
+ * Keys name each week by its first full local day, as in weekOf.
+ * @returns { weekAt(t) -> {key, start, end}, range(from, to) -> the weeks containing from..to, newest first }
+ */
+export function weekSchedule(tz, cadences, fixed = []) {
+  const segs = [...cadences].sort((a, b) => a.from - b.from);
+  const hard = [...new Set([...fixed, ...segs.slice(1).map((c) => c.from)])].sort((a, b) => a - b);
+  const WEEK = 7 * 86400e3, SLACK = 2 * 3600e3; // DST makes some calendar weeks an hour short or long
+  const nextHard = (t) => hard.find((x) => x > t) ?? Infinity;
+  const keyOf = (t) => {
+    const p = zonedParts(t, tz);
+    return new Date(Date.UTC(p.y, p.m - 1, p.d + (p.h || p.mi ? 1 : 0))).toISOString().slice(0, 10);
+  };
+  /** Every week start in [lo, hi), sorted. */
+  function starts(lo, hi) {
+    const out = hard.filter((t) => t >= lo && t < hi);
+    segs.forEach((c, i) => {
+      const a = Math.max(lo, c.from), b = Math.min(hi, segs[i + 1]?.from ?? Infinity);
+      if (!(a < b)) return;
+      const p = zonedParts(a, tz);
+      for (let d = p.d - ((p.wd - c.weekStartsOn + 7) % 7); ; d += 7) { // that weekday, on or before a's local date
+        const t = zonedTime(p.y, p.m, d, c.startMinutes, tz);
+        if (t >= b) break;
+        if (t >= a && nextHard(t) - t >= WEEK - SLACK) out.push(t);
+      }
+    });
+    return [...new Set(out)].sort((x, y) => x - y);
+  }
+  // A week is under 14 days (a week plus a skipped stub), so 15 days either side always holds its start and end.
+  function weekAt(t) {
+    const list = starts(t - 15 * 86400e3, t + 15 * 86400e3);
+    const i = list.findLastIndex((x) => x <= t);
+    return { key: keyOf(list[i]), start: list[i], end: list[i + 1] };
+  }
+  function range(from, to) {
+    const list = starts(weekAt(from).start, weekAt(to).end + 1);
+    const weeks = [];
+    for (let i = 0; i + 1 < list.length; i++) weeks.push({ key: keyOf(list[i]), start: list[i], end: list[i + 1] });
+    return weeks.reverse();
+  }
+  return { weekAt, range };
+}
+
 // ---------------------------------------------------------------- weekly roll-up
 
 function placementStats(list) {

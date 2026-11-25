@@ -75,8 +75,10 @@ Edit `config.json`:
   "weekStartsOn": 1,
   "trackFrom": "2026-09-01",
   "terms": [
-    { "name": "Fall Quarter", "from": "2026-09-23" },
-    { "name": "Winter Break" }
+    { "name": "Fall Quarter", "from": "2026-09-23",
+      "weeks": [{ "from": "2026-12-06", "name": "Finals Week", "warning": true }] },
+    { "name": "Winter Break", "from": "2026-12-13", "weekStartsOn": 0 },
+    { "name": "Winter Quarter" }
   ],
   "players": [
     { "riotId": "SomeName#NA1", "name": "Display Name" }
@@ -85,13 +87,20 @@ Edit `config.json`:
 ```
 
 `riotId` is the in-game `Name#TAG`. `trackFrom` sets how far back match history is backfilled
-(use the current set's launch date). `terms` are the school's quarters and breaks, in order. Each one's weeks are
-numbered from 1 (Week 1, Week 2, …, with the dates shown smaller), starting with the week under way at the end of its
-`from` date. With Wednesday-night weeks, give the Wednesday the term's first week starts on. The site gets a menu next
-to the week arrows for switching terms, and the arrows stay inside the chosen term. A term with no `from` yet, or one
-that hasn't started, is listed as "Coming soon". To open the next term, add its `from` date. Without `terms`, an older
-setting still works: `"weekOne": "2026-09-23"` numbers every week from that date, with no menu. Leave both out to label
-weeks by date only. `weekStartsOn`: 0 = Sunday, 1 = Monday.
+(use the current set's launch date). `terms` are the school's quarters and breaks, in order. Each one starts exactly
+at its `from` (a date means midnight; `"2026-12-09 22:00"` also works) and numbers its weeks from 1 (Week 1, Week 2, …,
+with the dates shown smaller). The site gets a menu above the week arrows for switching terms, and the arrows stay
+inside the chosen term. A term with no `from` yet, or one that hasn't started, is listed as "Coming soon". Optional per term:
+- `weekStartsOn` / `weekStartsAt`: from this term on, weeks start on that weekday and time (time defaults to `"00:00"`).
+  Later terms keep it unless they set their own.
+- `weeks`: special weeks, each starting at its `from`, shown by `name` instead of "Week N". `"warning": true` puts
+  warning signs on both sides of the name in the week selector.
+
+A fixed start (a term, a special week, a change of start day) never leaves a stub week. If the regular weekly start
+would come less than a week before it, that stretch joins the week before. So with Wednesday-night weeks and finals
+starting Sunday Dec 6, Week 10 runs from Wednesday Nov 25 through Saturday Dec 5.
+Without `terms`, an older setting still works: `"weekOne": "2026-09-23"` numbers every week from that date, with no
+menu. Leave both out to label weeks by date only. `weekStartsOn`: 0 = Sunday, 1 = Monday.
 `weekStartsAt` (optional, default `"00:00"`) is the time of day the week starts, e.g. `"22:00"` for after a Wednesday
 night meeting. A week that starts late in a day is named after its first full day, so Wednesday 22:00 weeks are named by
 their Thursday. `weekStartsAtFrom` (optional) is the first start day that time applies to; earlier weeks keep starting

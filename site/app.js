@@ -102,14 +102,22 @@ function weekLabel(key) {
   const f = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' });
   return `${f.format(a)} – ${a.getUTCMonth() === b.getUTCMonth() ? b.getUTCDate() : f.format(b)}`;
 }
-// Week numbers (within their term, from config terms or weekOne) lead; dates are secondary. Weeks without a number fall back to dates.
-const weekNum = (key) => site.weeks.find((w) => w.key === key)?.num ?? null;
-const weekName = (key) => (weekNum(key) ? `Week ${weekNum(key)}` : `Week of ${weekLabel(key)}`);
-const weekFull = (key) => (weekNum(key) ? `Week ${weekNum(key)} · ${weekLabel(key)}` : `Week of ${weekLabel(key)}`);
-const weekShort = (key) => (weekNum(key) ? `Wk ${weekNum(key)}` : weekLabel(key).split(' – ')[0]);
+// Week names lead and dates are secondary: a special week's name from config ("Finals Week"), else "Week N" (numbered
+// within its term). Weeks with neither fall back to dates.
+const weekOfKey = (key) => site.weeks.find((w) => w.key === key);
+const weekNum = (key) => weekOfKey(key)?.num ?? null;
+const named = (key) => weekOfKey(key)?.name ?? (weekNum(key) ? `Week ${weekNum(key)}` : null);
+const weekName = (key) => named(key) ?? `Week of ${weekLabel(key)}`;
+const weekFull = (key) => (named(key) ? `${named(key)} · ${weekLabel(key)}` : `Week of ${weekLabel(key)}`);
+const weekShort = (key) => (weekOfKey(key)?.name?.replace(/\s+week$/i, '') ?? (weekNum(key) ? `Wk ${weekNum(key)}` : weekLabel(key).split(' – ')[0]));
 /** "Week 7" in bold with the dates smaller and muted beside it. */
 const weekTitle = (key, tag = 'strong') =>
-  [h(tag, { class: 'week-num' }, weekName(key)), weekNum(key) ? h('span', { class: 'week-dates' }, weekLabel(key)) : null];
+  [h(tag, { class: 'week-num' }, weekName(key)), named(key) ? h('span', { class: 'week-dates' }, weekLabel(key)) : null];
+/** A yellow road-style warning sign, for weeks marked "warning" in config (finals). */
+const warnSign = () => s('svg', { class: 'warn-sign', viewBox: '0 0 24 22', 'aria-hidden': 'true' },
+  s('path', { class: 'warn-body', d: 'M10.27 2.1a2 2 0 0 1 3.46 0l8.94 15.4A2 2 0 0 1 20.94 20.5H3.06a2 2 0 0 1-1.73-3L10.27 2.1Z' }),
+  s('path', { class: 'warn-mark', d: 'M12 7.5v6' }),
+  s('circle', { class: 'warn-dot', cx: 12, cy: 16.9, r: 1.25 }));
 const duration = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, '0')}`;
 
 async function loadWeek(key) {
@@ -674,7 +682,12 @@ function weekNav(idx, hrefFor, oldest = site.weeks.length - 1) {
   const older = idx < oldest && weeks[idx + 1].term === weeks[idx].term, newer = idx > 0 && weeks[idx - 1].term === weeks[idx].term;
   return h('div', { class: 'week-nav' },
     h('a', { class: 'btn', href: older ? hrefFor(weeks[idx + 1].key) : null, 'aria-disabled': older ? null : 'true', 'aria-label': 'Previous week' }, chevron(-1)),
-    h('div', { class: 'week-label' }, weekTitle(weeks[idx].key), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null),
+    weeks[idx].warning
+      // e.g. finals: "⚠ FINALS WEEK ⚠", with the dates (and "This week") wrapping under it if there's no room
+      ? h('div', { class: 'week-label alert' },
+        h('strong', { class: 'week-num' }, warnSign(), h('span', {}, weekName(weeks[idx].key)), warnSign()),
+        h('span', { class: 'week-dates' }, weekLabel(weeks[idx].key)), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null)
+      : h('div', { class: 'week-label' }, weekTitle(weeks[idx].key), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null),
     h('a', { class: 'btn', href: newer ? hrefFor(weeks[idx - 1].key) : null, 'aria-disabled': newer ? null : 'true', 'aria-label': 'Next week' }, chevron(1)));
 }
 
@@ -840,7 +853,7 @@ async function renderPlayer(slug, weekKey, myId) {
 
   // The games list header: title on the left, the ranked-only filter on the right.
   const gamesTitle = () => h('div', { class: 'card-head' },
-    h('h2', { class: 'week-title' }, `${weekName(week.key)} games`, weekNum(week.key) ? h('span', { class: 'week-dates' }, weekLabel(week.key)) : null),
+    h('h2', { class: 'week-title' }, `${weekName(week.key)} games`, named(week.key) ? h('span', { class: 'week-dates' }, weekLabel(week.key)) : null),
     h('label', { class: 'toggle' },
       h('input', { type: 'checkbox', checked: ui.rankedOnly, onchange: (e) => { ui.rankedOnly = e.target.checked; render(); } }),
       'Ranked games only'));

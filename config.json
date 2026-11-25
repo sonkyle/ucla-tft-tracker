@@ -7,9 +7,10 @@
   "weekStartsAtFrom": "2026-11-11",
   "trackFrom": "2026-10-21",
   "terms": [
-    { "name": "Fall Quarter", "from": "2026-09-23" },
-    { "name": "Winter Break" },
-    { "name": "Winter Quarter" }
+    { "name": "Fall Quarter", "from": "2026-09-23",
+      "weeks": [{ "from": "2026-12-06", "name": "Finals Week", "warning": true }] },
+    { "name": "Winter Break", "from": "2026-12-13", "weekStartsOn": 0, "weekStartsAt": "00:00" },
+    { "name": "Winter Quarter", "from": "2027-01-04", "weekStartsOn": 1, "weekStartsAt": "00:00" }
   ],
   "updateUrl": "https://tft-update.sonkyle0420.workers.dev",
   "players": [

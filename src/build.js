@@ -10,7 +10,7 @@ import path from 'node:path';
 import { ROOT, arg, loadConfig, DataStore, writeJson } from './store.js';
 import { listIcons } from './icons.js';
 import {
-  RANKED_QUEUE, attributeLp, elimTime, matchTime, ladderScore, weekRange, weeklySummary, mergeLp, rankHistory, rankPoints, parseRank,
+  RANKED_QUEUE, attributeLp, elimTime, matchTime, ladderScore, weeklySummary, mergeLp, rankHistory, rankPoints, parseRank,
 } from './stats.js';
 
 const cfg = loadConfig(arg('config', path.join(ROOT, 'config.json')));
@@ -93,16 +93,23 @@ function withEndRankOverrides(p, weeksOut) {
   return weeksOut;
 }
 
-const weeks = weekRange(earliest, now, cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
+const weeks = cfg.schedule.range(earliest, now); // the week calendar from config (see loadConfig in store.js)
 
 // Each week belongs to a term (config.terms: a quarter or a break, or one unnamed term from config.weekOne) and
-// is numbered within it: Week 1 is the term's first week. Weeks before the first term belong to it but have no
+// is numbered within it: Week 1 is the term's first week. A special week (a term's "weeks", e.g. finals) also gets
+// a name the site shows instead, and maybe warning signs. Weeks before the first term belong to it but have no
 // number, and so does every week when neither terms nor weekOne is set.
-const dayIndex = (key) => { const [y, m, d] = key.split('-').map(Number); return Date.UTC(y, m - 1, d) / 86400e3; };
 const datedTerms = cfg.terms.map((t, i) => ({ ...t, i })).filter((t) => t.start != null);
 function termOf(week) {
   const t = datedTerms.findLast((x) => x.start <= week.start);
-  return t ? { term: t.i, num: Math.floor((dayIndex(week.key) - dayIndex(t.key)) / 7) + 1 } : { term: datedTerms[0]?.i ?? null, num: null };
+  if (!t) return { term: datedTerms[0]?.i ?? null, num: null };
+  const special = t.weeks.find((w) => w.start === week.start);
+  return {
+    term: t.i,
+    num: cfg.schedule.range(t.start, week.start).length,
+    ...(special?.name ? { name: special.name } : {}),
+    ...(special?.warning ? { warning: true } : {}),
+  };
 }
 // The "Check for new games" button's worker (worker/update-button.js); no button without it.
 if (cfg.updateUrl && !/^https:\/\/\S+$/.test(cfg.updateUrl)) throw new Error(`updateUrl "${cfg.updateUrl}" must be an https:// URL`);

@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { zonedMidnight, zonedTime, weekOfFrom } from './stats.js';
+import { zonedMidnight, zonedTime, weekSchedule } from './stats.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -43,32 +43,73 @@ export function loadConfig(file = path.join(ROOT, 'config.json')) {
     cfg.trackFromMs = zonedMidnight(y, m, d, cfg.timezone);
     if (!Number.isFinite(cfg.trackFromMs)) throw new Error(`trackFrom "${cfg.trackFrom}" must look like 2026-10-21`);
   }
+  // ---- The week calendar (weekSchedule in stats.js): the weekday/time weeks start on, which can change over time,
+  // plus fixed week starts (terms, special weeks).
+  const minutesOf = (text, what) => {
+    const c = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(String(text));
+    if (!c) throw new Error(`${what} "${text}" must be a 24-hour time like 22:00`);
+    return Number(c[1]) * 60 + Number(c[2]);
+  };
+  /** "2026-12-13" (local midnight) or "2026-12-09 22:00" -> UTC ms. */
+  const instant = (text, what) => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}:\d{2}))?$/.exec(String(text));
+    if (!m) throw new Error(`${what}: "${text}" must be a date like 2026-12-13, or a date and time like 2026-12-09 22:00`);
+    return zonedTime(+m[1], +m[2], +m[3], m[4] ? minutesOf(m[4], what) : 0, cfg.timezone);
+  };
+  const cadences = [{ from: -Infinity, weekStartsOn: cfg.weekStartsOn, startMinutes: cfg.weekStartsAtFrom ? 0 : cfg.weekStartMinutes }];
+  if (cfg.weekStartsAtFrom && cfg.weekStartMinutes) {
+    const [y, m, d] = cfg.weekStartsAtFrom.split('-').map(Number);
+    cadences.push({ from: zonedTime(y, m, d, cfg.weekStartMinutes, cfg.timezone), weekStartsOn: cfg.weekStartsOn, startMinutes: cfg.weekStartMinutes });
+  }
+  const fixed = [];
+  // School terms ("Fall Quarter", "Winter Break", ...), in order. Each starts at its `from` and numbers its weeks
+  // from 1. Optional per term:
+  //   weekStartsOn / weekStartsAt: from this term on, weeks start on that weekday (0 = Sunday) and time ("00:00").
+  //   weeks: [{ from, name, warning }]: a special week starting at `from` that the site shows by name (e.g.
+  //          "Finals Week") instead of "Week N"; warning: true flanks it with warning signs in the week selector.
+  // A term with no `from` yet is listed on the site as coming soon. Without terms, weekOne alone numbers every week
+  // from the week under way at the end of that date.
+  const termList = cfg.terms ?? (cfg.weekOne ? [{ from: cfg.weekOne, legacy: true }] : []);
+  if (!Array.isArray(termList)) throw new Error('terms must be a list like [{ "name": "Fall Quarter", "from": "2026-09-23" }]');
+  let lastStart = -Infinity;
+  const terms = termList.map((t, i) => {
+    const what = cfg.terms ? `terms[${i}]${t.name ? ` ("${t.name}")` : ''}` : 'weekOne';
+    if (cfg.terms && !t.name) throw new Error(`${what} needs a "name"`);
+    if (t.from == null) return { name: t.name ?? null, from: null, start: null, weeks: [] };
+    const start = instant(t.from, `${what} from`);
+    if (start <= lastStart) throw new Error(`${what} starts before the term listed above it`);
+    lastStart = start;
+    if (t.legacy) return { name: null, from: t.from, start, weeks: [], legacy: true };
+    fixed.push(start);
+    if (t.weekStartsOn != null || t.weekStartsAt != null) {
+      if (t.weekStartsOn != null && !(Number.isInteger(t.weekStartsOn) && t.weekStartsOn >= 0 && t.weekStartsOn <= 6)) {
+        throw new Error(`${what}: weekStartsOn must be 0 (Sunday) to 6 (Saturday)`);
+      }
+      const before = [...cadences].sort((a, b) => a.from - b.from).filter((c) => c.from <= start).at(-1);
+      cadences.push({ from: start, weekStartsOn: t.weekStartsOn ?? before.weekStartsOn, startMinutes: minutesOf(t.weekStartsAt ?? '00:00', `${what}: weekStartsAt`) });
+    }
+    if (t.weeks != null && !Array.isArray(t.weeks)) throw new Error(`${what}: weeks must be a list like [{ "from": "2026-12-06", "name": "Finals Week" }]`);
+    const weeks = (t.weeks ?? []).map((w, j) => {
+      const ws = instant(w.from, `${what} weeks[${j}] from`);
+      if (ws <= start) throw new Error(`${what} weeks[${j}] starts before its term does`);
+      fixed.push(ws);
+      return { start: ws, name: w.name ?? null, warning: w.warning === true };
+    });
+    return { name: t.name ?? null, from: t.from, start, weeks };
+  });
+  cfg.schedule = weekSchedule(cfg.timezone, cadences, fixed);
+  for (const t of terms) {
+    if (t.legacy) t.start = cfg.schedule.weekAt(t.start + 86400e3 - 60e3).start; // weekOne: the week under way at the end of that date
+    t.key = t.start == null ? null : cfg.schedule.weekAt(t.start).key;
+  }
+  cfg.terms = terms;
   // A week named in config (by its first full day, e.g. "2026-11-19") -> when that week starts.
   const weekStart = (key, what) => {
     const [y, m, d] = String(key).split('-').map(Number);
-    const w = /^\d{4}-\d{2}-\d{2}$/.test(key)
-      && weekOfFrom(zonedMidnight(y, m, d, cfg.timezone) + 12 * 3600e3, cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
+    const w = /^\d{4}-\d{2}-\d{2}$/.test(key) && cfg.schedule.weekAt(zonedMidnight(y, m, d, cfg.timezone) + 12 * 3600e3);
     if (!w || w.key !== key) throw new Error(`${what} "${key}" isn't a week's name (weeks are named by their first full day${w ? `, e.g. "${w.key}"` : ''})`);
     return w.start;
   };
-  // School terms ("Fall Quarter", "Winter Break", ...). Each numbers its weeks from 1, starting with the week
-  // that's under way at the end of its `from` date (so a Wednesday date means the week that starts that Wednesday,
-  // even when weeks start at 22:00). A term with no `from` yet is listed on the site as coming soon.
-  // Without terms, weekOne alone numbers every week from that date.
-  const termList = cfg.terms ?? (cfg.weekOne ? [{ from: cfg.weekOne }] : []);
-  if (!Array.isArray(termList)) throw new Error('terms must be a list like [{ "name": "Fall Quarter", "from": "2026-09-23" }]');
-  let lastStart = -Infinity;
-  cfg.terms = termList.map((t, i) => {
-    const what = cfg.terms ? `terms[${i}]${t.name ? ` ("${t.name}")` : ''}` : 'weekOne';
-    if (cfg.terms && !t.name) throw new Error(`${what} needs a "name"`);
-    if (t.from == null) return { name: t.name ?? null, from: null, key: null, start: null };
-    const [y, m, d] = String(t.from).split('-').map(Number);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(t.from)) throw new Error(`${what}: "${t.from}" must be a date like 2026-09-23`);
-    const w = weekOfFrom(zonedTime(y, m, d, 24 * 60 - 1, cfg.timezone), cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
-    if (w.start <= lastStart) throw new Error(`${what} starts before the term listed above it`);
-    lastStart = w.start;
-    return { name: t.name ?? null, from: t.from, key: w.key, start: w.start };
-  });
   cfg.players = cfg.players.map((p) => {
     const hash = p.riotId.lastIndexOf('#');
     if (hash < 1) throw new Error(`Riot ID "${p.riotId}" must look like Name#TAG`);

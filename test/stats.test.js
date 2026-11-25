@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseProfile, profileUrl } from '../src/tactics.js';
 import {
-  ladderScore, attributeLp, mergeLp, rankHistory, rankPoints, apexCutoff, parseRank, weekOf, weekOfFrom, weekFromKey, weekRange, weeklySummary, elimTime, matchTime, RANKED_QUEUE,
+  ladderScore, attributeLp, mergeLp, rankHistory, rankPoints, apexCutoff, parseRank, weekOf, weekOfFrom, weekFromKey, weekRange, weekSchedule, weeklySummary, elimTime, matchTime, RANKED_QUEUE,
 } from '../src/stats.js';
 
 const TZ = 'America/Los_Angeles';
@@ -70,6 +70,28 @@ test('switching to a 10pm start leaves earlier weeks alone and stretches the las
   const range = weekRange(Date.UTC(2026, 9, 29), Date.UTC(2026, 10, 20), TZ, 3, 22 * 60, '2026-11-11');
   assert.deepEqual(range.map((w) => w.key), ['2026-11-19', '2026-11-12', '2026-11-04', '2026-10-28']);
   assert.ok(range.every((w, i) => i === 0 || w.end === range[i - 1].start), 'weeks leave no gaps');
+});
+
+test('a week schedule with terms: stubs join the week before, special weeks, a switch to Sunday weeks', () => {
+  const pst = (m, d, h = 0) => Date.UTC(2026, m - 1, d, h + 8); // Pacific standard time -> UTC ms
+  const wed10pm = { from: pst(11, 11, 22), weekStartsOn: 3, startMinutes: 22 * 60 };
+  const cadences = [{ from: -Infinity, weekStartsOn: 3, startMinutes: 0 }, wed10pm, { from: pst(12, 13), weekStartsOn: 0, startMinutes: 0 }];
+  const fixed = [pst(9, 23), pst(12, 6), pst(12, 13), Date.UTC(2027, 0, 4, 8)]; // fall, finals, winter break, winter quarter
+  const sch = weekSchedule(TZ, cadences, fixed);
+  // with no terms it's the same calendar as before
+  const plain = weekSchedule(TZ, cadences.slice(0, 2));
+  const lo = Date.UTC(2026, 9, 20), hi = Date.UTC(2026, 10, 25);
+  assert.deepEqual(plain.range(lo, hi), weekRange(lo, hi, TZ, 3, 22 * 60, '2026-11-11'));
+  assert.deepEqual(sch.range(lo, hi), plain.range(lo, hi));
+  // Week 10 (Wed Nov 25, 10pm) runs on to finals: the Dec 2 10pm start would have left a 3-day stub
+  assert.deepEqual(sch.weekAt(pst(12, 4)), { key: '2026-11-26', start: pst(11, 25, 22), end: pst(12, 6) });
+  assert.deepEqual(sch.weekAt(pst(12, 9, 23)), { key: '2026-12-06', start: pst(12, 6), end: pst(12, 13) }); // finals, Sun-Sat
+  // winter break: Sunday weeks; the last one runs on to Monday Jan 4, when winter quarter starts
+  const keys = sch.range(pst(12, 13), Date.UTC(2027, 0, 12)).map((w) => w.key).reverse();
+  assert.deepEqual(keys, ['2026-12-13', '2026-12-20', '2026-12-27', '2027-01-04', '2027-01-10']);
+  assert.equal(sch.weekAt(pst(12, 28)).end, Date.UTC(2027, 0, 4, 8));
+  const all = sch.range(lo, Date.UTC(2027, 1, 1));
+  assert.ok(all.every((w, i) => i === 0 || w.end === all[i - 1].start), 'weeks leave no gaps');
 });
 
 test('elimination time is measured back from game end', () => {

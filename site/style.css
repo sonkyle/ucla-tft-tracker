@@ -150,6 +150,21 @@ footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--m
 }
 .week-label .week-dates { min-width: 8.6em; font-variant-numeric: tabular-nums; }
 .week-label .pill { align-self: center; }
+/* A week marked "warning" in config (finals): "⚠ FINALS WEEK ⚠" in red, between two yellow road-style signs. It's
+   wider than a normal week, so the label grows and the dates and "This week" wrap under it when there's no room. */
+.week-label.alert { width: auto; min-width: 300px; flex-wrap: wrap; row-gap: 0; align-items: center; }
+.week-label.alert .week-num {
+  display: inline-flex; align-items: center; gap: 8px; min-width: 0;
+  color: var(--down); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.warn-sign { display: block; flex: none; width: 24px; height: 22px; }
+.warn-body { fill: var(--gold); stroke: #1d1700; stroke-width: 1.2; stroke-linejoin: round; }
+.warn-mark { fill: none; stroke: #1d1700; stroke-width: 2.4; stroke-linecap: round; }
+.warn-dot { fill: #1d1700; }
+@media (max-width: 480px) {
+  .week-label.alert { min-width: 0; }
+  .warn-sign { width: 20px; height: 18px; }
+}
 @media (max-width: 480px) {
   .week-label { gap: 8px; }
   .week-label .week-num { font-size: 18px; }
