@@ -60,7 +60,8 @@
     {"t":1794527122805,"tier":"GRANDMASTER","rank":"I","lp":623,"wins":163,"losses":118},
     {"t":1794528920328,"tier":"GRANDMASTER","rank":"I","lp":604,"wins":163,"losses":119},
     {"t":1794550519721,"tier":"GRANDMASTER","rank":"I","lp":570,"wins":163,"losses":120},
-    {"t":1794553225529,"tier":"GRANDMASTER","rank":"I","lp":587,"wins":164,"losses":120}
+    {"t":1794553225529,"tier":"GRANDMASTER","rank":"I","lp":587,"wins":164,"losses":120},
+    {"t":1795592719364,"tier":"CHALLENGER","rank":"I","lp":587,"wins":164,"losses":120}
   ],
   "HfAbyhL7SHm5clayOBrDsCtzZyrygkKpW1BJ5uCTzDpdf50yukGUutvj2UrMjvQ6mQcsEAsJnvn3OQ": [
     {"t":1793873589498,"tier":"MASTER","rank":"I","lp":55,"wins":147,"losses":127},
@@ -252,7 +253,8 @@
     {"t":1795503625603,"tier":"GRANDMASTER","rank":"I","lp":197,"wins":141,"losses":120},
     {"t":1795506319539,"tier":"MASTER","rank":"I","lp":197,"wins":141,"losses":120},
     {"t":1795555823809,"tier":"MASTER","rank":"I","lp":227,"wins":142,"losses":120},
-    {"t":1795557953949,"tier":"MASTER","rank":"I","lp":259,"wins":143,"losses":120}
+    {"t":1795557953949,"tier":"MASTER","rank":"I","lp":259,"wins":143,"losses":120},
+    {"t":1795592719364,"tier":"GRANDMASTER","rank":"I","lp":259,"wins":143,"losses":120}
   ],
   "VCtYVjMfW7Il38ROfJRVkxKMRI2kutPr45fAy4eopUPUfiNmzQMGnLIEZ1YTJzRrMSxxWXIjawuqNg": [
     {"t":1793873589498,"tier":"GRANDMASTER","rank":"I","lp":375,"wins":171,"losses":126},
@@ -489,7 +491,8 @@
     {"t":1795497319371,"tier":"PLATINUM","rank":"IV","lp":45,"wins":32,"losses":26},
     {"t":1795554027572,"tier":"PLATINUM","rank":"IV","lp":26,"wins":32,"losses":27},
     {"t":1795556729859,"tier":"PLATINUM","rank":"IV","lp":16,"wins":32,"losses":28},
-    {"t":1795558521156,"tier":"PLATINUM","rank":"IV","lp":6,"wins":32,"losses":29}
+    {"t":1795558521156,"tier":"PLATINUM","rank":"IV","lp":6,"wins":32,"losses":29},
+    {"t":1795592719364,"tier":"PLATINUM","rank":"IV","lp":61,"wins":33,"losses":29}
   ],
   "4WMD9YNRafg4ptBnaHeq8fb9MgUJaTA9InADp7c8Gm-qadAJ3nAtIjtPKoVeyXzdphXMJIy5Iwv9Aw": [
     {"t":1795122921706,"tier":"EMERALD","rank":"IV","lp":77,"wins":72,"losses":63}
