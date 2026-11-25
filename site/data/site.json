@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795581576994,
+  "latestActivity": 1795584623314,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -465,6 +465,7 @@
     "6d618cc9_852d_4cbb_b77a_c5b4dbd7c809",
     "6d7df967_6b12_4e75_b374_40bd766547ca",
     "6d88e0ca_1b9d_4e2c_bd71_46988f601c65",
+    "6ec31615_18fc_4395_b09e_5d74a9517ef0",
     "6f3f9e25_6e91_436c_8621_5c74ee136635",
     "7000c704_efb4_493c_8a27_5523efca8865",
     "713f9892_90d9_40fa_9c97_5530de1e95e6",
@@ -663,6 +664,7 @@
     "d9c49bf7_f75b_45d5_9f82_b9e729d66141",
     "d9ddb8d7_0a80_44f3_b466_961ba06134c1",
     "dd908656_b884_459f_befc_286e17419da5",
+    "df515967_ff92_4905_a863_3dbf785261d9",
     "dfeccb5b_0753_4058_a082_b76e7f43e41f",
     "e0dabd7f_6f9c_4b89_a73d_587c3493cea6",
     "e0fca644_deac_4fa6_a661_dbeacee41cdf",
@@ -1447,7 +1449,9 @@
     "b59fee17-bb63-49a3-bb8b-4bb34d432f91": "Chibi Zoe",
     "610a6ada-8907-419c-bc43-decf4360ee80": "Chibi Kayle",
     "d17f9a59-4ee6-4c41-9ba2-309dfb164885": "Chibi Yasuo",
-    "981ae0cb-cd58-439c-89cf-cac0f5369cf4": "Toxic Hauntling"
+    "981ae0cb-cd58-439c-89cf-cac0f5369cf4": "Toxic Hauntling",
+    "6ec31615-18fc-4395-b09e-5d74a9517ef0": "Chibi Janna",
+    "df515967-ff92-4905-a863-3dbf785261d9": "Azure Inktales Featherknight"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1677,14 +1681,14 @@
       "slug": "hyo",
       "name": "Hyo",
       "riotId": "UCLA hyomaker#hyo",
-      "current": {"tier":"DIAMOND","rank":"III","lp":24,"wins":57,"losses":39},
-      "peak": {"tier":"DIAMOND","rank":"III","lp":24,"t":1794912334725},
+      "current": {"tier":"DIAMOND","rank":"III","lp":56,"wins":58,"losses":39},
+      "peak": {"tier":"DIAMOND","rank":"III","lp":56,"t":1795584623314},
       "trackedSince": 1793873654047,
-      "lpCoverage": {"games":21,"matched":21},
+      "lpCoverage": {"games":22,"matched":22},
       "firstWeek": null,
       "teamTotalsExcludedFrom": null,
-      "weeks": {"2026-11-19":{"lp":0,"partial":false,"fromGames":false,"ranked":{"games":0,"avg":null,"top4":null,"firsts":0,"eighths":0},"otherGames":6,"endRank":{"tier":"DIAMOND","rank":"III","lp":24}},"2026-11-12":{"lp":194,"partial":false,"fromGames":false,"ranked":{"games":17,"avg":4.41,"top4":64.7,"firsts":4,"eighths":6},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":24}},"2026-11-04":{"lp":78,"partial":false,"fromGames":true,"ranked":{"games":4,"avg":3.25,"top4":75,"firsts":0,"eighths":0},"otherGames":2,"endRank":{"tier":"EMERALD","rank":"I","lp":30}},"2026-10-28":{"lp":68,"partial":false,"fromGames":true,"ranked":{"games":12,"avg":4.33,"top4":50,"firsts":2,"eighths":1},"otherGames":0,"endRank":{"tier":"EMERALD","rank":"II","lp":52}},"2026-10-21":{"lp":156,"partial":false,"fromGames":true,"ranked":{"games":7,"avg":3.29,"top4":71.4,"firsts":2,"eighths":0},"otherGames":8,"endRank":{"tier":"EMERALD","rank":"III","lp":84}}},
-      "history": [[1792643851066,2028,"EMERALD"],[1792643845466,2069,"EMERALD"],[1792654912978,2096,"EMERALD"],[1792656984508,2062,"EMERALD"],[1792985654919,2072,"EMERALD"],[1793050663244,2135,"EMERALD"],[1793058799430,2194,"EMERALD"],[1793060922838,2184,"EMERALD"],[1793179098065,2240,"EMERALD"],[1793181200167,2220,"EMERALD"],[1793249810201,2200,"EMERALD"],[1793251982757,2238,"EMERALD"],[1793256310949,2262,"EMERALD"],[1793347031041,2226,"EMERALD"],[1793349211140,2282,"EMERALD"],[1793351372246,2272,"EMERALD"],[1793353533055,2248,"EMERALD"],[1793689182246,2269,"EMERALD"],[1793702003028,2234,"EMERALD"],[1793704401685,2252,"EMERALD"],[1793939029976,2273,"EMERALD"],[1793944175798,2312,"EMERALD"],[1794203815648,2302,"EMERALD"],[1794206689158,2330,"EMERALD"],[1794524973416,2300,"EMERALD"],[1794527020045,2310,"EMERALD"],[1794529137148,2320,"EMERALD"],[1794605092070,2300,"EMERALD"],[1794606863187,2275,"EMERALD"],[1794697554867,2310,"EMERALD"],[1794700967047,2359,"EMERALD"],[1794730471258,2406,"DIAMOND"],[1794733305088,2454,"DIAMOND"],[1794797102118,2409,"DIAMOND"],[1794798379311,2400,"DIAMOND"],[1794900660506,2410,"DIAMOND"],[1794902915714,2457,"DIAMOND"],[1794907091343,2477,"DIAMOND"],[1794909262339,2488,"DIAMOND"],[1794911786710,2524,"DIAMOND"]]
+      "weeks": {"2026-11-19":{"lp":32,"partial":false,"fromGames":false,"ranked":{"games":1,"avg":2,"top4":100,"firsts":0,"eighths":0},"otherGames":6,"endRank":{"tier":"DIAMOND","rank":"III","lp":56}},"2026-11-12":{"lp":194,"partial":false,"fromGames":false,"ranked":{"games":17,"avg":4.41,"top4":64.7,"firsts":4,"eighths":6},"otherGames":2,"endRank":{"tier":"DIAMOND","rank":"III","lp":24}},"2026-11-04":{"lp":78,"partial":false,"fromGames":true,"ranked":{"games":4,"avg":3.25,"top4":75,"firsts":0,"eighths":0},"otherGames":2,"endRank":{"tier":"EMERALD","rank":"I","lp":30}},"2026-10-28":{"lp":68,"partial":false,"fromGames":true,"ranked":{"games":12,"avg":4.33,"top4":50,"firsts":2,"eighths":1},"otherGames":0,"endRank":{"tier":"EMERALD","rank":"II","lp":52}},"2026-10-21":{"lp":156,"partial":false,"fromGames":true,"ranked":{"games":7,"avg":3.29,"top4":71.4,"firsts":2,"eighths":0},"otherGames":8,"endRank":{"tier":"EMERALD","rank":"III","lp":84}}},
+      "history": [[1792643851066,2028,"EMERALD"],[1792643845466,2069,"EMERALD"],[1792654912978,2096,"EMERALD"],[1792656984508,2062,"EMERALD"],[1792985654919,2072,"EMERALD"],[1793050663244,2135,"EMERALD"],[1793058799430,2194,"EMERALD"],[1793060922838,2184,"EMERALD"],[1793179098065,2240,"EMERALD"],[1793181200167,2220,"EMERALD"],[1793249810201,2200,"EMERALD"],[1793251982757,2238,"EMERALD"],[1793256310949,2262,"EMERALD"],[1793347031041,2226,"EMERALD"],[1793349211140,2282,"EMERALD"],[1793351372246,2272,"EMERALD"],[1793353533055,2248,"EMERALD"],[1793689182246,2269,"EMERALD"],[1793702003028,2234,"EMERALD"],[1793704401685,2252,"EMERALD"],[1793939029976,2273,"EMERALD"],[1793944175798,2312,"EMERALD"],[1794203815648,2302,"EMERALD"],[1794206689158,2330,"EMERALD"],[1794524973416,2300,"EMERALD"],[1794527020045,2310,"EMERALD"],[1794529137148,2320,"EMERALD"],[1794605092070,2300,"EMERALD"],[1794606863187,2275,"EMERALD"],[1794697554867,2310,"EMERALD"],[1794700967047,2359,"EMERALD"],[1794730471258,2406,"DIAMOND"],[1794733305088,2454,"DIAMOND"],[1794797102118,2409,"DIAMOND"],[1794798379311,2400,"DIAMOND"],[1794900660506,2410,"DIAMOND"],[1794902915714,2457,"DIAMOND"],[1794907091343,2477,"DIAMOND"],[1794909262339,2488,"DIAMOND"],[1794911786710,2524,"DIAMOND"],[1795583904939,2556,"DIAMOND"]]
     },
     {
       "slug": "george",
