@@ -170,6 +170,35 @@ footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--m
   font-size: 11px; font-weight: 600; line-height: 1;
   padding: 4px 7px; border-radius: 2px; background: var(--gold); color: #1d1700;
 }
+/* Term picker: a "Fall Quarter ▾" button above the week arrows (the term contains the week, and changes a few times a
+   year), opening a menu of quarters and breaks. Stacked, so switching to a longer term name never moves the ‹ › buttons.
+   Outlined like the arrow buttons so it reads as clickable, but shorter and smaller-type so the week stays the focus. */
+.week-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+.term-picker { position: relative; }
+.term-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px 0 10px;
+  border: 1px solid var(--axis); border-radius: 4px; background: var(--surface); color: var(--ink);
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.term-btn:hover, .term-btn[aria-expanded="true"] { background: var(--hover); }
+.term-btn .chev {
+  display: block; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; transition: transform 0.15s;
+}
+.term-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.term-menu {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 4; min-width: 220px; padding: 4px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+.term-menu[hidden] { display: none; }
+.term-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 10px; border-radius: 3px;
+  color: var(--ink); text-decoration: none; font-size: 14px; white-space: nowrap;
+}
+.term-item:is(a):hover, .term-item:focus-visible { background: var(--hover); outline: none; }
+.term-item[aria-checked="true"] { font-weight: 600; color: var(--accent); box-shadow: inset 3px 0 var(--accent); }
+.term-item[aria-disabled="true"] { color: var(--muted); cursor: default; }
+.pill.soon { background: var(--mid); color: var(--ink-2); font-weight: 600; }
 .toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); cursor: pointer; }
 .toggle input { accent-color: var(--accent); }
 .back { text-decoration: none; color: var(--ink-2); }

@@ -5,7 +5,9 @@
 // Trait icons are small white glyphs (the site tints them by activation tier); item icons and
 // champion portraits (the small square portrait, not the splash crop) are full color.
 // Only ids without an icon or name are looked up, so Community Dragon's big data file (~24 MB) is
-// downloaded about once per set. Ids it doesn't list are retried after a day.
+// downloaded about once per set. Ids it doesn't list are looked up in Riot's Data Dragon instead (see
+// ddragonInfo), and anything neither has is retried: every 2 hours for its first 3 days (a new set's
+// data can show up a few hours after launch), then daily.
 //
 //   node src/icons.js      fetch whatever is missing for every trait and item in data/
 
@@ -15,8 +17,12 @@ import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
 const CDRAGON = 'https://raw.communitydragon.org/latest';
-const RETRY_MISSING_MS = 24 * 3600e3;
+const DDRAGON = 'https://ddragon.leagueoflegends.com';
+const RETRY_NEW_MS = 2 * 3600e3, RETRY_OLD_MS = 24 * 3600e3, NEW_FOR_MS = 3 * 24 * 3600e3;
 const TACTICIAN_PX = 96;
+// Largest icon kept, per kind. Bigger downloads are cut to their center square and scaled down to this
+// (Data Dragon's champion art can be a 1024x512 splash, and from Set 19 its item art can be 512x512).
+const MAX_PX = { traits: 64, items: 128, units: 128, tacticians: TACTICIAN_PX };
 
 // Community Dragon occasionally lists the wrong artwork; these win over its listing.
 // Add a line (id -> icon path) and delete the id's file in site/img/... to re-download it.
@@ -137,6 +143,42 @@ export function shrinkPng(buf, size = TACTICIAN_PX) {
   }
 }
 
+/**
+ * Names, gold costs and icon URLs from Riot's Data Dragon: { id -> { name, cost, url } } for champions,
+ * traits and items. Used for ids Community Dragon doesn't list, e.g. a new set on its first day.
+ *
+ * Written for both Data Dragon formats. Today's files are keyed by long paths
+ * ("Maps/Shipping/Map22/Sets/TFTSet18/Shop/DA_CrimsonRaptor18") with the id inside each entry; from
+ * Set 19.1 (Dec 1, 2026) they're keyed by the id itself ("DA_19_Ahri"). So entries are read by their
+ * `id` field, never by key. Also from 19.1 (developer.riotgames.com/docs/tft):
+ * - a champion's square icon is image.icon (image.full becomes the splash), both in img/tft-champion/;
+ * - image.full can be "" for things with no image, so that means "no icon", not a URL;
+ * - sprite sheets and the sprite/x/y/w/h fields are gone; images are img/<image.group>/<file>.
+ */
+export async function ddragonInfo() {
+  const version = (await (await get(`${DDRAGON}/api/versions.json`)).json())[0];
+  const info = new Map();
+  for (const file of ['tft-champion', 'tft-trait', 'tft-item']) {
+    let data;
+    try {
+      data = (await (await get(`${DDRAGON}/cdn/${version}/data/en_US/${file}.json`)).json()).data ?? {};
+    } catch (err) {
+      console.warn(`! Data Dragon ${file}.json: ${err.message}`);
+      continue;
+    }
+    for (const v of Object.values(data)) {
+      if (!v?.id || info.has(v.id)) continue;
+      const img = v.image ?? {}, pic = img.icon || img.full;
+      info.set(v.id, {
+        name: v.name || null,
+        cost: v.cost ?? v.tier,
+        url: pic && img.group ? `${DDRAGON}/cdn/${version}/img/${img.group}/${pic}` : null,
+      });
+    }
+  }
+  return info;
+}
+
 /** All trait, item, unit and tactician ids used in the stored matches, opponents' boards included. */
 export function idsInMatches(matches) {
   const traits = new Set(), items = new Set(), units = new Set(), tacticians = new Set();
@@ -153,18 +195,23 @@ export function idsInMatches(matches) {
 /**
  * @param ids     { traits, items, units, tacticians } — Sets of ids
  * @param imgDir  site/img (icons go in traits/, items/, units/ and tacticians/ under it)
- * @param state   { names: {id: name}, costs: {unitId: gold cost}, missing: {id: lastCheckedMs} } — updated in place
+ * @param state   { names: {id: name}, costs: {unitId: gold cost}, missing: {id: lastCheckedMs},
+ *                  missingSince: {id: firstMissingMs} } — updated in place
  * @returns number of icons downloaded
  */
 export async function syncIcons(ids, imgDir, state, now = Date.now()) {
   state.names ??= {};
   state.costs ??= {};
   state.missing ??= {};
+  state.missingSince ??= {};
+  const retryAfter = (id) => (now - (state.missingSince[id] ?? now) < NEW_FOR_MS ? RETRY_NEW_MS : RETRY_OLD_MS);
+  const markMissing = (id) => { state.missing[id] = now; state.missingSince[id] ??= now; };
+  const found = (id) => { delete state.missing[id]; delete state.missingSince[id]; };
   const kinds = [['traits', ids.traits], ['items', ids.items], ['units', ids.units], ['tacticians', ids.tacticians]];
   const needs = (kind, id) => !fs.existsSync(iconFile(path.join(imgDir, kind), id)) || !state.names[id] ||
     (kind === 'units' && state.costs[id] == null);
   const todo = kinds.flatMap(([kind, set]) => [...(set ?? [])]
-    .filter((id) => needs(kind, id) && !(now - (state.missing[id] ?? 0) < RETRY_MISSING_MS))
+    .filter((id) => needs(kind, id) && !(now - (state.missing[id] ?? 0) < retryAfter(id)))
     .map((id) => [kind, id]));
   if (!todo.length) return 0;
 
@@ -190,25 +237,34 @@ export async function syncIcons(ids, imgDir, state, now = Date.now()) {
     }
   }
 
+  // Anything Community Dragon doesn't list (tacticians come from elsewhere): try Riot's Data Dragon.
+  if (todo.some(([kind, id]) => kind !== 'tacticians' && !info.has(id))) {
+    try {
+      for (const [id, entry] of await ddragonInfo()) if (!info.has(id)) info.set(id, entry);
+    } catch (err) {
+      console.warn(`! Data Dragon lookup failed: ${err.message}`);
+    }
+  }
+
   let saved = 0;
   for (const [kind, id] of todo) {
     const entry = info.get(id);
     if (entry?.name) state.names[id] = entry.name;
     if (kind === 'units' && Number.isFinite(entry?.cost)) state.costs[id] = entry.cost;
     const file = iconFile(path.join(imgDir, kind), id);
-    if (fs.existsSync(file)) { delete state.missing[id]; continue; }
+    if (fs.existsSync(file)) { found(id); continue; }
     const icon = ICON_OVERRIDES[id] ?? entry?.icon;
     // "ASSETS/Maps/TFT/Icons/Items/Hexcore/TFT_Item_X.TFT_Set13.tex" -> .../game/assets/maps/.../tft_item_x.tft_set13.png
     const url = entry?.url ?? (icon ? `${CDRAGON}/game/${icon.toLowerCase().replace(/\.(tex|dds)$/, '.png')}` : null);
-    if (!url) { state.missing[id] = now; continue; }
+    if (!url) { markMissing(id); continue; }
     try {
       fs.mkdirSync(path.dirname(file), { recursive: true });
       const bytes = Buffer.from(await (await get(url)).arrayBuffer());
-      fs.writeFileSync(file, kind === 'tacticians' ? shrinkPng(bytes) : bytes);
-      delete state.missing[id];
+      fs.writeFileSync(file, shrinkPng(bytes, MAX_PX[kind]));
+      found(id);
       saved++;
     } catch {
-      state.missing[id] = now;
+      markMissing(id);
     }
   }
   return saved;

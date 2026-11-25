@@ -48,7 +48,10 @@ each naming a week by its key (the week's first full day, e.g. `"2026-11-19"` fo
 
 **Trait, item and champion icons.** Each poll downloads icons (and in-game names) for any trait, item or champion
 that doesn't have one yet from [Community Dragon](https://communitydragon.org) into `site/img/traits/`, `items/` and `units/`
-(about once per set), so the site serves them itself. Run `node src/icons.js` to fetch them by hand.
+(about once per set), so the site serves them itself. Anything Community Dragon doesn't list yet (say, a new set on its
+first day) is looked up in Riot's [Data Dragon](https://developer.riotgames.com/docs/tft) instead. The lookup reads both
+the current format and the one Riot announced for Set 19.1 (Dec 1, 2026), and it shrinks large images. Ids neither
+source has are retried every 2 hours for their first 3 days, then daily. Run `node src/icons.js` to fetch them by hand.
 Weeks run Monday 12am to Sunday 11:59pm Pacific time. You can change this in `config.json`.
 
 ## Setup
@@ -71,7 +74,10 @@ Edit `config.json`:
   "timezone": "America/Los_Angeles",
   "weekStartsOn": 1,
   "trackFrom": "2026-09-01",
-  "weekOne": "2026-09-23",
+  "terms": [
+    { "name": "Fall Quarter", "from": "2026-09-23" },
+    { "name": "Winter Break" }
+  ],
   "players": [
     { "riotId": "SomeName#NA1", "name": "Display Name" }
   ]
@@ -79,7 +85,13 @@ Edit `config.json`:
 ```
 
 `riotId` is the in-game `Name#TAG`. `trackFrom` sets how far back match history is backfilled
-(use the current set's launch date). `weekOne` is the first day of "Week 1"; the site labels weeks by number from there (Week 1, Week 2, …), with the dates shown smaller. Leave it out to label weeks by date only. Change it when a new set starts. `weekStartsOn`: 0 = Sunday, 1 = Monday.
+(use the current set's launch date). `terms` are the school's quarters and breaks, in order. Each one's weeks are
+numbered from 1 (Week 1, Week 2, …, with the dates shown smaller), starting with the week under way at the end of its
+`from` date. With Wednesday-night weeks, give the Wednesday the term's first week starts on. The site gets a menu next
+to the week arrows for switching terms, and the arrows stay inside the chosen term. A term with no `from` yet, or one
+that hasn't started, is listed as "Coming soon". To open the next term, add its `from` date. Without `terms`, an older
+setting still works: `"weekOne": "2026-09-23"` numbers every week from that date, with no menu. Leave both out to label
+weeks by date only. `weekStartsOn`: 0 = Sunday, 1 = Monday.
 `weekStartsAt` (optional, default `"00:00"`) is the time of day the week starts, e.g. `"22:00"` for after a Wednesday
 night meeting. A week that starts late in a day is named after its first full day, so Wednesday 22:00 weeks are named by
 their Thursday. `weekStartsAtFrom` (optional) is the first start day that time applies to; earlier weeks keep starting
@@ -142,7 +154,7 @@ src/build.js         data/ -> site/data/ (LP attribution, weekly roll-ups)
 src/stats.js         ladder math, week math, LP attribution (unit-tested)
 src/riot.js          Riot API client (rate limits, retries)
 src/tactics.js       per-game LP from tactics.tools profiles
-src/icons.js         trait/item/champion icons + names from Community Dragon -> site/img/
+src/icons.js         trait/item/champion icons + names from Community Dragon (Data Dragon as backup) -> site/img/
 data/                stored snapshots and trimmed match data (committed)
 site/                the static website (index.html, app.js, style.css, data/)
 test/                npm test

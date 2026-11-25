@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { zonedMidnight, weekOfFrom } from './stats.js';
+import { zonedMidnight, zonedTime, weekOfFrom } from './stats.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -51,6 +51,24 @@ export function loadConfig(file = path.join(ROOT, 'config.json')) {
     if (!w || w.key !== key) throw new Error(`${what} "${key}" isn't a week's name (weeks are named by their first full day${w ? `, e.g. "${w.key}"` : ''})`);
     return w.start;
   };
+  // School terms ("Fall Quarter", "Winter Break", ...). Each numbers its weeks from 1, starting with the week
+  // that's under way at the end of its `from` date (so a Wednesday date means the week that starts that Wednesday,
+  // even when weeks start at 22:00). A term with no `from` yet is listed on the site as coming soon.
+  // Without terms, weekOne alone numbers every week from that date.
+  const termList = cfg.terms ?? (cfg.weekOne ? [{ from: cfg.weekOne }] : []);
+  if (!Array.isArray(termList)) throw new Error('terms must be a list like [{ "name": "Fall Quarter", "from": "2026-09-23" }]');
+  let lastStart = -Infinity;
+  cfg.terms = termList.map((t, i) => {
+    const what = cfg.terms ? `terms[${i}]${t.name ? ` ("${t.name}")` : ''}` : 'weekOne';
+    if (cfg.terms && !t.name) throw new Error(`${what} needs a "name"`);
+    if (t.from == null) return { name: t.name ?? null, from: null, key: null, start: null };
+    const [y, m, d] = String(t.from).split('-').map(Number);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(t.from)) throw new Error(`${what}: "${t.from}" must be a date like 2026-09-23`);
+    const w = weekOfFrom(zonedTime(y, m, d, 24 * 60 - 1, cfg.timezone), cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
+    if (w.start <= lastStart) throw new Error(`${what} starts before the term listed above it`);
+    lastStart = w.start;
+    return { name: t.name ?? null, from: t.from, key: w.key, start: w.start };
+  });
   cfg.players = cfg.players.map((p) => {
     const hash = p.riotId.lastIndexOf('#');
     if (hash < 1) throw new Error(`Riot ID "${p.riotId}" must look like Name#TAG`);

@@ -95,18 +95,17 @@ function withEndRankOverrides(p, weeksOut) {
 
 const weeks = weekRange(earliest, now, cfg.timezone, cfg.weekStartsOn, cfg.weekStartMinutes, cfg.weekStartsAtFrom);
 
-// Week numbers count from config.weekOne (the first day of week 1, e.g. the set's launch week).
-// Weeks before it, or every week when weekOne isn't set, have no number.
+// Each week belongs to a term (config.terms: a quarter or a break, or one unnamed term from config.weekOne) and
+// is numbered within it: Week 1 is the term's first week. Weeks before the first term belong to it but have no
+// number, and so does every week when neither terms nor weekOne is set.
 const dayIndex = (key) => { const [y, m, d] = key.split('-').map(Number); return Date.UTC(y, m - 1, d) / 86400e3; };
-if (cfg.weekOne && !/^\d{4}-\d{2}-\d{2}$/.test(cfg.weekOne)) throw new Error(`weekOne "${cfg.weekOne}" must look like 2026-09-23`);
+const datedTerms = cfg.terms.map((t, i) => ({ ...t, i })).filter((t) => t.start != null);
+function termOf(week) {
+  const t = datedTerms.findLast((x) => x.start <= week.start);
+  return t ? { term: t.i, num: Math.floor((dayIndex(week.key) - dayIndex(t.key)) / 7) + 1 } : { term: datedTerms[0]?.i ?? null, num: null };
+}
 // The "Check for new games" button's worker (worker/update-button.js); no button without it.
 if (cfg.updateUrl && !/^https:\/\/\S+$/.test(cfg.updateUrl)) throw new Error(`updateUrl "${cfg.updateUrl}" must be an https:// URL`);
-
-const weekNumber = (key) => {
-  if (!cfg.weekOne) return null;
-  const n = Math.floor((dayIndex(key) - dayIndex(cfg.weekOne)) / 7) + 1;
-  return n >= 1 ? n : null;
-};
 
 // ---- site.json
 const pick = (s) => (s && s.tier ? { tier: s.tier, rank: s.rank, lp: s.lp } : null);
@@ -127,7 +126,9 @@ const site = {
   unitCosts: store.icons.costs ?? {}, // champion gold cost (1-5), for the portrait border
   // Estimated LP needed for Grandmaster / Challenger (they move daily); null until first polled.
   apexCutoffs: store.cutoffs.t ? { grandmaster: store.cutoffs.grandmaster, challenger: store.cutoffs.challenger, t: store.cutoffs.t } : null,
-  weeks: weeks.map(({ key, start, end }) => ({ key, start, end, num: weekNumber(key) })),
+  // Terms in config order. The site lists one with no weeks yet as "coming soon".
+  terms: cfg.terms.map((t) => ({ name: t.name })),
+  weeks: weeks.map(({ key, start, end }) => ({ key, start, end, ...termOf({ key, start }) })),
   players: perPlayer.map(({ p, snaps, games, transitions, gameLp, history, points }) => {
     const last = snaps.at(-1);
     const peak = snaps.reduce((best, s) => (ladderScore(s) > (ladderScore(best) ?? -1) ? s : best), null);

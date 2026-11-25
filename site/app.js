@@ -102,7 +102,7 @@ function weekLabel(key) {
   const f = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' });
   return `${f.format(a)} – ${a.getUTCMonth() === b.getUTCMonth() ? b.getUTCDate() : f.format(b)}`;
 }
-// Week numbers (from config weekOne) lead; dates are secondary. Weeks without a number fall back to dates.
+// Week numbers (within their term, from config terms or weekOne) lead; dates are secondary. Weeks without a number fall back to dates.
 const weekNum = (key) => site.weeks.find((w) => w.key === key)?.num ?? null;
 const weekName = (key) => (weekNum(key) ? `Week ${weekNum(key)}` : `Week of ${weekLabel(key)}`);
 const weekFull = (key) => (weekNum(key) ? `Week ${weekNum(key)} · ${weekLabel(key)}` : `Week of ${weekLabel(key)}`);
@@ -605,9 +605,10 @@ function apexCutoffNote(prefix) {
 }
 const tierColor = (tier) => (tier && TIERS.includes(tier) ? `var(--t-${tier.toLowerCase()})` : 'var(--pos)');
 
-/** Net LP per week: diverging columns from a zero baseline. */
+/** Net LP per week (of the selected week's term): diverging columns from a zero baseline. */
 function weeklyChart(p, selKey) {
-  const weeks = site.weeks.filter((w) => p.weeks[w.key]?.lp != null).reverse();
+  const term = termOfKey(selKey);
+  const weeks = site.weeks.filter((w) => w.term === term && p.weeks[w.key]?.lp != null).reverse();
   if (!weeks.length) return h('div', { class: 'empty-chart' }, 'No tracked weeks yet.');
   return chartBox((box, W) => {
     const H = 240, m = { l: 48, r: 12, t: 12, b: 28 };
@@ -664,15 +665,79 @@ const playerHref = (slug, key) => `#/player/${slug}${weekPath(key)}`;
 const chevron = (dir) => s('svg', { class: 'chev', viewBox: '0 0 16 16', 'aria-hidden': 'true' },
   s('path', { d: dir < 0 ? 'M10 3.5 5.5 8l4.5 4.5' : 'M6 3.5 10.5 8 6 12.5' }));
 
-/** `oldest`: index of the oldest week to allow (a player who joined mid-season has no earlier weeks). */
+/**
+ * ‹ Week › buttons. They stay within the week's term (switching terms is the term picker's job).
+ * `oldest`: index of the oldest week to allow (a player who joined mid-season has no earlier weeks).
+ */
 function weekNav(idx, hrefFor, oldest = site.weeks.length - 1) {
   const weeks = site.weeks;
-  const older = idx < oldest, newer = idx > 0;
+  const older = idx < oldest && weeks[idx + 1].term === weeks[idx].term, newer = idx > 0 && weeks[idx - 1].term === weeks[idx].term;
   return h('div', { class: 'week-nav' },
     h('a', { class: 'btn', href: older ? hrefFor(weeks[idx + 1].key) : null, 'aria-disabled': older ? null : 'true', 'aria-label': 'Previous week' }, chevron(-1)),
     h('div', { class: 'week-label' }, weekTitle(weeks[idx].key), idx === 0 ? h('span', { class: 'pill' }, 'This week') : null),
     h('a', { class: 'btn', href: newer ? hrefFor(weeks[idx - 1].key) : null, 'aria-disabled': newer ? null : 'true', 'aria-label': 'Next week' }, chevron(1)));
 }
+
+// ---------------------------------------------------------------- term picker
+
+/** The term (quarter or break, an index into site.terms) a week belongs to. */
+const termOfKey = (key) => site.weeks.find((w) => w.key === key)?.term ?? null;
+
+/**
+ * "Fall Quarter ▾": a menu of every term (config.terms). Picking another term goes to its newest week, via
+ * hrefFor(weekKey). Terms with no weeks yet are listed with a "Coming soon" tag and can't be picked.
+ * Nothing is shown when the site has fewer than two terms.
+ */
+function termPicker(weekKey, hrefFor) {
+  const terms = site.terms ?? [];
+  if (terms.length < 2) return null;
+  const current = termOfKey(weekKey);
+  const items = terms.map((t, i) => {
+    const newest = site.weeks.find((w) => w.term === i); // weeks are newest first
+    if (!newest) {
+      return h('div', { class: 'term-item', role: 'menuitemradio', 'aria-checked': 'false', 'aria-disabled': 'true', tabindex: -1 },
+        t.name, h('span', { class: 'pill soon' }, 'Coming soon'));
+    }
+    return h('a', { class: 'term-item', role: 'menuitemradio', 'aria-checked': String(i === current), tabindex: -1,
+      href: hrefFor(i === current ? weekKey : newest.key) }, t.name); // the current term: just close the menu
+  });
+  const menu = h('div', { class: 'term-menu', id: 'term-menu', role: 'menu', 'aria-label': 'Quarter', hidden: true }, items);
+  const btn = h('button', { class: 'term-btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'term-menu' },
+    terms[current]?.name ?? terms[0].name,
+    s('svg', { class: 'chev', viewBox: '0 0 16 16', 'aria-hidden': 'true' }, s('path', { d: 'M4 6.5 8 10.5l4-4' })));
+  const open = () => {
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    (items.find((x) => x.getAttribute('aria-checked') === 'true') ?? items[0]).focus();
+  };
+  const close = (refocus) => {
+    menu.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (refocus) btn.focus();
+  };
+  btn.addEventListener('click', () => (menu.hidden ? open() : close(false)));
+  btn.addEventListener('keydown', (e) => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); } });
+  menu.addEventListener('keydown', (e) => {
+    const i = items.indexOf(document.activeElement);
+    const go = { ArrowDown: i + 1, ArrowUp: i - 1 + items.length, Home: 0, End: items.length - 1 }[e.key];
+    if (go != null) { e.preventDefault(); items[go % items.length].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+    else if (e.key === 'Tab') close(false);
+    else if (e.key === ' ' && document.activeElement?.tagName === 'A') { e.preventDefault(); document.activeElement.click(); }
+  });
+  menu.addEventListener('click', (e) => {
+    if (e.target.closest('[aria-disabled="true"]')) e.preventDefault();
+    else close(false);
+  });
+  return h('div', { class: 'term-picker' }, btn, menu);
+}
+// A click or tap anywhere else closes an open term menu.
+document.addEventListener('pointerdown', (e) => {
+  const picker = document.querySelector('.term-picker');
+  if (!picker || picker.contains(e.target)) return;
+  picker.querySelector('.term-menu').hidden = true;
+  picker.querySelector('.term-btn').setAttribute('aria-expanded', 'false');
+});
 
 // ---------------------------------------------------------------- team overview
 
@@ -733,7 +798,7 @@ function renderOverview(key) {
   });
 
   app.replaceChildren(
-    h('div', { class: 'filters' }, weekNav(idx, teamHref)),
+    h('div', { class: 'filters week-bar' }, termPicker(week.key, teamHref), weekNav(idx, teamHref)),
     tiles,
     h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Leaderboard'), apexCutoffNote('Cutoffs:')),
       h('p', { class: 'sub' }, 'Ranked games only. Click a column to sort, or a player to see their games this week.',
@@ -760,7 +825,7 @@ async function renderPlayer(slug, weekKey, myId) {
         h('h1', {}, p.name, ' ', h('span', { class: 'riot-id' }, p.riotId)),
         h('div', { class: 'hero' }, rankCrest(p.current), rankText(p.current)))));
 
-  const nav = h('div', { class: 'filters' }, weekNav(idx, (k) => playerHref(slug, k), oldest));
+  const nav = h('div', { class: 'filters week-bar' }, termPicker(week.key, (k) => playerHref(slug, k)), weekNav(idx, (k) => playerHref(slug, k), oldest));
 
   const lpNote = w?.lp == null ? 'rank not tracked this week'
     : w.partial ? '* tracking started mid-week'
@@ -785,7 +850,7 @@ async function renderPlayer(slug, weekKey, myId) {
     h('section', { class: 'card' }, h('h2', {}, 'Net LP by week'), h('p', { class: 'sub' }, 'Click a bar to see that week’s games.'), weeklyChart(p, week.key)),
     h('section', { class: 'card' }, h('div', { class: 'card-head' }, h('h2', {}, 'Rank over time'), apexCutoffNote()), h('p', { class: 'sub' }, 'Rank after each game, oldest to newest. Hover for details.'), rankChart(p)));
 
-  const weekRows = site.weeks.filter((x) => p.weeks[x.key] && (p.weeks[x.key].ranked.games || p.weeks[x.key].lp || p.weeks[x.key].otherGames));
+  const weekRows = site.weeks.filter((x) => x.term === week.term && p.weeks[x.key] && (p.weeks[x.key].ranked.games || p.weeks[x.key].lp || p.weeks[x.key].otherGames));
   const weekTable = h('section', { class: 'card' }, h('h2', {}, 'Week by week'), h('p', { class: 'sub' }, 'Click a week to see its games.'),
     h('div', { class: 'table-wrap' }, h('table', {},
       h('thead', {}, h('tr', {}, ['Week', 'Net LP', 'Ranked games', 'Avg place', 'Top 4', '1st rate', '1sts', 'Other games', 'Rank at end'].map((c, i) => h('th', { class: i && i < 8 ? 'r' : null }, c)))),
