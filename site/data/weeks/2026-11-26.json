@@ -1,4 +1,6 @@
 {
   "key": "2026-11-26",
-  "matches": []
+  "matches": [
+    {"id":"NA1_5686868272","time":1795680303445,"queue":1100,"set":18,"patch":null,"length":2363.3,"lobby":8,"entries":[{"player":"cynthia","placement":3,"level":9,"round":34,"dmg":0,"lp":{"delta":19,"games":1},"traits":[{"name":"DA_18_LuxUniqueTrait","units":1,"style":3},{"name":"DA_18_Blossom","units":3,"style":1},{"name":"DA_18_Defender","units":2,"style":1},{"name":"DA_18_Fae","units":2,"style":1},{"name":"DA_18_Hunter","units":2,"style":1},{"name":"DA_18_Inferno","units":2,"style":1},{"name":"DA_Primal18","units":2,"style":1},{"name":"DA_18_Vanguard","units":2,"style":1},{"name":"DA_Juggernaut18","units":2,"style":1}],"units":[{"id":"DA_18_Rakan","star":2,"rarity":0,"items":[]},{"id":"DA_Amumu18","star":2,"rarity":3,"items":["DA_Crownguard","DA_SteadfastHeart","DA_Component_GiantsBelt"]},{"id":"DA_18_Shen","star":2,"rarity":1,"items":[]},{"id":"DA_18_Lillia","star":1,"rarity":3,"items":[]},{"id":"DA_18_Sivir","star":2,"rarity":3,"items":["DA_LastWhisper","DA_SpearOfShojin","DA_InfinityEdge"]},{"id":"DA_Nidalee18_AP","star":2,"rarity":3,"items":["DA_SteraksGage","DA_Deathblade","DA_Quicksilver"]},{"id":"DA_Sentinel18","star":2,"rarity":3,"items":["DA_ProtectorsVow","DA_ProtectorsVow","DA_ProtectorsVow"]},{"id":"DA_18_Ashe","star":1,"rarity":4,"items":[]},{"id":"DA_Lux18_Base","star":2,"rarity":4,"items":["DA_AdaptiveHelm","DA_RedBuff"]}],"tactician":"5e171fec-60fe-470f-b922-47927f5e69a6"}]}
+  ]
 }
