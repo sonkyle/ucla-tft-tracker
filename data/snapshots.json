@@ -61,7 +61,8 @@
     {"t":1794528920328,"tier":"GRANDMASTER","rank":"I","lp":604,"wins":163,"losses":119},
     {"t":1794550519721,"tier":"GRANDMASTER","rank":"I","lp":570,"wins":163,"losses":120},
     {"t":1794553225529,"tier":"GRANDMASTER","rank":"I","lp":587,"wins":164,"losses":120},
-    {"t":1795592719364,"tier":"CHALLENGER","rank":"I","lp":587,"wins":164,"losses":120}
+    {"t":1795592719364,"tier":"CHALLENGER","rank":"I","lp":587,"wins":164,"losses":120},
+    {"t":1795765519938,"tier":"GRANDMASTER","rank":"I","lp":337,"wins":164,"losses":120}
   ],
   "HfAbyhL7SHm5clayOBrDsCtzZyrygkKpW1BJ5uCTzDpdf50yukGUutvj2UrMjvQ6mQcsEAsJnvn3OQ": [
     {"t":1793873589498,"tier":"MASTER","rank":"I","lp":55,"wins":147,"losses":127},
@@ -261,7 +262,8 @@
     {"t":1795735823025,"tier":"GRANDMASTER","rank":"I","lp":219,"wins":144,"losses":123},
     {"t":1795737627347,"tier":"GRANDMASTER","rank":"I","lp":182,"wins":144,"losses":124},
     {"t":1795739422221,"tier":"GRANDMASTER","rank":"I","lp":163,"wins":144,"losses":125},
-    {"t":1795742118722,"tier":"GRANDMASTER","rank":"I","lp":173,"wins":145,"losses":125}
+    {"t":1795742118722,"tier":"GRANDMASTER","rank":"I","lp":173,"wins":145,"losses":125},
+    {"t":1795765519938,"tier":"MASTER","rank":"I","lp":173,"wins":145,"losses":125}
   ],
   "VCtYVjMfW7Il38ROfJRVkxKMRI2kutPr45fAy4eopUPUfiNmzQMGnLIEZ1YTJzRrMSxxWXIjawuqNg": [
     {"t":1793873589498,"tier":"GRANDMASTER","rank":"I","lp":375,"wins":171,"losses":126},
