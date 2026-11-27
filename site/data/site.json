@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795742118722,
+  "latestActivity": 1795743028313,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -314,6 +314,7 @@
     "1b860b17_e947_4151_9456_ae38097bb6fb",
     "1d454cd7_5445_4fec_a1aa_afe34fb1c2ce",
     "1d645360_b2e4_4ec3_a17d_733021ffe81a",
+    "1dda44fa_5511_4e9f_9cda_eb7f1f5f1b38",
     "1e3b0251_623c_41ee_87b0_ecba9a0cf736",
     "1e51c235_ad94_4e8d_a4a6_bc8ad0d939ae",
     "1e7b3f8d_93b6_436a_a357_7d3c818659b5",
@@ -1471,7 +1472,8 @@
     "9b50bc03-cbfe-484d-be04-0674a9f74112": "Star Dust Astronyan",
     "71370065-3d53-4eae-b991-6f09fe477f11": "Hamlet",
     "3347872b-716f-4a40-8fb8-3d57c920673b": "Bees Astrovix",
-    "494817df-2db4-41c5-808b-18b1df4a32f4": "Hundun"
+    "494817df-2db4-41c5-808b-18b1df4a32f4": "Hundun",
+    "1dda44fa-5511-4e9f-9cda-eb7f1f5f1b38": "Porcelain Bellswayer"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1750,14 +1752,14 @@
       "slug": "cynthia",
       "name": "Cynthia",
       "riotId": "UCLA Radish#nom",
-      "current": {"tier":"PLATINUM","rank":"III","lp":0,"wins":36,"losses":34},
-      "peak": {"tier":"PLATINUM","rank":"III","lp":1,"t":1795731318880},
+      "current": {"tier":"PLATINUM","rank":"III","lp":35,"wins":37,"losses":34},
+      "peak": {"tier":"PLATINUM","rank":"III","lp":35,"t":1795743028313},
       "trackedSince": 1795122921706,
-      "lpCoverage": {"games":15,"matched":15},
+      "lpCoverage": {"games":16,"matched":16},
       "firstWeek": "2026-11-19",
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-26":{"lp":52,"partial":false,"fromGames":false,"ranked":{"games":3,"avg":4.33,"top4":66.7,"firsts":0,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"III","lp":0}},"2026-11-19":{"lp":81,"partial":false,"fromGames":true,"ranked":{"games":12,"avg":4.58,"top4":33.3,"firsts":3,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":48}}},
-      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556252066,1616,"PLATINUM"],[1795558388190,1606,"PLATINUM"],[1795592592638,1661,"PLATINUM"],[1795594480192,1640,"PLATINUM"],[1795645336302,1600,"PLATINUM"],[1795672230862,1648,"PLATINUM"],[1795680079845,1667,"PLATINUM"],[1795730621036,1701,"PLATINUM"],[1795738314871,1700,"PLATINUM"]]
+      "weeks": {"2026-11-26":{"lp":87,"partial":false,"fromGames":false,"ranked":{"games":4,"avg":3.75,"top4":75,"firsts":0,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"III","lp":35}},"2026-11-19":{"lp":81,"partial":false,"fromGames":true,"ranked":{"games":12,"avg":4.58,"top4":33.3,"firsts":3,"eighths":1},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":48}}},
+      "history": [[1795122921706,1567,"GOLD"],[1795420122896,1548,"GOLD"],[1795494691018,1587,"GOLD"],[1795496916122,1645,"PLATINUM"],[1795553544193,1626,"PLATINUM"],[1795556252066,1616,"PLATINUM"],[1795558388190,1606,"PLATINUM"],[1795592592638,1661,"PLATINUM"],[1795594480192,1640,"PLATINUM"],[1795645336302,1600,"PLATINUM"],[1795672230862,1648,"PLATINUM"],[1795680079845,1667,"PLATINUM"],[1795730621036,1701,"PLATINUM"],[1795738314871,1700,"PLATINUM"],[1795743028313,1735,"PLATINUM"]]
     },
     {
       "slug": "rei",
