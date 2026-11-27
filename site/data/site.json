@@ -4,7 +4,7 @@
   "timezone": "America/Los_Angeles",
   "rankedQueue": 1100,
   "queueNames": {},
-  "latestActivity": 1795763718716,
+  "latestActivity": 1795763767893,
   "traitIcons": [
     "DA_18_Adaptor",
     "DA_18_ApexPredator",
@@ -277,6 +277,7 @@
     "090753b8_a84a_4877_9cb5_8cc712413429",
     "0a8e982e_3dff_442d_8db8_9cca5ad880d2",
     "0afc0129_6f63_4a0c_9d61_5f97b3f97a61",
+    "0c5f7174_a3d3_4159_8dbc_e9069d881ee5",
     "0cd56a14_cf39_4c68_83cc_1ca3b35b44e2",
     "0d4a1a31_e739_4a79_9970_5e0ad29ac147",
     "0db256b8_7fab_4ee3_b18d_89ca8bca8406",
@@ -1473,7 +1474,8 @@
     "71370065-3d53-4eae-b991-6f09fe477f11": "Hamlet",
     "3347872b-716f-4a40-8fb8-3d57c920673b": "Bees Astrovix",
     "494817df-2db4-41c5-808b-18b1df4a32f4": "Hundun",
-    "1dda44fa-5511-4e9f-9cda-eb7f1f5f1b38": "Porcelain Bellswayer"
+    "1dda44fa-5511-4e9f-9cda-eb7f1f5f1b38": "Porcelain Bellswayer",
+    "0c5f7174-a3d3-4159-8dbc-e9069d881ee5": "Mountain Silverwing"
   },
   "unitCosts": {
     "DA_18_Akali_AD": 1,
@@ -1677,10 +1679,10 @@
       "current": {"tier":"PLATINUM","rank":"IV","lp":37,"wins":34,"losses":25},
       "peak": {"tier":"PLATINUM","rank":"IV","lp":56,"t":1795739422221},
       "trackedSince": 1793873589498,
-      "lpCoverage": {"games":14,"matched":14},
+      "lpCoverage": {"games":15,"matched":15},
       "firstWeek": null,
       "teamTotalsExcludedFrom": "2026-11-19",
-      "weeks": {"2026-11-26":{"lp":-9,"partial":false,"fromGames":false,"ranked":{"games":1,"avg":4,"top4":100,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":37}},"2026-11-19":{"lp":115,"partial":false,"fromGames":false,"ranked":{"games":6,"avg":3.5,"top4":66.7,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"PLATINUM","rank":"IV","lp":46}},"2026-11-12":{"lp":80,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":4.2,"top4":60,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-04":{"lp":25,"partial":false,"fromGames":true,"ranked":{"games":2,"avg":4.5,"top4":50,"firsts":1,"eighths":1},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":51}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0,"eighths":1},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3,"eighths":2},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
+      "weeks": {"2026-11-26":{"lp":-9,"partial":false,"fromGames":false,"ranked":{"games":2,"avg":5,"top4":50,"firsts":0,"eighths":0},"otherGames":0,"endRank":{"tier":"PLATINUM","rank":"IV","lp":37}},"2026-11-19":{"lp":115,"partial":false,"fromGames":false,"ranked":{"games":6,"avg":3.5,"top4":66.7,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"PLATINUM","rank":"IV","lp":46}},"2026-11-12":{"lp":80,"partial":false,"fromGames":false,"ranked":{"games":5,"avg":4.2,"top4":60,"firsts":1,"eighths":0},"otherGames":2,"endRank":{"tier":"GOLD","rank":"I","lp":31}},"2026-11-04":{"lp":25,"partial":false,"fromGames":true,"ranked":{"games":2,"avg":4.5,"top4":50,"firsts":1,"eighths":1},"otherGames":0,"endRank":{"tier":"GOLD","rank":"II","lp":51}},"2026-10-28":{"lp":-74,"partial":false,"fromGames":true,"ranked":{"games":9,"avg":5.44,"top4":33.3,"firsts":0,"eighths":1},"otherGames":3,"endRank":{"tier":"GOLD","rank":"II","lp":26}},"2026-10-21":{"lp":263,"partial":false,"fromGames":true,"ranked":{"games":10,"avg":3.5,"top4":60,"firsts":3,"eighths":2},"otherGames":1,"endRank":{"tier":"GOLD","rank":"I","lp":0}}},
       "history": [[1792794771964,1237,"GOLD"],[1792794771764,1303,"GOLD"],[1792801648229,1370,"GOLD"],[1792884610913,1328,"GOLD"],[1792905984678,1376,"GOLD"],[1793064831695,1445,"GOLD"],[1793139488168,1435,"GOLD"],[1793141206173,1400,"GOLD"],[1793143462384,1454,"GOLD"],[1793166629081,1505,"GOLD"],[1793168627823,1500,"GOLD"],[1793310704684,1475,"GOLD"],[1793395350157,1446,"GOLD"],[1793397443210,1456,"GOLD"],[1793424391688,1428,"GOLD"],[1793580970156,1418,"GOLD"],[1793745418076,1432,"GOLD"],[1793747340011,1400,"GOLD"],[1793749099930,1375,"GOLD"],[1793760321912,1426,"GOLD"],[1794287168439,1492,"GOLD"],[1794350426712,1451,"GOLD"],[1794867443236,1520,"GOLD"],[1794882048513,1552,"GOLD"],[1794899887502,1520,"GOLD"],[1795051848558,1500,"GOLD"],[1795054248288,1531,"GOLD"],[1795422721716,1544,"GOLD"],[1795424874248,1534,"GOLD"],[1795426878651,1524,"GOLD"],[1795429680894,1567,"GOLD"],[1795432391448,1636,"PLATINUM"],[1795469874420,1646,"PLATINUM"],[1795738898135,1656,"PLATINUM"],[1795763718716,1637,"PLATINUM"]]
     },
     {
